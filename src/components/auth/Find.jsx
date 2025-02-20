@@ -26,7 +26,7 @@ const Find = () => {
       return;
     }
 
-    const response = await fetch(`${import.meta.env.VITE_API_URL}find`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/find`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, pwd: password, name, phone }),
