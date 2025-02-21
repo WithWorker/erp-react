@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
 export default defineConfig({
   base: "/",
   plugins: [react()],
@@ -14,7 +13,7 @@ export default defineConfig({
     // 서버 프록시 설정
     proxy: {
       '/api': {
-        target: 'https://localhost:7777',  
+        target: 'http://localhost:7777',  
         changeOrigin: true,   
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, ''), // '/api'를 제거

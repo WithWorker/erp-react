@@ -15,7 +15,7 @@ const Login = () => {
     hover: false
   });
 
-  const [error, setError] = useState(''); // 로그인 에러 메시지 상태 추가
+  const [error, setError] = useState('');
 
   const changeUser = (e) => {
     const id = e.currentTarget.id;
@@ -33,22 +33,21 @@ const Login = () => {
 
   const handleSubmit = async () => {
     try {
-      // 서버로 로그인 정보 보내기 (axios POST 요청)
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/login`, {
-        username: tempUser.mem_email,
+      const response = await axios.post("/login", {
+        username: tempUser.mem_email,  
         password: tempUser.mem_pw
+      }, {
+        headers: {
+          'Content-Type': 'application/json', 
+        }
       });
 
-      // 로그인 성공 시 처리 (예: 토큰 저장, 리디렉션 등)
       console.log('로그인 성공:', response.data);
-      // 예를 들어, 토큰을 로컬스토리지에 저장
       localStorage.setItem('token', response.data.token);
 
-      // 로그인 성공 후 다른 페이지로 이동
-      window.location.href = '/home'; // 또는 리액트 라우터를 사용할 수 있습니다.
+      window.location.href = '/'; 
 
     } catch (err) {
-      // 로그인 실패 시 에러 처리
       setError('아이디 또는 비밀번호가 틀렸습니다.');
     }
   };
@@ -89,7 +88,7 @@ const Login = () => {
         >
           로그인
         </SubmitButton>
-        {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>} {/* 에러 메시지 출력 */}
+        {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>} 
 
         <DividerDiv>
           <DividerHr />
