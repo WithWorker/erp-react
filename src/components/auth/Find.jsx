@@ -2,9 +2,6 @@ import React, { useState } from 'react';
 
 const Find = () => {
   const [resetPwdForm, setResetPwdForm] = useState({
-    email: '',
-    name: '',
-    phone: '',
     password: '',
     repassword: ''
   });
@@ -16,7 +13,7 @@ const Find = () => {
   };
 
   const resetPassword = async () => {
-    const { email, name, phone, password, repassword } = resetPwdForm;
+    const { password, repassword } = resetPwdForm;
     if (password !== repassword) {
       alert('비밀번호가 일치하지 않습니다. 다시 입력해주세요.');
       return;
@@ -25,7 +22,7 @@ const Find = () => {
     const response = await fetch("/find", {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, pwd: password, name, phone }),
+      body: JSON.stringify({ pwd: password }),
     });
 
     const result = await response.json();
@@ -49,45 +46,6 @@ const Find = () => {
                 resetPassword();
               }}
             >
-              <div className="mb-3">
-                <label htmlFor="reEmail" className="d-flex me-3 mb-2">이메일</label>
-                <input
-                  type="text"
-                  id="reEmail"
-                  name="email"
-                  className="form-control flex-grow-1"
-                  placeholder="✉ 이메일을 입력하세요"
-                  value={resetPwdForm.email}
-                  onChange={(e) => handleInputChange(e, setResetPwdForm)}
-                  required
-                />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="reName" className="d-flex me-3 mb-2">이름</label>
-                <input
-                  type="text"
-                  id="reName"
-                  name="name"
-                  className="form-control flex-grow-1"
-                  placeholder="👤 이름을 입력하세요"
-                  value={resetPwdForm.name}
-                  onChange={(e) => handleInputChange(e, setResetPwdForm)}
-                  required
-                />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="rePhone" className="d-flex me-3 mb-2">전화번호</label>
-                <input
-                  type="text"
-                  id="rePhone"
-                  name="phone"
-                  className="form-control flex-grow-1"
-                  placeholder="☎ 전화번호를 입력하세요"
-                  value={resetPwdForm.phone}
-                  onChange={(e) => handleInputChange(e, setResetPwdForm)}
-                  required
-                />
-              </div>
               <div className="mb-3">
                 <label htmlFor="password" className="d-flex me-3 mb-2">새로운 비밀번호</label>
                 <input

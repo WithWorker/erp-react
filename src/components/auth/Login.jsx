@@ -41,12 +41,10 @@ const Login = () => {
           'Content-Type': 'application/json', 
         }
       });
-
       console.log('로그인 성공:', response.data);
       localStorage.setItem('token', response.data.token);
 
       window.location.href = '/'; 
-
     } catch (err) {
       setError('아이디 또는 비밀번호가 틀렸습니다.');
     }
@@ -89,17 +87,13 @@ const Login = () => {
           로그인
         </SubmitButton>
         {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>} 
-
         <DividerDiv>
           <DividerHr />
           <DividerSpan></DividerSpan>
         </DividerDiv>
         <MyP>
           비밀번호를 잊으셨나요?&nbsp;
-          <Link
-            to="/find"
-            style={{ color: 'blue', background: 'none', border: 'none', cursor: 'pointer' }}
-          >
+          <Link to="/find" style={{ color: 'blue', background: 'none', border: 'none', cursor: 'pointer' }}>
             비밀번호 변경
           </Link>
         </MyP>
