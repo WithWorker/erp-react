@@ -19,7 +19,7 @@ const Find = () => {
       return;
     }
 
-    const response = await fetch("/find", {
+    const response = await fetch("/api/find", {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ pwd: password }),
@@ -38,7 +38,6 @@ const Find = () => {
   return (
     <div className="d-flex flex-column align-items-center justify-content-center">
       <div className="custom-card text-center">
-        <div className="tab-content">
           <div>
             <form
               onSubmit={(e) => {
@@ -81,7 +80,6 @@ const Find = () => {
             )}
           </div>
         </div>
-      </div>
     </div>
   );
 };

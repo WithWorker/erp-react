@@ -33,8 +33,8 @@ const Login = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post("/login", {
-        username: tempUser.mem_email,  
+      const response = await axios.post("/api/login", {
+        email: tempUser.mem_email,  
         password: tempUser.mem_pw
       }, {
         headers: {
