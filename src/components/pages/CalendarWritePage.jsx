@@ -1,0 +1,404 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addEvent, setCategory } from '../../redux/slice/calendarSlice';
+import categoryColors from '../../utils/categoryColors';
+import { Calendar, Clock, PersonFill, Trash } from 'react-bootstrap-icons';
+import Sidebar from '../include/Sidebar';
+import Header from '../include/Header';
+import { ChevronDown } from 'react-bootstrap-icons';
+
+const debounce = (func, delay) => {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => func(...args), delay);
+  };
+};
+
+const CalendarWritePage = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [writer, setWriter] = useState('');
+
+  // 기존 startTime과 endTime은 문자열로 관리되었으나,
+  // 이제 startTime과 endTime을 객체 형태로 관리합니다.
+  const [startTime, setStartTime] = useState({ period: 'AM', hour: '12', minute: '00' }); // ✨
+  const [endTime, setEndTime] = useState({ period: 'AM', hour: '12', minute: '00' }); // ✨
+
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [category, setCategoryState] = useState('all');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const [attendeeQuery, setAttendeeQuery] = useState('');
+  const [attendeeResults, setAttendeeResults] = useState([]);
+  const [selectedAttendees, setSelectedAttendees] = useState([]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const dateFromUrl = params.get('date');
+    if (dateFromUrl) setSelectedDate(dateFromUrl);
+  }, []);
+
+  const handleCategorySelect = (value) => {
+    setCategoryState(value);
+    dispatch(setCategory(value)); // 선택된 카테고리를 Redux에도 저장
+    setDropdownOpen(false); // 드롭다운 닫기
+  };
+
+  /* 백엔드 연결되면 풀기
+  const handleSearchAttendees = debounce(async (query) => {
+    if (query.trim()) {
+      
+      const response = await axios.get(`/api/attendees?query=${query}`);
+      setAttendeeResults(response.data);
+    } else {
+      setAttendeeResults([]);
+    }
+  }, 300); */
+  
+  const handleSearchAttendees = debounce(async (query) => {
+    if (query.trim()) {
+      // 🎀 더미 데이터 설정
+      const mockAttendees = [
+        { id: 1, name: '홍길동' },
+        { id: 2, name: '홍철수' },
+        { id: 3, name: '이영희' },
+      ];
+  
+      const filteredResults = mockAttendees.filter((attendee) =>
+        attendee.name.includes(query)
+      );
+      
+      setAttendeeResults(filteredResults); // 🎀 더미 데이터 결과를 설정
+    } else {
+      setAttendeeResults([]);
+    }
+  }, 300);
+
+  const handleAttendeeInput = (e) => {
+    setAttendeeQuery(e.target.value);
+    handleSearchAttendees(e.target.value);
+  };
+
+  const selectAttendee = (attendee) => {
+    if (!selectedAttendees.find((a) => a.id === attendee.id)) {
+      setSelectedAttendees([...selectedAttendees, attendee]);
+    }
+    setAttendeeQuery('');
+    setAttendeeResults([]);
+  };
+
+  const removeAttendee = (id) => {
+    setSelectedAttendees(selectedAttendees.filter((a) => a.id !== id));
+  };
+
+  const generateTimeOptions = () => {
+    const times = [];
+    for (let hour = 0; hour < 24; hour++) {
+      for (let minute = 0; minute < 60; minute += 10) {
+        const formattedHour = hour.toString().padStart(2, '0');
+        const formattedMinute = minute.toString().padStart(2, '0');
+        times.push(`${formattedHour}:${formattedMinute}`);
+      }
+    }
+    return times;
+  };
+  
+  const timeOptions = generateTimeOptions();
+  
+  
+
+  /* 백엔드 연결되면 풀기
+  const handleSubmit = () => {
+    if (!title.trim() || !description.trim()) {
+      alert('제목과 내용을 입력해주세요!');
+      return;
+    }
+    
+    const newEvent = {
+      id: new Date().getTime().toString(),
+      date: selectedDate,
+      // 제출 시, startTime과 endTime을 객체에서 문자열로 변환하여 저장
+      startTime: `${startTime.period} ${startTime.hour}:${startTime.minute}`, // ✨
+      endTime: `${endTime.period} ${endTime.hour}:${endTime.minute}`, // ✨
+      writer,
+      title,
+      content: description,
+      attendees: selectedAttendees,
+      category,
+    };
+
+    dispatch(addEvent(newEvent));
+    dispatch(setCategory(category));
+    navigate('/calendar');
+  }; */
+
+  const handleSubmit = () => {
+    if (!title.trim() || !description.trim()) {
+      alert('제목과 내용을 입력해주세요!');
+      return;
+    }
+  
+    const newEvent = {
+      id: new Date().getTime().toString(),
+      date: selectedDate,
+      startTime: `${startTime.period} ${startTime.hour}:${startTime.minute}`,
+      endTime: `${endTime.period} ${endTime.hour}:${endTime.minute}`,
+      writer,
+      title,
+      content: description,
+      attendees: selectedAttendees,
+      category,
+    };
+  
+    // 🎀 서버 호출 없이 임시로 콘솔에 출력
+    console.log('New event submitted:', newEvent);
+    alert('일정이 성공적으로 등록되었습니다!');
+  
+    // 로컬 상태 갱신 및 페이지 이동
+    dispatch(addEvent(newEvent));
+    dispatch(setCategory(category));
+    navigate('/calendar');
+  };
+
+  const categories = [
+    { value: 'all', label: '전체보기', color: categoryColors['all'] },
+    { value: 'my-schedule', label: '내 일정', color: categoryColors['my-schedule'] },
+    { value: 'team-members', label: '부서 구성원', color: categoryColors['team-members'] },
+    { value: 'equipment-reservation', label: '설비 예약', color: categoryColors['equipment-reservation'] },
+  ];
+
+  return (
+    <div className="flex h-screen bg-gray-100">
+      <Sidebar />
+      <div className="flex-1 p-6">
+        <Header />
+        <div className="flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-4 w-full mb-6">
+
+          {/* 카테고리 선택 영역 (5:7 비율) */}
+          <div className="relative md:w-1/5 w-full">
+            <div
+              className="bg-white p-3 pl-6 pr-10 rounded-full shadow-md w-full cursor-pointer flex items-center h-[48px] border border-gray-300"
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+            >
+              <div
+                className="w-4 h-4 rounded-full mr-2"
+                style={{ backgroundColor: categoryColors[category] }}
+              />
+              <span className="font-medium">
+                {categories.find((cat) => cat.value === category)?.label}
+              </span>
+              <ChevronDown className="ml-auto text-gray-500" />
+            </div>
+
+            {/* 드롭다운 메뉴 (아래로 펼쳐지도록 조정) */}
+            {dropdownOpen && (
+              <div className="absolute left-0 top-full mt-1 w-full bg-white rounded-xl shadow-lg z-20 border overflow-hidden">
+                {categories.map((cat) => (
+                  <div
+                    key={cat.value}
+                    className="flex items-center p-3 hover:bg-gray-100 cursor-pointer transition"
+                    onClick={() => handleCategorySelect(cat.value)}
+                  >
+                    <div
+                      className="w-4 h-4 rounded-full mr-2"
+                      style={{ backgroundColor: cat.color }}
+                    />
+                    <span>{cat.label}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* 참석자 검색 영역 (5:7 비율) */}
+          <div className="relative md:w-4/5 w-full">
+            <input
+              type="text"
+              value={attendeeQuery}
+              onChange={handleAttendeeInput}
+              placeholder="참석자 이름 검색"
+              className="bg-white pl-4 pr-4 text-sm rounded-full shadow-md w-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black h-[48px]"
+            />
+            {attendeeResults.length > 0 && (
+              <ul className="absolute w-full border border-gray-300 rounded-md bg-white mt-1 max-h-40 overflow-auto z-20 shadow-lg">
+                {attendeeResults.map((attendee) => (
+                  <li
+                    key={attendee.id}
+                    className="p-3 hover:bg-gray-100 cursor-pointer transition"
+                    onClick={() => selectAttendee(attendee)}
+                  >
+                    {attendee.name}
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {/* 선택된 참석자 목록 */}
+            <div className="flex flex-wrap mt-2 space-x-2">
+              {selectedAttendees.map((attendee) => (
+                <div
+                  key={attendee.id}
+                  className="flex items-center bg-gray-200 rounded-full px-3 py-1 space-x-2 text-sm"
+                >
+                  <span>{attendee.name}</span>
+                  <Trash
+                    className="text-red-500 cursor-pointer"
+                    onClick={() => removeAttendee(attendee.id)}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+
+
+        </div>
+          {/* 일정 정보 입력 폼 */}
+          <div className="bg-white p-6 rounded-2xl shadow-lg space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+  {/* 일정 일자 */}
+  <div>
+    <label className="text-sm font-semibold">일정 일자</label>
+    <input
+      type="date"
+      value={selectedDate}
+      onChange={(e) => setSelectedDate(e.target.value)}
+      className="w-full border rounded-md p-2"
+    />
+  </div>
+
+  {/* 시작 시간 */}
+  <div className="relative">
+    <label className="text-sm font-semibold">시작 시간</label>
+    <div className="flex space-x-2">
+      {/* 오전/오후 선택 */}
+      <select
+        value={startTime.period}
+        onChange={(e) => setStartTime({ ...startTime, period: e.target.value })} // ✨
+        className="border rounded-md p-2 flex-1"
+      >
+        <option value="AM">AM</option>
+        <option value="PM">PM</option>
+      </select>
+
+      {/* 시간 선택 */}
+      <select
+        value={startTime.hour}
+        onChange={(e) => setStartTime({ ...startTime, hour: e.target.value })} // ✨
+        className="border rounded-md p-2 flex-1"
+      >
+        {Array.from({ length: 12 }, (_, index) => (
+          <option key={index} value={index}>
+            {String(index === 0 ? 12 : index).padStart(2, '0')}
+          </option>
+        ))}
+      </select>
+
+      {/* 분 선택 */}
+      <select
+        value={startTime.minute}
+        onChange={(e) => setStartTime({ ...startTime, minute: e.target.value })} // ✨
+        className="border rounded-md p-2 flex-1"
+      >
+        {Array.from({ length: 6 }, (_, index) => (
+          <option key={index} value={index * 10}>
+            {String(index * 10).padStart(2, '0')}
+          </option>
+        ))}
+      </select>
+    </div>
+  </div>
+
+  {/* 종료 시간 */}
+  <div className="relative">
+    <label className="text-sm font-semibold">종료 시간</label>
+    <div className="flex space-x-2">
+      {/* 오전/오후 선택 */}
+      <select
+        value={endTime.period}
+        onChange={(e) => setEndTime({ ...endTime, period: e.target.value })} // ✨
+        className="border rounded-md p-2 flex-1"
+      >
+        <option value="AM">AM</option>
+        <option value="PM">PM</option>
+      </select>
+
+      {/* 시간 선택 */}
+      <select
+        value={endTime.hour}
+        onChange={(e) => setEndTime({ ...endTime, hour: e.target.value })} // ✨
+        className="border rounded-md p-2 flex-1"
+      >
+        {Array.from({ length: 12 }, (_, index) => (
+          <option key={index} value={index}>
+            {String(index === 0 ? 12 : index).padStart(2, '0')}
+          </option>
+        ))}
+      </select>
+
+      {/* 분 선택 */}
+      <select
+        value={endTime.minute}
+        onChange={(e) => setEndTime({ ...endTime, minute: e.target.value })} // ✨
+        className="border rounded-md p-2 flex-1"
+      >
+        {Array.from({ length: 6 }, (_, index) => (
+          <option key={index} value={index * 10}>
+            {String(index * 10).padStart(2, '0')}
+          </option>
+        ))}
+      </select>
+    </div>
+  </div>
+
+  {/* 작성자 */}
+  <div>
+    <label className="text-sm font-semibold">작성자</label>
+    <input
+      type="text"
+      value={writer}
+      onChange={(e) => setWriter(e.target.value)}
+      className="w-full border rounded-md p-2"
+      placeholder="작성자 이름"
+    />
+  </div>
+</div>
+
+
+
+            <div>
+              <label className="text-sm font-semibold">일정 제목</label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full border rounded-md p-2"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-semibold">일정 내용</label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="w-full border rounded-md p-2 h-auto min-h-[430px]"
+              />
+            </div>
+
+            <div className="flex justify-end space-x-2">
+              <button className="border rounded-md px-4 py-2" onClick={() => navigate('/calendar')}>취소</button>
+              <button className="bg-[#006D2C] text-white px-4 py-2 rounded-md" onClick={handleSubmit}>등록</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  );
+};
+
+export default CalendarWritePage;
