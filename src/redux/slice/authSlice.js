@@ -1,16 +1,9 @@
-// src/redux/slice/authSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-/* 
-const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-const username = useSelector((state) => state.auth.username);
-const error = useSelector((state) => state.auth.error);
-
-*/
-
+import axios from 'axios';
 
 // 초기 상태
 const initialState = {
-  username: "",
+  email: "",
   password: "",
   isAuthenticated: false,
   error: null,
@@ -19,23 +12,19 @@ const initialState = {
 
 // 로그인 API 호출을 위한 비동기 액션
 export const login = createAsyncThunk(
-  'auth/login',
-  async ({ username, password }, { rejectWithValue }) => {
+  'api/login',
+  async ({ email, password }, { rejectWithValue }) => {
     try {
-      // Mock 데이터로 로그인 확인
-      const mockData = {
-        user_no: 1,
-        username: "testUser", // 임시 유저명
-        password: "1234", // 임시 비밀번호
-      };
+      const response = await axios.post('/api/login', { email, password });
 
-      if (username === mockData.username && password === mockData.password) {
-        return mockData; // 성공 시 반환값
+      // 서버 응답 예시: { success: true, token: 'JWT_TOKEN', user: { email: 'testUser' }}
+      if (response.data.success) {
+        return { token: response.data.token, user: response.data.user }; // 로그인 성공 시 토큰과 사용자 정보를 반환
       } else {
-        return rejectWithValue("아이디 또는 비밀번호가 잘못되었습니다.");
+        return rejectWithValue(response.data.message || "아이디 또는 비밀번호가 잘못되었습니다.");
       }
     } catch (error) {
-      return rejectWithValue(error.message || "로그인 중 오류 발생");
+      return rejectWithValue(error.response?.data?.message || "로그인 중 오류 발생");
     }
   }
 );
@@ -45,14 +34,14 @@ const authSlice = createSlice({
   initialState: { count: 0 },
   reducers: {
     increment: (state) => { state.count += 1; },
-    setUsername: (state, action) => {
-      state.username = action.payload;
+    setEmail: (state, action) => {
+      state.email = action.payload;
     },
     setPassword: (state, action) => {
       state.password = action.payload;
     },
     logout: (state) => {
-      state.username = "";
+      state.email = "";
       state.password = "";
       state.isAuthenticated = false;
       state.error = null;
@@ -62,6 +51,7 @@ const authSlice = createSlice({
     builder
       .addCase(login.fulfilled, (state, action) => {
         state.isAuthenticated = true;
+        state.email = action.payload.user.email; // 서버에서 받은 email을 상태에 저장
         state.error = null;
       })
       .addCase(login.rejected, (state, action) => {
@@ -71,5 +61,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { increment, setUsername, setPassword, logout } = authSlice.actions;
+export const { increment, setEmail, setPassword, logout } = authSlice.actions;
 export default authSlice;

@@ -1,24 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setUsername, setPassword, login } from '../../redux/slice/authSlice';
+import { setEmail, setPassword, login } from '../../redux/slice/authSlice';
 import { LockFill, PersonFill } from 'react-bootstrap-icons';
+import axios from 'axios';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // 상태가 undefined일 때 빈 문자열로 초기화 >> 이거 없으면 사번 입력창에 undefined 표시됨
-  const username = useSelector((state) => state.auth.username || '');
+  // 상태가 undefined일 때 빈 문자열로 초기화
+  const email = useSelector((state) => state.auth.email || '');
   const password = useSelector((state) => state.auth.password || '');
-
   const [rememberMe, setRememberMe] = useState(false);
-  
-  // 모달 상태 추가
   const [showModal, setShowModal] = useState(false);
 
-  const handleUsernameChange = (e) => {
-    dispatch(setUsername(e.target.value));
+  const handleEmailChange = (e) => {
+    dispatch(setEmail(e.target.value));
   };
 
   const handlePasswordChange = (e) => {
@@ -28,20 +26,27 @@ const LoginPage = () => {
   const handleRememberMeChange = (e) => {
     setRememberMe(e.target.checked);
     if (e.target.checked) {
-      localStorage.setItem('username', username);
+      localStorage.setItem('email', email);
       localStorage.setItem('password', password);
     } else {
-      localStorage.removeItem('username');
+      localStorage.removeItem('email');
       localStorage.removeItem('password');
     }
   };
 
+  // 로그인 함수
   const handleLogin = async () => {
     try {
-      const response = await dispatch(login({ username, password })).unwrap();
-      if (response.user_no) {
+      const response = await dispatch(login({ email, password })).unwrap();
+      if (response.token) {
+        // 로그인 성공 시 JWT 토큰을 localStorage에 저장
+        localStorage.setItem('authToken', response.token);
+
+        // axios 기본 헤더에 Authorization 추가
+        axios.defaults.headers['Authorization'] = `Bearer ${response.token}`;
+
         alert('로그인 성공');
-        navigate('/dashboard');
+        navigate('/dashboard'); // 대시보드 페이지로 이동
       }
     } catch (err) {
       alert('아이디 또는 비밀번호가 잘못되었습니다.');
@@ -49,17 +54,17 @@ const LoginPage = () => {
   };
 
   const handleForgotPassword = () => {
-    setShowModal(true); // 비밀번호 찾기 모달 표시
+    setShowModal(true);
   };
 
   const closeModal = () => {
-    setShowModal(false); // 모달 닫기
+    setShowModal(false);
   };
 
   useEffect(() => {
-    const savedUsername = localStorage.getItem('username');
-    if (savedUsername) {
-      dispatch(setUsername(savedUsername));
+    const savedEmail = localStorage.getItem('email');
+    if (savedEmail) {
+      dispatch(setEmail(savedEmail));
     }
   }, [dispatch]);
 
@@ -71,15 +76,15 @@ const LoginPage = () => {
       </div>
       <div className="bg-white p-12 rounded-[2rem] shadow-lg w-[32rem] h-[22rem]">
         <div className="mb-4">
-          <label className="block text-[#323232]">사번</label>
+          <label className="block text-[#323232]">이메일</label>
           <div className="relative">
             <PersonFill className="absolute left-3 top-3 text-gray-400" />
             <input
               type="text"
               className="w-full !pl-10 p-2 border rounded-lg"
-              placeholder="사번을 입력하세요."
-              value={username}
-              onChange={handleUsernameChange}
+              placeholder="이메일을 입력하세요."
+              value={email}
+              onChange={handleEmailChange}
             />
           </div>
         </div>
@@ -113,12 +118,12 @@ const LoginPage = () => {
             비밀번호 찾기
           </button>
         </div>
-        
+
         <button
           className="w-full bg-[#006D2C] text-white p-2 rounded-lg hover:bg-[#004B1D]"
           onClick={handleLogin}
         >
-          Login
+          로그인
         </button>
       </div>
 
