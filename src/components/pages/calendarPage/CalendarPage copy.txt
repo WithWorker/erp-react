@@ -25,26 +25,106 @@ const CalendarPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const calendarRef = useRef(null);
 
-  const today = new Date().toISOString().split('T')[0];
+
+  const today = new Date().toISOString().split('T')[0]; // 오늘 날짜를 `YYYY-MM-DD` 형식으로 저장
+  //const filteredEvents = events.filter(event => event.date === today); // 필터링 시 비교
+
+  const filteredEvents = events
+  .filter(event => category === "all" || event.category === category)
+  .map(event => ({
+    ...event,
+    backgroundColor: categoryColors[event.category] || '#D1D5DB',
+  }));
+  console.log('Filtered today\'s events:', filteredEvents);
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
 
+  /* // clg로 이벤트 일정 빈배열인지 아닌지 확인하기
+  useEffect(() => {
+    if (!selectedDate) {
+      setSelectedDate(today);
+    }
+    console.log("selectedDate:", selectedDate); // selectedDate 값 확인
+    console.log("events:", events); // events 배열이 올바르게 전달되는지 확인
+  
+    if (selectedDate) {
+      // selectedDate와 event.start를 비교하려면 event.start에서 날짜만 추출해야 합니다.
+      const filteredSelectedEvents = events.filter(event => {
+        if (!event.start) return false; // event.start가 없으면 제외
+  
+        // event.start가 ISO 문자열이라면, 이를 Date 객체로 변환하고 날짜만 추출
+        const eventDateString = event.start.split(' ')[0]; // "2025-03-13" 형태로 추출
+        //if (isNaN(eventDate.getTime())) return false; // 유효한 날짜가 아니면 제외
+  
+        //const eventDateString = eventDate.toISOString().split('T')[0]; // "YYYY-MM-DD" 형식으로 변환
+        console.log("eventDateString:", eventDateString); // 날짜 부분 확인
+        console.log("selectedDate:", selectedDate); // selectedDate 값 확인
+
+        // 비교 전에 값의 타입과 형식 확인
+        console.log("Comparing:", eventDateString === selectedDate);
+        return eventDateString === selectedDate; // selectedDate와 비교
+      });
+  
+      console.log("filteredSelectedEvents:", filteredSelectedEvents); // 필터링된 일정 확인
+      setSelectedEvents(filteredSelectedEvents); // selectedEvents 업데이트
+    }
+  }, [selectedDate, events]); // selectedDate나 events가 변경될 때마다 실행 */
+
+
+  /* useEffect(() => {
+    if (selectedDate) {
+      // 로컬스토리지에서 일정 데이터를 가져와서 selectedEvents로 설정
+      const events = JSON.parse(localStorage.getItem('events')) || [];
+      const filteredEvents = events.filter(
+        (event) => event.date === selectedDate
+      );
+      setSelectedEvents(filteredEvents);
+    }
+  }, [selectedDate]); // selectedDate가 변경될 때마다 실행 */
+
+  useEffect(() => {
+    // 로컬스토리지에서 기존 일정 가져오기
+    const storedEvents = JSON.parse(localStorage.getItem('events')) || [];
+  
+    // 선택된 날짜에 맞는 일정 필터링
+    const updatedSelectedEvents = storedEvents.filter(
+      (event) => event.date === selectedDate
+    );
+  
+    // 선택된 날짜에 맞는 일정만 상태 업데이트
+    setSelectedEvents(updatedSelectedEvents);
+  }, [selectedDate]);
+  
+  
 
   useEffect(() => {
     const savedEvents = JSON.parse(localStorage.getItem('events')) || [];
-    dispatch(loadEvents(savedEvents));
+    console.log("Loaded events from localStorage:", savedEvents); // 확인
+    dispatch(loadEvents(savedEvents)); // Redux로 이벤트 로드
   }, [dispatch]);
+  
+
+  /* useEffect(() => {
+    const filteredTodayEvents = events.filter(event => 
+       event.start && event.start.split('T')[0] === today);
+    setTodayEvents(filteredTodayEvents);
+  }, [events]); */
 
   useEffect(() => {
-    const filteredTodayEvents = events.filter(event => event.start?.split('T')[0] === today);
+    const filteredTodayEvents = events.filter(event => {
+      if (!event.start) return false; // event.start가 없으면 제외
+      const eventDateString = event.start.split('T')[0]; // 'YYYY-MM-DD' 형식으로 변환
+      return eventDateString === today; // 오늘 날짜와 비교
+    });
+    console.log("Filtered today's events:", filteredTodayEvents); // 오늘의 일정 필터링 확인
     setTodayEvents(filteredTodayEvents);
-  }, [events]);
+  }, [events, today]);
 
   useEffect(() => {
       const filteredEvents = events.filter(event => {
-      const isSameDate = event.start?.split('T')[0] === selectedDate;
+      const isSameDate = event.start?.split('T')[0] === selectedDate;  // `events.start`에서 날짜 비교
       const matchesSearchQuery = event.title.toLowerCase().includes(searchQuery.toLowerCase());
       return isSameDate && matchesSearchQuery;
     });
@@ -70,16 +150,7 @@ const CalendarPage = () => {
     dispatch(setCategory('all'));
   }, [dispatch]);
 
-  const filteredEvents = events
-    .filter(event => category === "all" || event.category === category)
-    .map(event => ({
-      ...event,
-      backgroundColor: categoryColors[event.category] || '#D1D5DB',
-      borderColor: 'none',
-      borderWidth: 0,
-      borderStyle: 'none',
-    }));
-
+  
   const handlePrevMonth = () => {
     if (currentMonth > 0) {
       const newMonth = currentMonth - 1;
@@ -104,7 +175,7 @@ const CalendarPage = () => {
     }
   };
 
-  const handleDateClick = (info) => {
+  /* const handleDateClick = (info) => {
     const clickedDate = info.dateStr;
     const calendarApi = calendarRef.current.getApi();
     
@@ -130,42 +201,52 @@ const CalendarPage = () => {
     // 선택된 날짜에 오늘의 일정이 포함되도록 오늘 일정도 필터링
     const filteredTodayEvents = events.filter(event => event.start?.split('T')[0] === today);
     setTodayEvents(filteredTodayEvents);
+  }; */
+
+  const handleDateClick = (info) => {
+    const clickedDate = info.dateStr; // 클릭된 날짜
+    setSelectedDate(clickedDate); // selectedDate 업데이트
+  
+    // 클릭된 날짜에 해당하는 이벤트 필터링
+    const filteredSelectedEvents = events.filter(event => {
+      if (!event.start) return false; // event.start가 없으면 제외
+  
+      const eventDate = new Date(event.start);
+      if (isNaN(eventDate.getTime())) return false; // 유효한 날짜가 아니면 제외
+  
+      const eventDateString = eventDate.toISOString().split('T')[0]; // "YYYY-MM-DD" 형식으로 변환
+      return eventDateString === clickedDate; // selectedDate와 비교
+    });
+    setSelectedEvents(filteredSelectedEvents); // selectedEvents 업데이트
   };
+  
 
   useEffect(() => {
     // events가 변경될 때마다 오늘 날짜에 해당하는 일정만 필터링하여 todayEvents로 설정
-    const filteredTodayEvents = events.filter(event => event.start?.split('T')[0] === today);
-    setTodayEvents(filteredTodayEvents);
-  }, [events]);
-  
-  // 검색 후에 selectedDate가 설정되지 않으면 오늘 날짜로 설정
-  const handleSearchKeyDown = (e) => {
-  if (e.key === 'Enter') {
-    // 검색어로 필터링된 일정들
-    const filteredEvents = events.filter(event =>
-      event.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setSelectedEvents(filteredEvents);
-
-    // 검색 후 selectedDate가 설정되지 않으면 검색된 일정 중 첫 번째 날짜를 selectedDate로 설정
-    if (filteredEvents.length > 0) {
-      setSelectedDate(filteredEvents[0].start.split('T')[0]); // 첫 번째 일정의 날짜로 설정
-    } else {
-      setSelectedDate(today); // 검색 결과가 없다면 오늘 날짜로 설정
-    }
-  }
-};
-
-  
-  useEffect(() => {
-    // events가 변경될 때마다 오늘 날짜에 해당하는 일정만 필터링하여 todayEvents로 설정
-    const filteredTodayEvents = events.filter(event =>
-      event.start?.split('T')[0] === today
+    const filteredTodayEvents = events.filter(event => 
+      event.start && event.start.split('T')[0] === today
     );
     setTodayEvents(filteredTodayEvents);
-  }, [events]);
-  
-  
+    }, [events]);
+    
+    // 검색 후에 selectedDate가 설정되지 않으면 오늘 날짜로 설정
+    const handleSearchKeyDown = (e) => {
+      if (e.key === 'Enter') {
+        // 검색어로 필터링된 일정들
+        const filteredEvents = events.filter(event =>
+          event.title.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setSelectedEvents(filteredEvents);
+    
+        // 검색 후 selectedDate가 설정되지 않으면 검색된 일정 중 첫 번째 날짜를 selectedDate로 설정
+        if (filteredEvents.length > 0 && filteredEvents[0].start) {
+          setSelectedDate(filteredEvents[0].start.split('T')[0]); // 첫 번째 일정의 날짜로 설정
+        } else {
+          //setSelectedDate(today); // 검색 결과가 없다면 오늘 날짜로 설정
+        }
+      }
+    };
+    
 
   const handleEventClick = (info) => {
     const eventId = info.event.id;
@@ -186,6 +267,8 @@ const CalendarPage = () => {
 
     setSelectedDate(today);
   };
+  
+  
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -225,47 +308,44 @@ const CalendarPage = () => {
               ref={calendarRef}
               plugins={[dayGridPlugin, interactionPlugin]}
               initialView="dayGridMonth"
-              events={filteredEvents}
               headerToolbar={false}
+              locale="kr"
+              events={filteredEvents}
+              eventClick={handleEventClick}
+              dateClick={handleDateClick}
+              selectable={true} // 날짜 선택 가능
               height="auto"
               initialDate={currentDate}
-              dateClick={handleDateClick}
-              eventClick={handleEventClick}
+              dayCellContent={(args) => {
+                return args.date.getDate();
+              }}
+              eventContent={(eventInfo) => {
+                return (
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <span>{eventInfo.event.title}</span>
+                  </div>
+                );
+              }}
             />
           </div>
 
           <div className="flex flex-col space-y-4 w-96 ml-6 p-4 bg-white rounded-2xl shadow-lg">
-            {selectedDate ? (
-              <div>
-                <h3 className="text-lg font-bold">{selectedDate} 일정</h3>
-                {selectedEvents.length > 0 ? (
-                  <ul>
-                    {selectedEvents.map((event) => (
-                      <li key={event.id} className="mt-2 p-2 bg-gray-100 rounded-md">
-                        {event.title}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p>등록된 일정이 없습니다.</p>
-                )}
-              </div>
-            ) : (
-              <div>
-                <h3 className="text-lg font-bold">오늘의 일정</h3>
-                {todayEvents.length > 0 ? (
-                  <ul>
-                    {todayEvents.map((event) => (
-                      <li key={event.id} className="mt-2 p-2 bg-gray-100 rounded-md">
-                        {event.title}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p>오늘의 일정이 없습니다.</p>
-                )}
-              </div>
-            )}
+      {selectedDate && (
+        <div>
+          <h3 className="text-lg font-bold">{selectedDate} 일정</h3>
+          {selectedEvents.length > 0 ? (
+            <ul>
+              {selectedEvents.map((event) => (
+                <li key={event.id} className="mt-2 p-2 bg-gray-100 rounded-md">
+                  {event.title}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>등록된 일정이 없습니다.</p>
+          )}
+        </div>
+      )}
             <button
               className="w-full p-2 mt-4 bg-[#006D2C] text-white rounded-md"
               onClick={() => navigate(`/write?date=${selectedDate || today}`)}

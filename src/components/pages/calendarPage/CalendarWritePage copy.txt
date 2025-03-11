@@ -30,7 +30,9 @@ const CalendarWritePage = () => {
   const [startTime, setStartTime] = useState({ period: 'AM', hour: '12', minute: '00' }); // ✨
   const [endTime, setEndTime] = useState({ period: 'AM', hour: '12', minute: '00' }); // ✨
 
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  /* const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]); */
+  const [selectedDate, setSelectedDate] = useState(new Date().toLocaleDateString('en-CA'));
+
   const [category, setCategoryState] = useState('all');
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -69,6 +71,11 @@ const CalendarWritePage = () => {
         { id: 2, name: '홍철수' },
         { id: 3, name: '이영희' },
       ];
+
+      // 이벤트 생성 후 참석자 추가
+      mockAttendees.forEach(attendee => {
+        dispatch(addAttendee({ eventId: attendee.id, participant: attendee }));
+      });
   
       const filteredResults = mockAttendees.filter((attendee) =>
         attendee.name.includes(query)
@@ -138,15 +145,17 @@ const CalendarWritePage = () => {
     navigate('/calendar');
   }; */
 
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
     if (!title.trim() || !description.trim()) {
       alert('제목과 내용을 입력해주세요!');
       return;
     }
   
-    const newEvent = {
+    /* const newEvent = {
       id: new Date().getTime().toString(),
-      date: selectedDate,
+      date: new Date(selectedDate).toISOString().split('T')[0], // 이렇게 수정해서 `YYYY-MM-DD` 형식으로 저장
       startTime: `${startTime.period} ${startTime.hour}:${startTime.minute}`,
       endTime: `${endTime.period} ${endTime.hour}:${endTime.minute}`,
       writer,
@@ -154,16 +163,38 @@ const CalendarWritePage = () => {
       content: description,
       attendees: selectedAttendees,
       category,
+    }; */
+
+    const newEvent = {
+      id: new Date().getTime().toString(),
+      date: new Date(selectedDate).toISOString().split('T')[0],
+      startTime: `${startTime.period} ${String(startTime.hour).padStart(2, '0')}:${String(startTime.minute).padStart(2, '0')}`,
+      endTime: `${endTime.period} ${String(endTime.hour).padStart(2, '0')}:${String(endTime.minute).padStart(2, '0')}`,
+      writer: writer || "작성자 미지정", // 기본값 설정
+      title,
+      content: description,
+      attendees: selectedAttendees,  // 참석자들 추가
+      category,
     };
+    
+
+    // 로컬스토리지에서 기존 일정 가져오기
+    const storedEvents = JSON.parse(localStorage.getItem('events')) || [];
+    
+    // 새 일정 추가
+    storedEvents.push(newEvent);
+    localStorage.setItem('events', JSON.stringify(storedEvents));
   
     // 🎀 서버 호출 없이 임시로 콘솔에 출력
     console.log('New event submitted:', newEvent);
     alert('일정이 성공적으로 등록되었습니다!');
   
-    // 로컬 상태 갱신 및 페이지 이동
-    dispatch(addEvent(newEvent));
-    dispatch(setCategory(category));
-    navigate('/calendar');
+    Promise.all([
+      dispatch(addEvent(newEvent)),
+      dispatch(setCategory(category))
+    ]).then(() => {
+      navigate('/calendar');
+    });
   };
 
   const categories = [
@@ -290,7 +321,15 @@ const CalendarWritePage = () => {
       {/* 시간 선택 */}
       <select
         value={startTime.hour}
-        onChange={(e) => setStartTime({ ...startTime, hour: e.target.value })} // ✨
+        /* onChange={(e) => setStartTime({ ...startTime, hour: e.target.value })} // ✨ */
+        onChange={(e) => {
+          const value = String(e.target.value).padStart(2, '0'); // 두 자리 문자열로 변환
+          const validHour = value === '00' ? '12' : value;      // "00"이면 "12"로 변환
+          setStartTime({ 
+            ...startTime, 
+            hour: validHour 
+          });
+        }}
         className="border rounded-md p-2 flex-1"
       >
         {Array.from({ length: 12 }, (_, index) => (

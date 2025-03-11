@@ -1,10 +1,12 @@
 // src/App.jsx
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginPage from './components/auth/LoginPage';
-import CalendarPage from './components/pages/CalendarPage';
+import CalendarPage from './components/pages/calendarPage/CalendarPage';
 import DashBoardPage from './components/pages/DashBoardPage';
-import CalendarWritePage from './components/pages/CalendarWritePage';
-import EventDetailPage from './components/pages/EventDetailPage';
+import CalendarWritePage from './components/pages/calendarPage/CalendarWritePage';
+import EventDetailPage from './components/pages/calendarPage/EventDetailPage';
+import EmployeeListPage from './components/pages/employeePage/EmployeeListPage';
+import ChatPage from './components/pages/ChatPage';
 
 function App() {
 
@@ -18,8 +20,8 @@ function App() {
         <Route path="/event/:id" element={<EventDetailPage />} />
         <Route path="/vacation" element={<div>휴가 페이지</div>} />
         <Route path="/board" element={<div>게시판 페이지</div>} />
-        <Route path="/chat" element={<div>채팅 페이지</div>} />
-        <Route path="/employees" element={<div>사원 조회 페이지</div>} />
+        <Route path="/chat" element={<ChatPage />} />
+        <Route path="/employees" element={<EmployeeListPage />} />
         <Route path="/mypage" element={<div>마이페이지</div>} />
       </Routes>
     </Router>

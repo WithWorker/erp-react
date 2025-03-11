@@ -2,12 +2,16 @@ import { configureStore } from '@reduxjs/toolkit';
 import authSlice from './slice/authSlice.js';  
 import calendarReducer from './slice/calendarSlice.js';  
 import attendanceSlice from './slice/attendanceSlice.js';
+import employeeReducer from './slice/employeeSlice.js';
+import chatReducer from './slice/chatSlice.js';
 
 const store = configureStore({
   reducer: {
     auth: authSlice.reducer,
     calendar: calendarReducer,
     attendance: attendanceSlice.reducer,
+    employee: employeeReducer,
+    chat: chatReducer,
   },
 });
 

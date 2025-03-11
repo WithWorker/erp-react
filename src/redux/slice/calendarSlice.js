@@ -8,8 +8,13 @@ const initialState = {
 
 const calendarSlice = createSlice({
   name: 'calendar',
-  initialState, // ✅ 여기서 initialState를 확실히 적용
+  initialState, // initialState 바로 사용
+
   reducers: {
+    setEvents: (state, action) => {
+      state.events = action.payload;
+    },
+
     setCategory(state, action) {
       state.category = action.payload; // 카테고리 업데이트
     },
@@ -22,7 +27,7 @@ const calendarSlice = createSlice({
       //}
 
       state.events.push(action.payload); // ✅ 이제 안전하게 추가 가능
-      //localStorage.setItem('events', JSON.stringify(state.events)); // 이벤트 추가 후 로컬 스토리지에 저장
+      localStorage.setItem('events', JSON.stringify(state.events)); // 이벤트 추가 후 로컬 스토리지에 저장
     },
     removeEvent(state, action) {
       state.events = state.events.filter(event => event.id !== action.payload);
@@ -31,9 +36,16 @@ const calendarSlice = createSlice({
     loadEvents(state, action) {
       state.events = action.payload;
     },
+    // 참석자 추가 액션
+    addAttendee: (state, action) => {
+      const event = state.events.find(event => event.id === action.payload.eventId);
+      if (event) {
+        event.participants.push(action.payload.participant);
+      }
+    },
   }
 });
 
 // ✅ 액션과 리듀서 내보내기
-export const { setCategory, addEvent, removeEvent, loadEvents } = calendarSlice.actions;
+export const { setEvents, setCategory, addEvent, removeEvent, loadEvents, addAttendee } = calendarSlice.actions;
 export default calendarSlice.reducer; // ✅ 올바른 내보내기
