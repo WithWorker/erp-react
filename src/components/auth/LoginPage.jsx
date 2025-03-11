@@ -28,15 +28,20 @@ const LoginPage = () => {
           'Content-Type': 'application/json', 
         }
       });
-
-      console.log('로그인 성공:', response.data);
-      localStorage.setItem('token', response.data.token);
-
-      navigate('/dashboard');
+  
+      const token = response.headers['authorization']?.split(' ')[1];
+      if (token) {
+        localStorage.setItem('token', token);
+        navigate('/dashboard');
+      } else {
+        setError('토큰이 없습니다.');
+      }
     } catch (err) {
+      console.error('로그인 오류:', err);
       setError('아이디 또는 비밀번호가 틀렸습니다.');
     }
   };
+  
 
   return (
     <div className="flex flex-col h-screen items-center justify-center bg-gray-100">
