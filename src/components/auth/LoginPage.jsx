@@ -2,15 +2,18 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LockFill, PersonFill } from 'react-bootstrap-icons';
 import axios from 'axios';
+import PasswordResetModal from './PasswordResetModal ';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [tempUser, setTempUser] = useState({
     mem_email: '',
-    mem_pw: ''
+    mem_pw: '',
+    mem_phone: '', 
   });
 
   const [error, setError] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   const changeUser = (e) => {
     const id = e.currentTarget.id;
@@ -41,7 +44,14 @@ const LoginPage = () => {
       setError('아이디 또는 비밀번호가 틀렸습니다.');
     }
   };
-  
+
+  const handleForgotPassword = () => {
+    setShowModal(true); 
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
 
   return (
     <div className="flex flex-col h-screen items-center justify-center bg-gray-100">
@@ -81,6 +91,7 @@ const LoginPage = () => {
         <div className="flex items-center justify-between mb-6">
           <button
             className="text-sm text-[#006D2C] hover:text-[#004B1D]"
+            onClick={handleForgotPassword}
           >
             비밀번호 찾기
           </button>
@@ -95,6 +106,9 @@ const LoginPage = () => {
 
         {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
       </div>
+
+      {/* 비밀번호 재설정 모달 */}
+      <PasswordResetModal showModal={showModal} closeModal={closeModal} />
     </div>
   );
 };
