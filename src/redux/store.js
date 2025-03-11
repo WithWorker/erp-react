@@ -1,13 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authSlice from './slice/authSlice.js';  
-import calendarReducer from './slice/calendarSlice.js';  
-import attendanceSlice from './slice/attendanceSlice.js';
 
 const store = configureStore({
   reducer: {
-    auth: authSlice.reducer,
-    calendar: calendarReducer,
-    attendance: attendanceSlice.reducer,
+    auth: authSlice.reducer
   },
 });
 
