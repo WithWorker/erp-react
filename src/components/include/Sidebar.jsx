@@ -1,36 +1,67 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BsGrid, BsCalendar, BsTree, BsFileText, BsChat, BsPerson } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   const navigate = useNavigate();
-  
-  // 출근 상태를 useState로 관리
   const [isWorking, setIsWorking] = useState(false);
   const [clockInMessage, setClockInMessage] = useState("");
 
+  const empId = 24;
+
   // 출근하기 버튼 클릭
   const handleClockIn = async () => {
+    if (!empId) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500)); // 0.5초 딜레이
-      setIsWorking(true); // 출근 상태로 변경
-      setClockInMessage("출근 도장 성공!"); // 출근 메시지 설정
+      const response = await fetch(`api/info/attendance/in/${empId}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (!response.ok) throw new Error("출근 기록 실패");
+
+      const message = await response.text();
+      setClockInMessage(message);
+      setIsWorking(true); 
     } catch (error) {
-      console.error("출근 실패:", error);
+      console.error("출근 오류:", error);
+      alert("출근 기록에 실패했습니다.");
     }
   };
 
   // 퇴근하기 버튼 클릭
   const handleClockOut = async () => {
+    if (!empId) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500)); // 0.5초 딜레이
+      const response = await fetch(`api/info/attendance/out/${empId}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (!response.ok) throw new Error("퇴근 기록 실패");
+
+      const message = await response.text();
+      setClockInMessage(message);
       setIsWorking(false); // 퇴근 상태로 변경
-      setClockInMessage(""); // 퇴근 후 메시지 초기화
     } catch (error) {
-      console.error("퇴근 실패:", error);
+      console.error("퇴근 오류:", error);
+      alert("퇴근 기록에 실패했습니다.");
     }
   };
 
+  // 메뉴 목록
   const menuItems = [
     { name: "DashBoard", icon: BsGrid, path: "/dashboard" },
     { name: "캘린더", icon: BsCalendar, path: "/calendar" },
@@ -55,7 +86,6 @@ const Sidebar = () => {
             onClick={() => navigate(menu.path)}
             className="flex items-center gap-2 mb-2 hover:bg-gray-100 rounded-lg cursor-pointer p-2"
           >
-            {/* 아이콘 렌더링 */}
             <menu.icon className="text-xl" />
             <span>{menu.name}</span>
           </div>
@@ -64,9 +94,9 @@ const Sidebar = () => {
 
       {/* 출퇴근 버튼 */}
       <div className="mt-auto flex flex-col gap-2">
-        {!isWorking && ( // 출근 상태가 아니면 출근 버튼 보이기
+        {!isWorking && (
           <button
-            onClick={handleClockIn} // 출근하기 클릭 시
+            onClick={handleClockIn}
             className="flex items-center justify-center gap-2 bg-[#006D2C] text-white py-2 rounded-full"
           >
             <i className="bi bi-box-arrow-in-right"></i> 출근하기
@@ -75,10 +105,9 @@ const Sidebar = () => {
 
         {isWorking && (
           <>
-            {/* 출근 도장 메시지 */}
             {clockInMessage && <div className="text-[#006D2C] text-center py-2">{clockInMessage}</div>}
             <button
-              onClick={handleClockOut} // 퇴근하기 클릭 시
+              onClick={handleClockOut}
               className="flex items-center justify-center gap-2 border-2 border-[#006D2C] text-[#006D2C] py-2 rounded-full"
             >
               <i className="bi bi-box-arrow-left"></i> 퇴근하기
