@@ -1,0 +1,184 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { addMessage, deleteMessage } from '../../redux/slice/chatSlice';
+import { Plus, Send, Trash } from 'react-bootstrap-icons';
+import Sidebar from '../include/Sidebar';
+import Header from '../include/Header';
+import { v4 as uuidv4 } from 'uuid';
+
+const ChatPage = () => {
+  const [input, setInput] = useState('');
+  const [selectedMessages, setSelectedMessages] = useState([]); // 스택 상태 추가
+  const messages = useSelector((state) => state.chat.messages);
+  const dispatch = useDispatch();
+  const inputRef = useRef(null); // 입력창 참조
+  const messagesEndRef = useRef(null); // 메시지 목록 끝을 참조할 ref 추가
+
+  // ✅ localStorage에서 저장된 중요 메시지 불러오기
+  useEffect(() => {
+    const savedMessages = localStorage.getItem('selectedMessages');
+    if (savedMessages) {
+      setSelectedMessages(JSON.parse(savedMessages));
+    }
+  }, []);
+
+  // ✅ 중요 메시지 상태를 localStorage에 저장
+  useEffect(() => {
+    localStorage.setItem('selectedMessages', JSON.stringify(selectedMessages));
+  }, [selectedMessages]);
+
+  // 최신 메시지로 스크롤 이동
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]); // messages가 변경될 때마다 실행
+
+  const handleSend = () => {
+    if (input.trim()) {
+      dispatch(
+        addMessage({
+          id: uuidv4(), // 고유 UUID 생성
+          text: input,
+          sender: 'user',
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), // timestamp 초 제외하고 시, 분만 표시
+        })
+      );
+      setInput('');
+      inputRef.current.focus(); // 메시지 전송 후 입력창에 포커스 설정
+    }
+  };
+
+  // 메시지 클릭 시 스택에 추가
+  const handleSelectMessage = (msg) => {
+    //setSelectedMessages((prev) => [...prev, msg]);
+    setSelectedMessages((prev) => {
+      // ✅ 이미 추가된 메시지는 제외
+      if (prev.some((m) => m.id === msg.id)) return prev;
+      return [...prev, msg];
+    });
+  };
+
+  // 중요 메시지 삭제
+    const handleDeleteMessage = (id) => {
+    setSelectedMessages((prev) =>
+      prev.filter((msg) => msg.id !== id) // 삭제 후 상태 업데이트
+    );
+  };
+
+  // 엔터 키로 메시지 전송
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // 기본 엔터 키 동작 방지 (줄바꿈 방지)
+      handleSend();
+    }
+  };
+
+  return (
+    <div className="flex h-screen bg-gray-100">
+      <Sidebar />
+      <div className="flex-1 p-6">
+        <Header />
+          <div className="flex h-[calc(109vh-14rem)] ">
+            {/* 채팅 영역 */}
+            <div className="flex-1 bg-white rounded-2xl shadow-lg p-4 relative">
+              <div className="space-y-4 overflow-y-auto h-[90%]">
+                {messages.map((msg, index) => {
+                  // 타임스탬프가 일치하는지 체크
+                  const isLastMessage = index === messages.length - 1; // 마지막 메시지 체크
+                  const prevMessage = messages[index - 1]; // 이전 메세지
+                  const showTimestamp = 
+                    !prevMessage || prevMessage.timestamp !== msg.timestamp; // 이전 메시지와 타임스탬프가 다르면 표시
+
+                  return (
+                    <div
+                    key={msg.id} // ✅ 중복 방지
+                    className={`flex items-center ${
+                        msg.sender === 'user' ? 'justify-end' : 'justify-start'
+                      }`}
+                    >
+                      {msg.sender !== 'user' && (
+                        <div className="w-4 h-4 bg-gray-300 rounded-full"></div>
+                      )}
+                      <div className={`ml-2 flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}>
+                      <div
+                        className={`ml-2 flex flex-col px-4 py-2 rounded-2xl max-w-[40ch] whitespace-normal break-words ${
+                          msg.sender === 'user'
+                            ? 'bg-[#006D2C] text-white'
+                            : 'bg-gray-200'
+                        }`}
+                        onClick={() => handleSelectMessage(msg)} // 클릭 시 처리
+                      >
+                        <span>{msg.text}</span>
+                      </div>
+                        {/* 타임스탬프 표시 */}
+                        {showTimestamp && (
+                          <span
+                            className={`text-xs text-gray-500 mt-1 ${
+                              msg.sender === 'user' ? 'ml-2' : 'mr-2'
+                            }mt-1`}
+                          >
+                            {msg.timestamp}
+                          </span>
+                        )}
+                    </div>
+                    </div>
+                  );
+                })}
+                {/* 메시지 목록 끝 */}
+              <div ref={messagesEndRef} />
+              </div>
+
+              {/* 입력창 */}
+              <div className="absolute bottom-4 left-4 right-4 flex items-center space-x-2">
+                <button className="p-2 bg-white rounded-full shadow-md">
+                  <Plus />
+                </button>
+                <input
+                  ref={inputRef} // 입력창에 ref 설정
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown} // 엔터 키 이벤트 추가
+                  placeholder="메시지를 입력하세요..."
+                  className="flex-1 px-4 py-2 bg-white border rounded-full shadow-md focus:outline-none"
+                />
+                <button
+                  onClick={handleSend}
+                  className="p-2 bg-white rounded-full shadow-md"
+                >
+                  <Send />
+                </button>
+              </div>
+            </div>
+
+            {/* 우측 패널 - 중요 내용 저장 */}
+            <div className="w-1/4 bg-white rounded-2xl shadow-md p-4 ml-4">
+              <h2 className="text-lg font-bold mb-4">중요 내용 저장하기</h2>
+              <div className="space-y-2 overflow-y-auto h-[300px]">
+                {selectedMessages.map((msg) => (
+                  <div key={msg.id} className="flex items-center space-x-2 border-b pb-2">
+                    <div className="flex items-center space-x-2">
+                    <span className="text-sm text-gray-500">
+                      {msg.timestamp}
+                    </span>
+                    <span className="text-sm truncate">{msg.text}</span>
+                  </div>
+                  {/* 삭제 버튼 */}
+                  <button
+                    onClick={() => handleDeleteMessage(msg.id)}
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    <Trash />
+                  </button>
+              </div>
+            ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ChatPage;
