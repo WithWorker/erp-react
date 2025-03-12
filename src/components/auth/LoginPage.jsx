@@ -23,27 +23,38 @@ const LoginPage = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post("/api/login", {
-        email: tempUser.mem_email,  
-        password: tempUser.mem_pw
-      }, {
-        headers: {
-          'Content-Type': 'application/json', 
+      const response = await axios.post(
+        "/api/login",
+        {
+          email: tempUser.mem_email,
+          password: tempUser.mem_pw,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      });
+      );
   
-      const token = response.headers['authorization']?.split(' ')[1];
+      // JWT 토큰 추출
+      const token = response.headers["authorization"]?.split(" ")[1];
       if (token) {
-        localStorage.setItem('token', token);
-        navigate('/dashboard');
+        const payload = JSON.parse(atob(token.split(".")[1])); 
+        const empId = payload.empId; 
+  
+        localStorage.setItem("token", token);
+        localStorage.setItem("empId", empId); 
+  
+        navigate("/dashboard");
       } else {
-        setError('토큰이 없습니다.');
+        setError("토큰이 없습니다.");
       }
     } catch (err) {
-      console.error('로그인 오류:', err);
-      setError('아이디 또는 비밀번호가 틀렸습니다.');
+      console.error("로그인 오류:", err);
+      setError("아이디 또는 비밀번호가 틀렸습니다.");
     }
   };
+  
 
   const handleForgotPassword = () => {
     setShowModal(true); 

@@ -5,9 +5,15 @@ import { useNavigate } from "react-router-dom";
 const Sidebar = () => {
   const navigate = useNavigate();
   const [isWorking, setIsWorking] = useState(false);
-  const [clockInMessage, setClockInMessage] = useState("");
+  const [clockMessage, setClockMessage] = useState(""); 
+  const [empId, setEmpId] = useState(null); 
 
-  const empId = 24;
+  useEffect(() => {
+    const storedEmpId = localStorage.getItem("empId");
+    if (storedEmpId) {
+      setEmpId(storedEmpId);
+    }
+  }, []);
 
   // 출근하기 버튼 클릭
   const handleClockIn = async () => {
@@ -17,7 +23,7 @@ const Sidebar = () => {
     }
 
     try {
-      const response = await fetch(`api/info/attendance/in/${empId}`, {
+      const response = await fetch(`/api/info/attendance/in/${empId}`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -27,8 +33,8 @@ const Sidebar = () => {
       if (!response.ok) throw new Error("출근 기록 실패");
 
       const message = await response.text();
-      setClockInMessage(message);
-      setIsWorking(true); 
+      setClockMessage(message); // 메시지 업데이트
+      setIsWorking(true); // 출근 상태로 변경
     } catch (error) {
       console.error("출근 오류:", error);
       alert("출근 기록에 실패했습니다.");
@@ -43,7 +49,7 @@ const Sidebar = () => {
     }
 
     try {
-      const response = await fetch(`api/info/attendance/out/${empId}`, {
+      const response = await fetch(`/api/info/attendance/out/${empId}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -53,7 +59,7 @@ const Sidebar = () => {
       if (!response.ok) throw new Error("퇴근 기록 실패");
 
       const message = await response.text();
-      setClockInMessage(message);
+      setClockMessage(message); // 메시지 업데이트
       setIsWorking(false); // 퇴근 상태로 변경
     } catch (error) {
       console.error("퇴근 오류:", error);
@@ -92,27 +98,24 @@ const Sidebar = () => {
         ))}
       </nav>
 
-      {/* 출퇴근 버튼 */}
+      {/* 출퇴근 메시지 & 버튼 */}
       <div className="mt-auto flex flex-col gap-2">
-        {!isWorking && (
+        {clockMessage && <div className="text-center py-2 text-[#006D2C]">{clockMessage}</div>}
+
+        {!isWorking ? (
           <button
             onClick={handleClockIn}
             className="flex items-center justify-center gap-2 bg-[#006D2C] text-white py-2 rounded-full"
           >
             <i className="bi bi-box-arrow-in-right"></i> 출근하기
           </button>
-        )}
-
-        {isWorking && (
-          <>
-            {clockInMessage && <div className="text-[#006D2C] text-center py-2">{clockInMessage}</div>}
-            <button
-              onClick={handleClockOut}
-              className="flex items-center justify-center gap-2 border-2 border-[#006D2C] text-[#006D2C] py-2 rounded-full"
-            >
-              <i className="bi bi-box-arrow-left"></i> 퇴근하기
-            </button>
-          </>
+        ) : (
+          <button
+            onClick={handleClockOut}
+            className="flex items-center justify-center gap-2 border-2 border-[#006D2C] text-[#006D2C] py-2 rounded-full"
+          >
+            <i className="bi bi-box-arrow-left"></i> 퇴근하기
+          </button>
         )}
       </div>
     </div>
