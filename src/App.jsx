@@ -1,21 +1,20 @@
-import { Route, Routes, BrowserRouter } from "react-router-dom"
-import Login from "./components/auth/Login"
-import HomePage from "./components/pages/home/HomePage"
-import Find from "./components/auth/Find"
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LoginPage from './components/auth/LoginPage';
+import DashBoardPage from './components/pages/DashBoardPage';
+import EmployeeListPage from './components/employees/EmployeeListPage';
 
 function App() {
 
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" exact={true} element={<Login />}/>
-          <Route path="/find" element={<Find />} />
-        </Routes>
-      </BrowserRouter>
-    </>
-  )
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/dashboard" element={<DashBoardPage />} />
+        <Route path="/employees" element={<EmployeeListPage />} />
+        <Route path="/mypage" element={<div>마이페이지</div>} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
