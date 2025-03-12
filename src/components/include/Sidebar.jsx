@@ -1,54 +1,19 @@
 import { useState } from "react";
 import { BsGrid, BsCalendar, BsTree, BsFileText, BsChat, BsPerson } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { clockIn, clockOut } from '../../redux/slice/attendanceSlice';
 
 const Sidebar = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const isWorking = useSelector((state) => state.attendance.isWorking);
-
-  // clockInMessage 상태 추가
+  
+  // 출근 상태를 useState로 관리
+  const [isWorking, setIsWorking] = useState(false);
   const [clockInMessage, setClockInMessage] = useState("");
 
-  /* 
-  백엔드 완성되면 이거 풀어서 연결하기
-
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
-  const handleClockIn = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/clock-in`, { method: "POST" });
-      if (response.ok) {
-        dispatch(clockIn());
-      } else {
-        console.error("출근 실패:", response.status);
-      }
-    } catch (error) {
-      console.error("출근 실패:", error);
-    }
-  };
-
-  const handleClockOut = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/clock-out`, { method: "POST" });
-      if (response.ok) {
-        dispatch(clockOut());
-      }
-    } catch (error) {
-      console.error("퇴근 실패:", error);
-    }
-  };
-  */
-
-  // Mock 데이터 처리 (백엔드 없이 테스트용)
   // 출근하기 버튼 클릭
   const handleClockIn = async () => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500)); // 0.5초 딜레이
-      console.log("출근 성공 (Mock)");
-      dispatch(clockIn());
+      setIsWorking(true); // 출근 상태로 변경
       setClockInMessage("출근 도장 성공!"); // 출근 메시지 설정
     } catch (error) {
       console.error("출근 실패:", error);
@@ -59,14 +24,13 @@ const Sidebar = () => {
   const handleClockOut = async () => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500)); // 0.5초 딜레이
-      console.log("퇴근 성공 (Mock)");
-      dispatch(clockOut());
+      setIsWorking(false); // 퇴근 상태로 변경
       setClockInMessage(""); // 퇴근 후 메시지 초기화
     } catch (error) {
       console.error("퇴근 실패:", error);
     }
   };
-  
+
   const menuItems = [
     { name: "DashBoard", icon: BsGrid, path: "/dashboard" },
     { name: "캘린더", icon: BsCalendar, path: "/calendar" },

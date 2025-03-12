@@ -68,28 +68,6 @@ const Header = () => {
     navigate("/email"); // 이메일 페이지로 이동
   };
 
-  // 로그인 후 사용자 프로필 이미지 가져오기
-  useEffect(() => {
-    const fetchProfileImage = async () => {
-      try {
-        const response = await fetch("http://localhost:7777/api/user-profile"); 
-        if (!response.ok) {
-          const errorMessage = await response.text(); // 서버에서 응답한 오류 메시지 출력
-          throw new Error(`서버 오류: ${response.status} - ${errorMessage}`);
-        }
-        const data = await response.json();
-        console.log("서버 응답 데이터:", data); // 서버에서 받은 데이터 콘솔 출력
-        setProfileImage(data.profileImageUrl || defaultProfileImage);
-      } catch (error) {
-        console.error("프로필 이미지 로드 실패:", error);
-        setProfileImage(defaultProfileImage); // 오류 시 기본 이미지 설정
-      }
-    };
-    
-
-    fetchProfileImage(); // 프로필 이미지 설정
-  }, []);
-
   return (
     <div className="flex justify-between items-center p-4">
       <h2 className="text-xl font-bold">{getPageTitle()}</h2> {/* 경로에 맞는 페이지 제목 표시 */}
@@ -113,15 +91,6 @@ const Header = () => {
           <BsBellFill size={24} className="cursor-pointer text-[#323232]" onClick={handleBellClick} />
         )}
         
-        {/* 프로필 이미지 (기본 또는 사용자 이미지) */}
-        <div className="w-10 h-10 rounded-full bg-gray-300">
-          <img
-            src={profileImage}
-            alt="사용자 프로필"
-            className="w-full h-full rounded-full object-cover"
-            onError={(e) => (e.target.src = defaultProfileImage)} // 이미지 로드 실패 시 기본 이미지로 변경
-          />
-        </div>
       </div>
     </div>
   );
