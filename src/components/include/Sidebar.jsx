@@ -4,15 +4,14 @@ import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   const navigate = useNavigate();
-  
-  // 출근 상태를 useState로 관리
-  const [isWorking, setIsWorking] = useState(false);
-  const [clockInMessage, setClockInMessage] = useState("");
+  const [isWorking, setIsWorking] = useState(false); // 출근 상태
+  const [clockInMessage, setClockInMessage] = useState(""); // 출근 메시지 상태
 
   // 출근하기 버튼 클릭
   const handleClockIn = async () => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500)); // 0.5초 딜레이
+      console.log("출근 성공 (Mock)");
       setIsWorking(true); // 출근 상태로 변경
       setClockInMessage("출근 도장 성공!"); // 출근 메시지 설정
     } catch (error) {
@@ -24,6 +23,7 @@ const Sidebar = () => {
   const handleClockOut = async () => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500)); // 0.5초 딜레이
+      console.log("퇴근 성공 (Mock)");
       setIsWorking(false); // 퇴근 상태로 변경
       setClockInMessage(""); // 퇴근 후 메시지 초기화
     } catch (error) {
