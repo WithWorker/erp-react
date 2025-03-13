@@ -7,21 +7,22 @@ import Pagination from "./Pagination";
 import { ThreeDots } from "react-bootstrap-icons";
 
 const departmentMap = {
-    all: null,
-    dev: 1,
-    admin: 2,
-    design: 3,
-    security: 4,
-    sales: 5,
-    hr: 6,
+    '전체보기': null,
+    '개발': 1,
+    '경영': 2,
+    '디자인': 3,
+    '보안': 4,
+    '영업': 5,
+    '인사': 6,
 };
+
 
 const EmployeeListPage = () => {
 const [query, setQuery] = useState("");
 const [employees, setEmployees] = useState([]);
 const [currentPage, setCurrentPage] = useState(1);
 const [pageGroup, setPageGroup] = useState(0); 
-const itemsPerPage = 1;
+const itemsPerPage = 8;
 
 useEffect(() => {
     fetchEmployees();

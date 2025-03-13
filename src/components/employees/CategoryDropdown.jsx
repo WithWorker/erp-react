@@ -1,15 +1,15 @@
 import { useState } from "react";
-import categoryEmployee from "../../utils/categoryEmployee";
+import categoryDepartment from "../../utils/categoryDepartment";
 import { ChevronDown } from "react-bootstrap-icons";
 
 const CategoryDropdown = ({ onSelectDepartment }) => {
 const [dropdownOpen, setDropdownOpen] = useState(false);
-const [selectedCategory, setSelectedCategory] = useState("all");
+const [selectedCategory, setSelectedCategory] = useState("전체보기");
 
 const handleCategorySelect = (categoryValue) => {
-setSelectedCategory(categoryValue);
-setDropdownOpen(false);
-onSelectDepartment(categoryValue); 
+    setSelectedCategory(categoryValue);
+    setDropdownOpen(false);
+    onSelectDepartment(categoryValue); 
 };
 
 return (
@@ -21,20 +21,20 @@ return (
     <div
         className="w-4 h-4 rounded-full mr-2"
         style={{
-        backgroundColor: categoryEmployee.find(
+        backgroundColor: categoryDepartment.find(
             (cat) => cat.value === selectedCategory
         )?.color,
         }}
     />
     <span className="font-medium">
-        {categoryEmployee.find((cat) => cat.value === selectedCategory)?.label}
+        {categoryDepartment.find((cat) => cat.value === selectedCategory)?.label}
     </span>
     <ChevronDown className="ml-auto text-gray-500" />
     </div>
 
     {dropdownOpen && (
     <div className="absolute left-0 top-full mt-1 w-full bg-white rounded-xl shadow-lg z-20 border overflow-hidden">
-        {categoryEmployee.map((cat) => (
+        {categoryDepartment.map((cat) => (
         <div
             key={cat.value}
             className="flex items-center p-3 hover:bg-gray-100 cursor-pointer transition"
