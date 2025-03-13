@@ -34,7 +34,9 @@ const Header = () => {
       case "/chat":
         return "채팅";
       case "/employees":
-        return "사원 조회";
+        return "직원 조회";
+      case "/join":
+        return "직원 등록";
       case "/mypage":
         return "마이페이지";
       default:
