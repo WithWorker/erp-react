@@ -1,21 +1,33 @@
-import { Route, Routes, BrowserRouter } from "react-router-dom"
-import Login from "./components/auth/Login"
-import HomePage from "./components/pages/home/HomePage"
-import Find from "./components/auth/Find"
+// src/App.jsx
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LoginPage from './components/auth/LoginPage';
+import CalendarPage from './components/pages/calendarPage/CalendarPage';
+import DashBoardPage from './components/pages/DashBoardPage';
+import CalendarWritePage from './components/pages/calendarPage/CalendarWritePage';
+import EventDetailPage from './components/pages/calendarPage/EventDetailPage';
+import EmployeeListPage from './components/pages/employeePage/EmployeeListPage';
+import ChatPage from './components/pages/ChatPage';
+import AlarmPage from './components/pages/AlarmPage';
 
 function App() {
 
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" exact={true} element={<Login />}/>
-          <Route path="/find" element={<Find />} />
-        </Routes>
-      </BrowserRouter>
-    </>
-  )
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/dashboard" element={<DashBoardPage />} />
+        <Route path="/calendar" element={<CalendarPage />} />
+        <Route path="/write" element={<CalendarWritePage />} />
+        <Route path="/event/:id" element={<EventDetailPage />} />
+        <Route path="/vacation" element={<div>휴가 페이지</div>} />
+        <Route path="/board" element={<div>게시판 페이지</div>} />
+        <Route path="/chat" element={<ChatPage />} />
+        <Route path="/alarm" element={<AlarmPage />} />
+        <Route path="/employees" element={<EmployeeListPage />} />
+        <Route path="/mypage" element={<div>마이페이지</div>} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
