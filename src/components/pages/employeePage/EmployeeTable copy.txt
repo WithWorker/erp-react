@@ -4,7 +4,6 @@ import { loadEmployees } from '../../../redux/slice/employeeSlice';
 import { ThreeDots } from 'react-bootstrap-icons'; // 점 3개 아이콘
 import { useNavigate } from 'react-router-dom'; // 네비게이션 추가
 import categoryEmployee from '../../../utils/categoryEmployee';
-import EmployeeModal from './EmployeeModal';
 
 const EmployeeTable = () => {
   const dispatch = useDispatch();
@@ -12,11 +11,10 @@ const EmployeeTable = () => {
   const { employees = [], status, searchQuery, category, isAdmin  } = useSelector((state) => state.employee || {});
   
   const [selectedEmployee, setSelectedEmployee] = useState(null);  // 선택된 직원
-  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     dispatch(loadEmployees());  // 직원 목록 로드
-  }, [dispatch]); // 'status'가 변경될 때마다 데이터 로드
+  }, [dispatch]);
 
   // 검색어가 있으면 필터링
   const filteredEmployees = employees.filter((employee) => {
@@ -34,30 +32,15 @@ const EmployeeTable = () => {
     );
   }); */
 
+  if (status === 'loading') return <p>로딩 중...</p>;
+  if (status === 'failed') return <p>데이터를 불러오는 데 실패했습니다.</p>;
+
+
   // 점 3개 클릭 시 admin 페이지 이동
   const handleAdminRedirect = (employee) => {
     setSelectedEmployee(employee);  // 선택된 직원 설정
-    //navigate(`/admin/employee/${employee.id}`);
-    setShowModal(true);
+    navigate(`/admin/employee/${employee.id}`);
   };
-
-  const closeModal = () => setShowModal(false);
-
-  // 직원 정보 추가 페이지로 이동
-  const handleAddEmployee = () => {
-    closeModal();
-    navigate('/employee/add');
-  };
-
-  // 직원 정보 수정 페이지로 이동
-  const handleEditEmployee = () => {
-    closeModal();
-    navigate(`/employee/edit/${selectedEmployee?.id}`);
-  };
-
-
-  if (status === 'loading') return <p>로딩 중...</p>;
-  if (status === 'failed') return <p>데이터를 불러오는 데 실패했습니다.</p>;
 
 
   return (
@@ -99,23 +82,16 @@ const EmployeeTable = () => {
                 </span>
               </td>
               {isAdmin && (
-                <td className="p-4 text-center">
-                  <button onClick={() => handleAdminRedirect(employee)} className="text-gray-500">
-                    <ThreeDots size={20} />
-                  </button>
-                </td>
+              <td className="p-4 text-center">
+                <button onClick={() => handleAdminRedirect(employee)} className="text-gray-500">
+                  <ThreeDots size={20} />
+                </button>
+              </td>
               )}
             </tr>
           ))}
         </tbody>
       </table>
-        {/* 모달 창 */}
-        {showModal && (
-          <EmployeeModal
-            employee={selectedEmployee}
-            onClose={() => setShowModal(false)}
-          />
-        )}
     </div>
   );
 };

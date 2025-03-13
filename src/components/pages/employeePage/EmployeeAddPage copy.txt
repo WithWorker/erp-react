@@ -1,0 +1,190 @@
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { loadEmployees } from '../../../redux/slice/employeeSlice';
+import { addEmployee } from '../../../redux/slice/employeeSlice';
+import Sidebar from '../../include/Sidebar';
+import Header from '../../include/Header';
+
+const EmployeeAddPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    employeeId: '',
+    name: '',
+    department: '',
+    position: '',
+    phone: '',
+    email: '',
+    status: 'active',
+    profileImage: null
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    setFormData(prev => ({ ...prev, profileImage: file }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const newEmployee = {
+      ...formData,
+      profileImage: formData.profileImage ? URL.createObjectURL(formData.profileImage) : null
+    };
+
+    await dispatch(addEmployee(newEmployee)); // 직원 추가
+    dispatch(loadEmployees()); // 직원 목록 갱신
+    navigate('/employees'); // 목록으로 이동
+  };
+
+  
+
+  // 닫기 버튼 클릭 시 /employees 페이지로 이동
+  const handleClose = () => {
+    navigate("/employees");  // /employees로 이동
+  };
+
+  return (
+    <div className="flex h-screen bg-gray-100">
+      <Sidebar />
+      <div className="flex-1 p-6">
+        <Header />
+        <div>
+        <div className="flex flex-row md:flex-row items-start justify-between space-y-4 md:space-y-0 md:space-x-4 w-full mb-6">
+        <form onSubmit={handleSubmit} className="flex flex-col md:flex-row w-full space-y-4 md:space-y-0"> 
+        {/* 프로필 이미지 업로드 */}
+        <div className="flex flex-col space-y-4 w-99 ml-6 mr-8 p-4 bg-white rounded-2xl shadow-lg">
+        <label className="block text-md font-medium text-center">프로필 이미지</label>
+        {/* 선택된 이미지 미리보기 (선택된 이미지가 있을 경우) */}
+        {formData.profileImage ? (
+          <div className="mt-2">
+            <img 
+              src={URL.createObjectURL(formData.profileImage)} 
+              alt="Selected Profile" 
+              className="mt-2 w-full h-100 rounded-lg object-cover"
+            />
+            {/* 선택된 이미지 파일명 표시 */}
+            <p className="mt-2 text-sm text-gray-500">{formData.profileImage.name}</p>
+          </div>
+        ) : (
+          <div className="mt-4 w-full h-80 bg-gray-300 rounded-lg flex items-center justify-center">
+            <p className="text-sm text-gray-500">이미지를 선택하세요</p>
+          </div>
+        )}
+
+          <input 
+            type="file" 
+            accept="image/*" 
+            onChange={handleImageUpload}
+            className="border-2 border-[#323232] border-dotted rounded-md w-full py-2 px-3"
+          />
+        </div>
+
+        <div className="flex-1 space-y-4">
+          <div className='h-30 bg-white text-center rounded-3xl p-8 shadow-md mb-8'>
+            <h className='text-lg font-bold'>개인정보 추가</h>
+            {/* 이름 */}
+            <div className='flex justify-between items-center ml-5 mr-20 mt-8'>
+              <label className="block text-sm font-medium w-40">이름</label>
+              <input 
+                type="text" 
+                name="name" 
+                value={formData.name} 
+                onChange={handleChange} 
+                className="bg-gray-100 border rounded-md w-full p-2"
+                required 
+              />
+            </div>
+
+        {/* 이메일 */}
+        <div className='flex justify-between items-center ml-5 mr-20 mt-8'>
+        <label className="block text-sm font-medium w-40">이메일</label>
+          <input 
+            type="email" 
+            name="email" 
+            value={formData.email} 
+            onChange={handleChange} 
+            className="bg-gray-100 border rounded-md w-full p-2"
+          />
+        </div>
+
+        {/* 전화번호 */}
+        <div className='flex justify-between items-center ml-5 mr-20 mt-8 mb-2'>
+          <label className="block text-sm font-medium w-40">전화번호</label>
+          <input 
+            type="text" 
+            name="phone" 
+            value={formData.phone} 
+            onChange={handleChange} 
+            className="bg-gray-100 border rounded-md w-full p-2"
+          />
+        </div>
+        </div>
+
+        <div className="flex flex-row space-x-8 items-center">
+          <div className='w-full h-30 bg-white text-center rounded-3xl p-8 shadow-md'>
+            <h className='text-lg font-bold'>부서관리</h>
+            {/* 부서 */}
+            <div className='flex justify-between items-center ml-5 mr-20 mt-8 mb-2'>
+            <label className="block text-sm font-medium w-40">현재부서     :     </label>
+              <input 
+                type="text" 
+                name="department" 
+                value={formData.department} 
+                onChange={handleChange} 
+                className="border-gray-300 border rounded-md w-full"
+              />
+            </div>
+          </div>
+          <div className='w-full h-30 bg-white text-center rounded-3xl p-8 shadow-md'>
+            <h className='text-lg font-bold'>직급관리</h>
+            {/* 직급 */}
+            <div className='flex justify-between items-center ml-5 mr-20 mt-8 mb-2'>
+              <label className="block text-sm font-medium w-40">현재직급     :     </label>
+              <input 
+                type="text" 
+                name="position" 
+                value={formData.position} 
+                onChange={handleChange} 
+                className="border-gray-300 border rounded-md w-full"
+              />
+            </div>
+            </div>
+        </div>
+
+
+        
+        {/* 등록 버튼 */}
+        <div className='flex justify-end'>
+          <button 
+            type="submit" 
+            onClick={handleClose}
+            className="border-1 border-[#323232] text-[#323232] py-2 mr-4 rounded-full w-40"
+          >
+            닫기 
+          </button>
+          <button 
+            type="submit" 
+            className="bg-[#006D2C] text-white py-2 rounded-full w-40"
+          >
+            추가하기 
+          </button>
+        </div>
+        </div>
+
+      </form>
+    </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default EmployeeAddPage;

@@ -16,6 +16,10 @@ const EmployeeListPage = () => {
     dispatch(loadEmployees()); // 직원 목록 로드
   }, [dispatch]); */
 
+  useEffect(() => {
+  }, [dispatch]);
+  
+
   return (
     <div className="flex h-screen bg-gray-100">
       <Sidebar />

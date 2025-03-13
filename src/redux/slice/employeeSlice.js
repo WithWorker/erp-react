@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 //import { fetchEmployees } from '../../service/employeeService';
 
 /* 백엔드 연결시 해제
@@ -41,17 +42,33 @@ const mockData = [
   },
 ];
 
+// 직원 추가
+export const addEmployee = createAsyncThunk(
+  'employee/addEmployee', 
+  async (newEmployee) => {
+    const response = await axios.post('/api/employees', newEmployee);
+    return response.data;
+});
+
+// 직원 수정
+export const updateEmployee = createAsyncThunk('employee/updateEmployee', async (updatedEmployee) => {
+  const response = await axios.put(`/api/employee/${updatedEmployee.id}`, updatedEmployee);
+  return response.data;
+});
 
 export const loadEmployees = createAsyncThunk('employee/loadEmployees', async () => {
+  const response = await axios.get('/api/employees');
+  return response.data;
   // 백엔드 연결 없이 mock data 사용
-  return mockData;
+  //return mockData;
 });
 
 const initialState = {
   employees: [], // 실제 직원 정보만 저장
-  status: 'idle',
+  status: 'idle', // 'idle', 'loading', 'succeeded', 'failed'
   searchQuery: '',  // 검색어 상태 추가
   category: 'all',  // 카테고리 상태
+  isAdmin: true, // 관리자 권한 강제 활성화
   error: null,
 };
 
@@ -68,9 +85,27 @@ const employeeSlice = createSlice({
     setCategory: (state, action) => {
       state.category = action.payload;  // 카테고리 상태 업데이트
     },
+    addEmployee: (state, action) => {
+      state.employees.push(action.payload);
+    },
+    setEmployees: (state, action) => {
+      state.employees = action.payload;
+    },
+    loadEmployees: (state, action) => {
+      // 예시로, 데이터를 서버에서 가져오는 것처럼 처리
+      // 실제로는 API 호출을 해서 데이터를 가져오거나, store 상태를 업데이트
+    },
   },
   extraReducers: (builder) => {
     builder
+      .addCase(addEmployee.fulfilled, (state, action) => {
+        // 새로 추가된 직원 정보를 employees 배열에 추가
+        state.employees.push(action.payload);
+      })
+      .addCase(updateEmployee.fulfilled, (state, action) => {
+        const index = state.employees.findIndex(e => e.id === action.payload.id);
+        state.employees[index] = action.payload;
+      })
       .addCase(loadEmployees.pending, (state) => {
         state.status = 'loading';
       })
@@ -82,9 +117,8 @@ const employeeSlice = createSlice({
         state.status = 'failed';
         state.error = action.error.message;
       });
-  },
-}
-);
+    },
+});
 
 export const { setSearchQuery, setStatus, setCategory } = employeeSlice.actions;
 
