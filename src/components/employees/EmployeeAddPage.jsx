@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import Sidebar from '../include/Sidebar';
 import Header from '../include/Header';
-import DepartmentDropdown from '../employees/DepartmentDropdown'; // DepartmentDropdown import
-import PositionDropdown from '../employees/PositionDropdown'; // PositionDropdown import
-import categoryDepartment from '../../utils/categoryDepartment'; // 부서 데이터
-import categoryPosition from '../../utils/categoryPosition'; // 직급 데이터
+import DepartmentDropdown from '../employees/DepartmentDropdown';
+import PositionDropdown from '../employees/PositionDropdown';
+import categoryDepartment from '../../utils/categoryDepartment';
+import categoryPosition from '../../utils/categoryPosition';
 
 const EmployeeAddPage = () => {
-  const [profileImage, setProfileImage] = useState(null); // 사진 업로드 상태 관리
-  const [departmentId, setDepartmentId] = useState(''); // 부서 ID 상태
-  const [positionId, setPositionId] = useState(''); // 직급 ID 상태
+  const [profileImage, setProfileImage] = useState(null);
+  const [departmentId, setDepartmentId] = useState('');
+  const [positionId, setPositionId] = useState('');
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -18,22 +18,20 @@ const EmployeeAddPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // 선택된 부서 ID와 직급 ID를 포함한 전체 데이터를 요청
     const data = {
       profileImage,
-      departmentId, // 부서 ID
-      positionId,   // 직급 ID
+      departmentId,
+      positionId,
     };
     console.log('직원 추가:', data);
-    // 여기에 데이터를 서버로 보내는 로직을 추가하세요.
   };
 
   const handlePositionSelect = (value, id) => {
-    setPositionId(id); // 직급 ID 상태 업데이트
+    setPositionId(id);
   };
 
   const handleDepartmentSelect = (value, id) => {
-    setDepartmentId(id); // 부서 ID 상태 업데이트
+    setDepartmentId(id);
   };
 
   const handleClose = () => {
@@ -47,8 +45,7 @@ const EmployeeAddPage = () => {
         <Header />
         <div>
           <form onSubmit={handleSubmit} className="flex w-full space-x-8">
-            {/* 왼쪽: 프로필 이미지 */}
-            <div className="flex flex-col space-y-4 w-[350px] p-4 bg-white rounded-2xl shadow-lg h-[472px]">
+            <div className="flex flex-col space-y-4 w-[350px] p-4 bg-white rounded-2xl shadow-lg h-[550px]">
               <label className="block text-md font-medium text-center">프로필 이미지</label>
               {profileImage ? (
                 <div className="mt-2">
@@ -72,14 +69,28 @@ const EmployeeAddPage = () => {
               />
             </div>
 
-            {/* 가운데: 개인정보 추가 */}
             <div className="flex-1 space-y-8">
               <div className="w-full h-auto bg-white text-center rounded-3xl p-8 shadow-md mb-8">
                 <h1 className="text-lg font-bold">개인정보 추가</h1>
                 <div className="flex flex-col space-y-4 items-center mt-4">
-                  {/* 이름 */}
                   <div className="flex flex-row space-x-4 w-full max-w-[400px]">
                     <div className="flex flex-col space-y-2 w-1/2">
+                      <label className="block text-sm font-medium text-left">부서</label>
+                      <DepartmentDropdown
+                        items={categoryDepartment}
+                        onSelectCategory={handleDepartmentSelect}
+                      />
+                    </div>
+                    <div className="flex flex-col space-y-2 w-1/2">
+                      <label className="block text-sm font-medium text-left">직급</label>
+                      <PositionDropdown
+                        items={categoryPosition}
+                        onSelectCategory={handlePositionSelect}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-row space-x-4 w-full max-w-[400px]">
+                    <div className="flex flex-col space-y-2 w-full">
                       <label className="block text-sm font-medium text-left">이름</label>
                       <input
                         type="text"
@@ -88,18 +99,10 @@ const EmployeeAddPage = () => {
                         required
                       />
                     </div>
-                    <div className="flex flex-col space-y-2 w-1/2">
-                      <label className="block text-sm font-medium text-left">부서</label>
-                      <DepartmentDropdown
-                        items={categoryDepartment}
-                        onSelectCategory={handleDepartmentSelect} // 부서 선택 시 ID만 업데이트
-                      />
-                    </div>
                   </div>
 
-                  {/* 전화번호 */}
                   <div className="flex flex-row space-x-4 w-full max-w-[400px]">
-                    <div className="flex flex-col space-y-2 w-1/2">
+                    <div className="flex flex-col space-y-2 w-full">
                       <label className="block text-sm font-medium text-left">전화번호</label>
                       <input
                         type="text"
@@ -107,16 +110,8 @@ const EmployeeAddPage = () => {
                         className="bg-gray-100 border rounded-md w-full p-2"
                       />
                     </div>
-                    <div className="flex flex-col space-y-2 w-1/2">
-                      <label className="block text-sm font-medium text-left">직급</label>
-                      <PositionDropdown
-                        items={categoryPosition}
-                        onSelectCategory={handlePositionSelect} // 직급 선택 시 ID만 업데이트
-                      />
-                    </div>
                   </div>
 
-                  {/* 이메일 */}
                   <div className="flex flex-col space-y-4 w-full max-w-[400px]">
                     <label className="block text-sm font-medium text-left">이메일</label>
                     <input
@@ -126,7 +121,6 @@ const EmployeeAddPage = () => {
                     />
                   </div>
 
-                  {/* 비밀번호 */}
                   <div className="flex flex-col space-y-4 w-full max-w-[400px]">
                     <label className="block text-sm font-medium text-left">비밀번호</label>
                     <input
@@ -140,7 +134,6 @@ const EmployeeAddPage = () => {
             </div>
           </form>
 
-          {/* 등록 버튼 */}
           <div className="flex justify-end pt-4 space-x-4">
             <button
               type="submit"
