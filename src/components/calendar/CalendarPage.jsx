@@ -23,7 +23,7 @@ const CalendarPage = () => {
   const [selectedEvents, setSelectedEvents] = useState([]); // 선택된 날짜의 일정 목록
 
   const applicantId = 2; // 특정 사용자의 ID (임시 값)
-  const departmentId = 2; // 부서명
+  const departmentId = 3; // 부서명
 
   // 일정 데이터 불러오기
   useEffect(() => {
@@ -162,30 +162,31 @@ const CalendarPage = () => {
           <div className="flex-1 bg-white p-6 rounded-2xl shadow-lg">
             <TopNav setViewMode={setViewMode} />
             <div className="flex justify-between items-center mb-4">
-              <div className="flex items-center space-x-2">
-                <button
-                  onClick={handleTodayClick}
-                  className="px-4 py-2 bg-[#006D2C] text-white rounded-md"
-                >
-                  오늘
-                </button>
-                <button onClick={handlePrevMonth} disabled={currentMonth === 0}>
-                  <ChevronLeft size={24} />
-                </button>
-                <h2 className="text-lg font-bold">{currentMonth + 1}월</h2>
-                <button
-                  onClick={handleNextMonth}
-                  disabled={currentMonth === 11}
-                >
-                  <ChevronRight size={24} />
-                </button>
-              </div>
+            <div className="flex-1 flex justify-start">
+              <button onClick={handleTodayClick} className="px-4 py-2 bg-[#006D2C] text-white rounded-md">
+                오늘
+              </button>
             </div>
+
+            <div className="flex justify-center items-center">
+              <button onClick={handlePrevMonth} disabled={currentMonth === 0}>
+                <ChevronLeft size={24} />
+              </button>
+              <h2 className="text-lg font-bold mx-2">{currentMonth + 1}월</h2>
+              <button
+                onClick={handleNextMonth}
+                disabled={currentMonth === 11}
+              >
+                <ChevronRight size={24} />
+              </button>
+            </div>
+            <div className="flex-1"></div> {/* 빈 공간을 추가하여 요소들이 가운데 정렬되게 함 */}
+          </div>
             <FullCalendar
               ref={calendarRef}
               plugins={[dayGridPlugin, interactionPlugin, googleCalendarPlugin]}
               initialView="dayGridMonth"
-              googleCalendarApiKey="AIzaSyDfwgsofWdf7-7m9Odn9G4T6jXN9vKLvCE"
+              googleCalendarApiKey={import.meta.env.VITE_GOOGLE_CALENDAR_API_KEY}
               events={events}
               eventSources={[{
                 googleCalendarId: 'ko.south_korea#holiday@group.v.calendar.google.com',

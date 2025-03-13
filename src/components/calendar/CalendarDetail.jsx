@@ -26,9 +26,14 @@ const CalendarDetail = () => {
     if (!event) {
     return <div>Loading...</div>;
   }
+  
+  // 일정 수정 페이지 이동
+  const handleEditClick = () => {
+    navigate(`/calendar/edit/${calendarId}`)
+  }
 
   // 일정 삭제
-  const handleDeleteEvent = async (calendarId) => {
+  const handleDeleteEvent = async () => {
     const confirmDelete = window.confirm("일정을 삭제하시겠습니까?"); // confirm 창 띄우기
     if (confirmDelete) {
       try {
@@ -48,13 +53,9 @@ const CalendarDetail = () => {
       <div className="flex-1 w-screen p-6">
         <Header />
 
-        {/* 전체 Flexbox 구조 */}
         <div className="flex space-x-4">
-          {/* 왼쪽 일정 정보 섹션 */}
           <div className="flex-1 space-y-4">
-            {/* 일정 일자, 시간, 작성자 */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {/* 시작일자 */}
               <div className="w-full bg-white p-6 rounded-full shadow-md flex items-center">
                 <label className="text-sm font-semibold w-24">시작 일자</label>
                 <input
@@ -64,8 +65,6 @@ const CalendarDetail = () => {
                   readOnly
                 />
               </div>
-
-              {/* 종료일자 */}
               <div className="w-full bg-white p-6 rounded-full shadow-md flex items-center">
                 <label className="text-sm font-semibold w-24">종료 일자</label>
                 <input
@@ -75,22 +74,18 @@ const CalendarDetail = () => {
                   readOnly
                 />
               </div>
-
-              {/* 작성자 */}
               <div className="w-full bg-white p-6 rounded-full shadow-md flex items-center">
                 <label className="text-sm font-semibold w-24">작성자</label>
                 <input
                   type="text"
-                  value={event.memberDto.name}
+                  value={`${event.memberDto.name}    (부서명으로 변경${event.memberDto.empId})`}
                   className="w-full border-none text-[#006D2C]"
                   readOnly
                 />
               </div>
             </div>
-
-            {/* 작성 제목 */}
             <div className="w-full bg-white p-6 rounded-full shadow-md flex items-center">
-              <label className="text-sm font-semibold w-24">작성 제목</label>
+              <label className="text-sm font-semibold w-24">일정 제목</label>
               <input
                 type="text"
                 value={event.title}
@@ -98,8 +93,6 @@ const CalendarDetail = () => {
                 readOnly
               />
             </div>
-
-            {/* 일정 내용 */}
             <div className="bg-white p-6 rounded-2xl shadow-lg h-96 overflow-hidden">
               <span className="text-sm font-semibold text-[#323232]">
                 일정 내용
@@ -111,16 +104,15 @@ const CalendarDetail = () => {
               />
             </div>
 
-            {/* 버튼 */}
             <div className="flex justify-end gap-2 mt-4">
               <button
-                onClick={() => navigate("/calendar")}
+                onClick={() => handleEditClick()}
                 className="bg-[#006D2C] text-white px-4 py-2 rounded-lg hover:bg-[#0e5028]"
               >
                 수정
               </button>
               <button
-                onClick={() => handleDeleteEvent(event.calendarId)}
+                onClick={() => handleDeleteEvent()}
                 className="bg-[#006D2C] text-white px-4 py-2 rounded-lg hover:bg-[#0e5028]"
               >
                 삭제

@@ -3,6 +3,7 @@ import DashBoardPage from './components/pages/DashBoardPage';
 import CalendarPage from './components/calendar/CalendarPage';
 import CalendarWrite from './components/calendar/CalendarWrite';
 import CalendarDetail from './components/calendar/CalendarDetail';
+import CalendarEdit from './components/calendar/CalendarEdit';
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
         <Route path="/calendar" element={<CalendarPage/>} />
         <Route path="/calendar/:calendarId" element={<CalendarDetail/>} />
         <Route path="/calendar/add" element={<CalendarWrite/>} />
+        <Route path="/calendar/edit/:calendarId" element={<CalendarEdit/>} />
       </Routes>
     </Router>
   );

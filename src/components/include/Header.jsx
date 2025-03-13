@@ -21,6 +21,10 @@ const Header = () => {
     if (eventMatch) {
       return "일정 상세보기";
     }
+    
+    if (path.startsWith("/calendar")) {
+      return "캘린더";
+    }
 
     switch (path) {
       case "/calendar":
