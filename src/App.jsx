@@ -12,7 +12,7 @@ function App() {
         <Route path="/dashboard" element={<DashBoardPage />} />
         <Route path="/mypage" element={<div>마이페이지</div>} />
         <Route path="/calendar" element={<CalendarPage/>} />
-        <Route path="/calendar/detail" element={<CalendarDetail/>} />
+        <Route path="/calendar/:calendarId" element={<CalendarDetail/>} />
         <Route path="/calendar/add" element={<CalendarWrite/>} />
       </Routes>
     </Router>

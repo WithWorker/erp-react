@@ -110,6 +110,7 @@ export const updateCalendar = async (calendar) => {
 // 일정 삭제하기
 export const deleteCalendar = async (calendarId) => {
   try {
+    console.log("삭제할 calendarId:", calendarId);
     const response = await axios.delete(`/api/calendar/${calendarId}`);
     if (response.status === 200) {
       console.log("일정 삭제 성공");

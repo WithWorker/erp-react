@@ -1,23 +1,45 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { BsCheckCircleFill } from "react-icons/bs";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "../include/Sidebar";
 import Header from "../include/Header";
+import { deleteCalendar, readCalendar } from "../../service/calendarLogic";
 
 const CalendarDetail = () => {
   const navigate = useNavigate();
+  const { calendarId } = useParams();
+  const [event, setEvent] = useState(null);
 
-  // Sample event data for design purposes
-  const event = {
-    date: "2025-03-15",
-    startTime: "10:00 AM",
-    writer: "John Doe",
-    title: "Meeting with Team",
-    content: "This is a detailed description of the event.",
-    attendees: [
-      { name: "Jane Smith" },
-      { name: "Robert Johnson" },
-    ],
+  useEffect(() => {
+    const fetchEventDetail = async () => {
+      try {
+        const data = await readCalendar(calendarId);
+        setEvent(data);
+      } catch (error) {
+        console.error("일정 상세 조회 오류:", error);
+      }
+    };
+
+    fetchEventDetail();
+  }, [calendarId]);
+
+   // event가 null이면 로딩 화면을 표시
+    if (!event) {
+    return <div>Loading...</div>;
+  }
+
+  // 일정 삭제
+  const handleDeleteEvent = async (calendarId) => {
+    const confirmDelete = window.confirm("일정을 삭제하시겠습니까?"); // confirm 창 띄우기
+    if (confirmDelete) {
+      try {
+        await deleteCalendar(calendarId);  // 삭제 API 호출
+        navigate("/calendar");  // 삭제 후 캘린더 페이지로 리다이렉트
+      } catch (error) {
+        console.error("일정 삭제 실패:", error);
+      }
+    } else {
+      console.log("일정 삭제 취소");
+    }
   };
 
   return (
@@ -32,23 +54,23 @@ const CalendarDetail = () => {
           <div className="flex-1 space-y-4">
             {/* 일정 일자, 시간, 작성자 */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {/* 일정 일자 */}
+              {/* 시작일자 */}
               <div className="w-full bg-white p-6 rounded-full shadow-md flex items-center">
-                <label className="text-sm font-semibold w-24">일정 일자</label>
+                <label className="text-sm font-semibold w-24">시작 일자</label>
                 <input
                   type="text"
-                  value={event.date}
+                  value={event.start_date}
                   className="w-full border-none text-[#006D2C]"
                   readOnly
                 />
               </div>
 
-              {/* 일정 시간 */}
+              {/* 종료일자 */}
               <div className="w-full bg-white p-6 rounded-full shadow-md flex items-center">
-                <label className="text-sm font-semibold w-24">일정 시간</label>
+                <label className="text-sm font-semibold w-24">종료 일자</label>
                 <input
                   type="text"
-                  value={event.startTime}
+                  value={event.end_date}
                   className="w-full border-none text-[#006D2C]"
                   readOnly
                 />
@@ -59,7 +81,7 @@ const CalendarDetail = () => {
                 <label className="text-sm font-semibold w-24">작성자</label>
                 <input
                   type="text"
-                  value={event.writer}
+                  value={event.memberDto.name}
                   className="w-full border-none text-[#006D2C]"
                   readOnly
                 />
@@ -78,7 +100,7 @@ const CalendarDetail = () => {
             </div>
 
             {/* 일정 내용 */}
-            <div className="bg-white p-6 rounded-2xl shadow-lg h-[calc(90vh-18rem)] overflow-hidden">
+            <div className="bg-white p-6 rounded-2xl shadow-lg h-96 overflow-hidden">
               <span className="text-sm font-semibold text-[#323232]">
                 일정 내용
               </span>
@@ -98,7 +120,7 @@ const CalendarDetail = () => {
                 수정
               </button>
               <button
-                onClick={() => navigate("/calendar")}
+                onClick={() => handleDeleteEvent(event.calendarId)}
                 className="bg-[#006D2C] text-white px-4 py-2 rounded-lg hover:bg-[#0e5028]"
               >
                 삭제
@@ -109,30 +131,6 @@ const CalendarDetail = () => {
               >
                 닫기
               </button>
-            </div>
-          </div>
-
-          {/* 우측 참석자 섹션 */}
-          <div className="w-64 bg-white p-6 rounded-2xl shadow-lg h-[calc(88vh-2rem)]">
-            <span className="text-sm font-medium text-gray-500">참석자</span>
-            <div className="bg-gray-100 p-4 rounded-lg max-h-64 overflow-y-auto mt-2">
-              {event.attendees && event.attendees.length > 0 ? (
-                event.attendees.map((attendee, index) => (
-                  <div
-                    key={index}
-                    className="flex justify-between items-center mb-2 h-2"
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium">{attendee.name}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <BsCheckCircleFill className="text-[#006D2C]" />
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p className="text-sm text-gray-500">참석자가 없습니다.</p>
-              )}
             </div>
           </div>
         </div>

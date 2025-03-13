@@ -14,7 +14,7 @@ const EventList = ({ selectedDate, selectedEvents }) => {
           ) : (
             <ul>
               {selectedEvents.map((event) => (
-                <li key={event.id} className="mt-2 p-2 bg-gray-100 rounded-md">
+                <li key={event.id || `${event.title}-${event.start}`} className="mt-2 p-2 bg-gray-100 rounded-md">
                   {event.title}
                 </li>
               ))}

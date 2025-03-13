@@ -3,11 +3,15 @@ import { ChevronDown, Trash } from "react-bootstrap-icons";
 import Sidebar from "../include/Sidebar";
 import Header from "../include/Header";
 import categoryColors from "../../utils/categoryColors";
+import { useNavigate } from "react-router-dom";
 
 const CalendarWrite = () => {
+
+  const navigate = useNavigate();
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [writer, setWriter] = useState("");
+  const [applicantId, setapplicantId] = useState(""); // 사원번호 상태 추가
 
   const [startDate, setStartDate] = useState(
     new Date().toLocaleDateString("en-CA")
@@ -175,6 +179,17 @@ const CalendarWrite = () => {
                 className="w-full border rounded-md p-2"
               />
             </div>
+
+            {/* 사원번호 */}
+            <div>
+              <label className="text-sm font-semibold">사원번호</label>
+              <input
+                type="text"
+                value={applicantId}
+                onChange={(e) => setapplicantId(e.target.value)}
+                className="w-full border rounded-md p-2"
+              />
+            </div>
           </div>
 
           <div>
@@ -198,6 +213,11 @@ const CalendarWrite = () => {
           </div>
 
           <div className="flex justify-end">
+            <button className="bg-gray-300 text-gray-700 px-6 py-2 rounded-full mr-2"
+            onClick={() => navigate("/calendar")}
+            >
+              닫기
+            </button>
             <button className="bg-[#006D2C] text-white px-6 py-2 rounded-full">
               일정 등록
             </button>
@@ -208,4 +228,4 @@ const CalendarWrite = () => {
   );
 };
 
-export default CalendarWrite;
+export default CalendarWrite; 

@@ -16,65 +16,14 @@ const CalendarPage = () => {
   const navigate = useNavigate();
   const calendarRef = useRef(null);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
-  const [selectedDate, setSelectedDate] = useState(null);
   const today = new Date().toISOString().split("T")[0]; // 오늘 날짜를 YYYY-MM-DD 형식으로 저장
+  const [selectedDate, setSelectedDate] = useState(today); // 초기값을 today로 설정
   const [events, setEvents] = useState([]); // 전체 일정
   const [viewMode, setViewMode] = useState('all'); // 'all', 'personal', 'department'
   const [selectedEvents, setSelectedEvents] = useState([]); // 선택된 날짜의 일정 목록
 
   const applicantId = 2; // 특정 사용자의 ID (임시 값)
   const departmentId = 2; // 부서명
-
-  // 이전 달 버튼 클릭
-  const handlePrevMonth = () => {
-    if (currentMonth > 0) {
-      const newMonth = currentMonth - 1;
-      setCurrentMonth(newMonth);
-      moveCalendarToMonth(newMonth);
-    }
-  };
-
-  // 다음 달 버튼 클릭
-  const handleNextMonth = () => {
-    if (currentMonth < 11) {
-      const newMonth = currentMonth + 1;
-      setCurrentMonth(newMonth);
-      moveCalendarToMonth(newMonth);
-    }
-  };
-
-  // 달력을 특정 월로 이동
-  const moveCalendarToMonth = (month) => {
-    const year = new Date().getFullYear();
-    const newDate = new Date(year, month, 1);
-    if (calendarRef.current) {
-      calendarRef.current.getApi().gotoDate(newDate);
-    }
-  };
-
-  // 오늘 날짜로 달력 이동
-  const handleTodayClick = () => {
-    const calendarApi = calendarRef.current.getApi();
-    calendarApi.gotoDate(today); //오늘 날짜로 달력 이동
-    const todayMonth = new Date().getMonth(); // 현재 월을 오늘 월로 설정
-    setCurrentMonth(todayMonth);
-    setSelectedDate(today); // 선택된 날짜를 오늘 날짜로 설정
-  };
-
-  // 날짜 클릭 시 일정 필터링
-  const handleDateClick = (arg) => {
-    const clickedDate = arg.date.toLocaleDateString('en-CA');
-    setSelectedDate(clickedDate); // 'YYYY-MM-DD' 형식으로 변환
-    
-  // 해당 날짜에 맞는 이벤트 필터링
-  const eventsOnSelectedDate = events.filter(event => {
-    const startDate = new Date(event.start).toLocaleDateString('en-CA'); // UTC 변환 없이 로컬 기준 날짜 추출
-    const endDate = new Date(event.end).toLocaleDateString('en-CA');
-    return clickedDate >= startDate && clickedDate <= endDate; // clickedDate가 start와 end 사이에 있는지 확인
-  });
-
-    setSelectedEvents(eventsOnSelectedDate); // 선택된 날짜의 이벤트만 필터링
-  };
 
   // 일정 데이터 불러오기
   useEffect(() => {
@@ -110,7 +59,7 @@ const CalendarPage = () => {
           }
 
           return {
-            id: event.id, // id 추가
+            id: event.calendarId, // id 추가
             title: event.title,
             start: startDate.toISOString(),
             end: endDate.toISOString(),
@@ -124,6 +73,12 @@ const CalendarPage = () => {
 
         console.log("변환된 일정 데이터:", calendarEvents);
         setEvents(calendarEvents);
+
+        // 오늘 날짜에 맞는 일정 필터링
+        if (selectedDate) {
+          filterEventsByDate(selectedDate, calendarEvents);
+        }
+
       } catch (error) {
         console.error("일정을 가져오는 중 오류 발생: ", error);
       }
@@ -131,6 +86,71 @@ const CalendarPage = () => {
 
     fetchCalendars();
   }, [viewMode, selectedDate, currentMonth]);
+
+  // 날짜에 맞는 일정 필터링 함수
+  const filterEventsByDate = (date, events) => {
+    const eventsOnSelectedDate = events.filter(event => {
+      const startDate = new Date(event.start).toLocaleDateString('en-CA'); // UTC 변환 없이 로컬 기준 날짜 추출
+      const endDate = new Date(event.end).toLocaleDateString('en-CA');
+      return date >= startDate && date <= endDate; // selectedDate가 start와 end 사이에 있는지 확인
+    });
+
+    setSelectedEvents(eventsOnSelectedDate); // 선택된 날짜의 이벤트만 필터링
+  };
+  
+  // 일정 클릭 시 상세 페이지로 이동
+  const handleEventClick = (info) => {
+    const calendarId = info.event.id;
+    navigate(`/calendar/${calendarId}`);
+  }
+
+  // 이전 달 버튼 클릭
+  const handlePrevMonth = () => {
+    if (currentMonth > 0) {
+      const newMonth = currentMonth - 1;
+      setCurrentMonth(newMonth);
+      moveCalendarToMonth(newMonth);
+    }
+  };
+
+  // 다음 달 버튼 클릭
+  const handleNextMonth = () => {
+    if (currentMonth < 11) {
+      const newMonth = currentMonth + 1;
+      setCurrentMonth(newMonth);
+      moveCalendarToMonth(newMonth);
+    }
+  };
+
+  // 달력을 특정 월로 이동
+  const moveCalendarToMonth = (month) => {
+    const year = new Date().getFullYear();
+    const newDate = new Date(year, month, 1);
+    if (calendarRef.current) {
+      calendarRef.current.getApi().gotoDate(newDate);
+    }
+  };
+
+  // 오늘 날짜로 달력 이동
+  const handleTodayClick = () => {
+    const calendarApi = calendarRef.current.getApi();
+    calendarApi.gotoDate(today); // 오늘 날짜로 달력 이동
+    const todayMonth = new Date().getMonth(); // 현재 월을 오늘 월로 설정
+    setCurrentMonth(todayMonth);
+    setSelectedDate(today); // 선택된 날짜를 오늘 날짜로 설정
+
+    // 오늘 날짜에 맞는 일정 필터링
+    filterEventsByDate(today, events);
+  };
+
+  // 날짜 클릭 시 일정 필터링
+  const handleDateClick = (arg) => {
+    const clickedDate = arg.date.toLocaleDateString('en-CA');
+    setSelectedDate(clickedDate); // 'YYYY-MM-DD' 형식으로 변환
+
+    // 해당 날짜에 맞는 이벤트 필터링
+    filterEventsByDate(clickedDate, events);
+  };
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -184,6 +204,7 @@ const CalendarPage = () => {
                 const formattedDate = arg.date.toLocaleDateString('en-CA'); // 'YYYY-MM-DD' 형식으로 변환
                 return formattedDate === selectedDate ? "selected-date" : "";
               }}
+              eventClick={handleEventClick}
             />
           </div>
           <EventList selectedDate={selectedDate} selectedEvents={selectedEvents} />
