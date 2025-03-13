@@ -1,19 +1,20 @@
 import { useState } from "react";
-import categoryPosition from "../../utils/categoryPosition"; // category.js에서 import
 import { ChevronDown } from "react-bootstrap-icons";
+import { categoryPosition } from "../../utils/categoryPosition"; // category.js에서 import
 
-const PositionDropdown = ({ onSelectPosition }) => {
+const PositionDropdown = ({ onSelectCategory }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState("전체보기");
 
   const handlePositionSelect = (position) => {
-    setSelectedPosition(position);
+    setSelectedPosition(position.label); // 직급 이름을 선택
     setDropdownOpen(false);
-    onSelectPosition(position); // 직급 선택 시 부모로 전달
+    onSelectCategory(position); // 직급 객체(직급명, id)를 부모에게 전달
+    console.log("Selected Position:", position);
   };
 
   return (
-    <div className="relative w-full"> {/* w-full 추가 */}
+    <div className="relative w-full">
       <div
         className="bg-white p-3 pl-6 pr-10 rounded-full shadow-md w-full cursor-pointer flex items-center h-[48px] border border-gray-300"
         onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -22,12 +23,13 @@ const PositionDropdown = ({ onSelectPosition }) => {
           className="w-4 h-4 rounded-full mr-2"
           style={{
             backgroundColor: categoryPosition.find(
-              (cat) => cat.value === selectedPosition
+              (cat) => cat.label === selectedPosition
             )?.color,
           }}
         />
         <span className="font-medium">
-          {categoryPosition.find((cat) => cat.value === selectedPosition)?.label}
+          {categoryPosition.find((cat) => cat.label === selectedPosition)
+            ?.label}
         </span>
         <ChevronDown className="ml-auto text-gray-500" />
       </div>
@@ -38,7 +40,7 @@ const PositionDropdown = ({ onSelectPosition }) => {
             <div
               key={cat.value}
               className="flex items-center p-3 hover:bg-gray-100 cursor-pointer transition"
-              onClick={() => handlePositionSelect(cat.value)}
+              onClick={() => handlePositionSelect(cat)} // 직급 객체를 전달
             >
               <div
                 className="w-4 h-4 rounded-full mr-2"

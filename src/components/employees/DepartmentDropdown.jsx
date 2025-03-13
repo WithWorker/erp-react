@@ -10,6 +10,7 @@ const DepartmentDropdown = ({ onSelectDepartment }) => {
     setSelectedDepartment(department);
     setDropdownOpen(false);
     onSelectDepartment(department); // 부서 선택 시 부모로 전달
+    console.log("Selected Department ID:", department);
   };
 
   return (

@@ -74,7 +74,7 @@ const Sidebar = () => {
     { name: "휴가", icon: BsTree, path: "/vacation" },
     { name: "게시판", icon: BsFileText, path: "/board" },
     { name: "채팅", icon: BsChat, path: "/chat" },
-    { name: "사원조회", icon: BsPerson, path: "/employees" },
+    { name: "직원조회", icon: BsPerson, path: "/employees" },
   ];
 
   return (

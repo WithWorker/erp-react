@@ -79,7 +79,7 @@ const LoginPage = () => {
               type="email"
               id="mem_email"
               className="w-full !pl-10 p-2 border rounded-lg"
-              placeholder="이메일을 입력하세요."
+              placeholder="이메일을 입력하세요"
               onChange={changeUser}
               value={tempUser.mem_email}
             />
@@ -93,7 +93,7 @@ const LoginPage = () => {
               type="password"
               id="mem_pw"
               className="w-full !pl-10 p-2 border rounded-lg"
-              placeholder="비밀번호를 입력하세요."
+              placeholder="비밀번호를 입력하세요"
               onChange={changeUser}
               value={tempUser.mem_pw}
             />
