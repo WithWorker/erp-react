@@ -79,9 +79,14 @@
     vertical-align: middle;
 }
 
-/* Tody Cell에 배경색 주기 */
+/* Today Cell에 배경색 주기 */
 .fc .fc-daygrid-day.fc-day-today {
     background-color: #e6895724;
+}
+
+/* 선택한 날짜에 배경색 주기*/
+.selected-date {
+    background-color: #E0F2F7 !important; /* 원하는 색상 */
 }
 
 /* 날짜 Cell 프레임 */
@@ -109,7 +114,6 @@
     font-weight: 500;
     font-size: 14px;
 }
-
 
 /* 구글캘린더 - 공휴일 스타일 */
 .gcal-event {

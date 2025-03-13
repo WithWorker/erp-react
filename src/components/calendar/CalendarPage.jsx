@@ -17,7 +17,7 @@ const CalendarPage = () => {
   const calendarRef = useRef(null);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [selectedDate, setSelectedDate] = useState(null);
-  const today = new Date().toISOString().split("T")[0]; // 오늘 날짜를 `YYYY-MM-DD` 형식으로 저장
+  const today = new Date().toISOString().split("T")[0]; // 오늘 날짜를 YYYY-MM-DD 형식으로 저장
   const [events, setEvents] = useState([]); // 전체 일정
   const [viewMode, setViewMode] = useState('all'); // 'all', 'personal', 'department'
   const [selectedEvents, setSelectedEvents] = useState([]); // 선택된 날짜의 일정 목록
@@ -63,14 +63,15 @@ const CalendarPage = () => {
 
   // 날짜 클릭 시 일정 필터링
   const handleDateClick = (arg) => {
-    const clickedDate = arg.dateStr;
-    setSelectedDate(clickedDate);
+    const clickedDate = arg.date.toLocaleDateString('en-CA');
+    setSelectedDate(clickedDate); // 'YYYY-MM-DD' 형식으로 변환
     
-    // 해당 날짜에 맞는 이벤트 필터링
-    const eventsOnSelectedDate = events.filter(event => {
-      const eventDate = new Date(event.start).toISOString().split("T")[0];  // 'YYYY-MM-DD' 형식으로만 비교
-      return eventDate === clickedDate;
-    });
+  // 해당 날짜에 맞는 이벤트 필터링
+  const eventsOnSelectedDate = events.filter(event => {
+    const startDate = new Date(event.start).toLocaleDateString('en-CA'); // UTC 변환 없이 로컬 기준 날짜 추출
+    const endDate = new Date(event.end).toLocaleDateString('en-CA');
+    return clickedDate >= startDate && clickedDate <= endDate; // clickedDate가 start와 end 사이에 있는지 확인
+  });
 
     setSelectedEvents(eventsOnSelectedDate); // 선택된 날짜의 이벤트만 필터링
   };
@@ -179,10 +180,12 @@ const CalendarPage = () => {
               initialDate={today}
               height="auto"
               dateClick={handleDateClick} // 날짜 클릭 시 처리
+              dayCellClassNames={(arg) => {
+                const formattedDate = arg.date.toLocaleDateString('en-CA'); // 'YYYY-MM-DD' 형식으로 변환
+                return formattedDate === selectedDate ? "selected-date" : "";
+              }}
             />
           </div>
-
-          {/* EventList 컴포넌트 사용 */}
           <EventList selectedDate={selectedDate} selectedEvents={selectedEvents} />
         </div>
       </div>

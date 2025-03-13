@@ -24,7 +24,7 @@ const EventList = ({ selectedDate, selectedEvents }) => {
       )}
       <button
         className="w-full p-2 mt-4 bg-[#006D2C] text-white rounded-md"
-        onClick={() => navigate(`/calendar/add`)}
+        onClick={() => navigate("/calendar/add")}
       >
         일정 추가
       </button>
