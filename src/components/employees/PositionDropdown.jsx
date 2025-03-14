@@ -1,5 +1,5 @@
 import { useState } from "react";
-import categoryPosition from "../../utils/categoryPosition"; // category.js에서 import
+import categoryPosition from "../../utils/categoryPosition"; 
 import { ChevronDown } from "react-bootstrap-icons";
 
 const PositionDropdown = ({ onSelectPosition }) => {
@@ -13,7 +13,7 @@ const PositionDropdown = ({ onSelectPosition }) => {
   };
 
   return (
-    <div className="relative w-full"> {/* w-full 추가 */}
+    <div className="relative w-full"> 
       <div
         className="bg-white p-3 pl-6 pr-10 rounded-full shadow-md w-full cursor-pointer flex items-center h-[48px] border border-gray-300"
         onClick={() => setDropdownOpen(!dropdownOpen)}

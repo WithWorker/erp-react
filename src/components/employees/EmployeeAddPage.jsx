@@ -45,15 +45,30 @@ const EmployeeAddPage = () => {
     console.log(departmentId);
   };
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    setProfileImage(file);
+  const handleImageUpload = async () => {
+    const formData = new FormData();
+    formData.append("file", profileImage); 
+
+    const response = await fetch("/api/upload", {
+      method: "POST",
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error("이미지 업로드 실패");
+    }
+
+    const imgUrl = await response.text();  // 서버에서 파일 경로 반환
+    return imgUrl;
   };
 
   const handleSubmit = async () => {
     try {
-      // 이미지 업로드가 필요하다면 여기에 호출
-      // const imgUrl = await uploadImage(); // 이미지 업로드 후 URL 받기 (아직 구현 안됨)
+      // 이미지 업로드 후 경로 받기
+      const imgUrl = await handleImageUpload();
 
       const requestData = {
         name,
@@ -62,7 +77,7 @@ const EmployeeAddPage = () => {
         password,
         departmentId,
         positionId,
-        // imgUrl, // 이미지 업로드 후 받은 경로 저장
+        imgUrl,
       };
 
       const response = await fetch('/api/join', {  
@@ -71,7 +86,7 @@ const EmployeeAddPage = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem("token")}`, 
         },
-        body: JSON.stringify(requestData), 
+        body: JSON.stringify(requestData),
       });
 
       if (response.ok) {
@@ -112,7 +127,7 @@ const EmployeeAddPage = () => {
             <input
               type="file"
               accept="image/*"
-              onChange={handleImageUpload}
+              onChange={(e) => setProfileImage(e.target.files[0])}
               className="border-2 border-gray-300 border-dotted rounded-md w-full py-2 px-3"
             />
           </div>

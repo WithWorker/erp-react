@@ -9,11 +9,11 @@ const DepartmentDropdown = ({ onSelectDepartment }) => {
   const handleDepartmentSelect = (department) => {
     setSelectedDepartment(department);
     setDropdownOpen(false);
-    onSelectDepartment(department); // 부서 선택 시 부모로 전달
+    onSelectDepartment(department); 
   };
 
   return (
-    <div className="relative w-full"> {/* w-full 추가 */}
+    <div className="relative w-full"> 
       <div
         className="bg-white p-3 pl-6 pr-10 rounded-full shadow-md w-full cursor-pointer flex items-center h-[48px] border border-gray-300"
         onClick={() => setDropdownOpen(!dropdownOpen)}
