@@ -3,8 +3,26 @@ import Sidebar from '../include/Sidebar';
 import Header from '../include/Header';
 import DepartmentDropdown from '../employees/DepartmentDropdown';
 import PositionDropdown from '../employees/PositionDropdown';
-import categoryDepartment from '../../utils/categoryDepartment';
-import categoryPosition from '../../utils/categoryPosition';
+
+const departmentMap = {
+  '전체보기': null,
+  '개발': 1,
+  '경영': 2,
+  '디자인': 3,
+  '보안': 4,
+  '영업': 5,
+  '인사': 6,
+};
+
+const positionMap = {
+  '전체보기': null,
+  '부서장': 1,
+  '사원': 2,
+  '이사': 3,
+  '인턴': 4,
+  '팀장': 5,
+  '회장': 6,
+};
 
 const EmployeeAddPage = () => {
   const [profileImage, setProfileImage] = useState(null);
@@ -26,12 +44,15 @@ const EmployeeAddPage = () => {
     console.log('직원 추가:', data);
   };
 
-  const handlePositionSelect = (value, id) => {
-    setPositionId(id);
+  const handlePositionSelect = (positionKey) => {
+    const positionId = positionMap[positionKey];
+    setPositionId(positionId);
+    console.log(positionId);
   };
 
-  const handleDepartmentSelect = (value, id) => {
-    setDepartmentId(id);
+  const handleDepartmentSelect = (departmentKey) => {
+    const departmentId = departmentMap[departmentKey];
+    setDepartmentId(departmentId);
   };
 
   const handleClose = () => {
@@ -77,15 +98,13 @@ const EmployeeAddPage = () => {
                     <div className="flex flex-col space-y-2 w-1/2">
                       <label className="block text-sm font-medium text-left">부서</label>
                       <DepartmentDropdown
-                        items={categoryDepartment}
-                        onSelectCategory={handleDepartmentSelect}
+                        onSelectDepartment={handleDepartmentSelect} 
                       />
                     </div>
                     <div className="flex flex-col space-y-2 w-1/2">
                       <label className="block text-sm font-medium text-left">직급</label>
                       <PositionDropdown
-                        items={categoryPosition}
-                        onSelectCategory={handlePositionSelect}
+                        onSelectPosition={handlePositionSelect}
                       />
                     </div>
                   </div>

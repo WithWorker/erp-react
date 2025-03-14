@@ -22,7 +22,7 @@ const EmployeeListPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageGroup, setPageGroup] = useState(0);
   const itemsPerPage = 8;
-  const [department, setDepartment] = useState("전체보기"); // New state for department
+  const [department, setDepartment] = useState("전체보기"); 
 
   useEffect(() => {
     fetchEmployees();
@@ -44,7 +44,7 @@ const EmployeeListPage = () => {
   };
 
   const fetchEmployeesByDepartment = async (departmentKey) => {
-    setDepartment(departmentKey); // Update the department state
+    setDepartment(departmentKey); 
     const departmentId = departmentMap[departmentKey];
     if (!departmentId) {
       fetchEmployees();
