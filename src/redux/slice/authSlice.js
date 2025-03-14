@@ -13,6 +13,7 @@ const initialState = {
   username: "",
   password: "",
   isAuthenticated: false,
+  isAdmin: true,  // 기본값은 관리자가 아닌 상태
   error: null,
   count: 0, // 추가됨
 };
@@ -42,8 +43,13 @@ export const login = createAsyncThunk(
 
 const authSlice = createSlice({
   name: 'auth',
-  initialState: { count: 0 },
+  //initialState: { count: 0 },
+  initialState,
   reducers: {
+    setAdminStatus: (state, action) => {
+      state.isAdmin = action.payload;  // 관리자인지 아닌지 설정
+    },
+
     increment: (state) => { state.count += 1; },
     setUsername: (state, action) => {
       state.username = action.payload;
@@ -63,6 +69,7 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isAuthenticated = true;
         state.error = null;
+        state.isAdmin = true;  // ❤️ 로그인 후 관리자로 설정
       })
       .addCase(login.rejected, (state, action) => {
         state.isAuthenticated = false;
@@ -71,5 +78,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { increment, setUsername, setPassword, logout } = authSlice.actions;
+export const { increment, setUsername, setPassword, logout, setAdminStatus } = authSlice.actions;
 export default authSlice;
