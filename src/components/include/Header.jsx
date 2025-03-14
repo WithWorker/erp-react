@@ -37,6 +37,12 @@ const Header = () => {
         return "사원 조회";
       case "/mypage":
         return "마이페이지";
+      case "/user/documents":
+        return "결재";
+      case "/employee/add":
+        return "직원 정보 추가";
+      case "/employee/edit/:id":
+        return "직원 정보 수정";
       default:
         return "Dashboard"; // 기본 값
     }
