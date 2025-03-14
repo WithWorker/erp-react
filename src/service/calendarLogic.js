@@ -97,9 +97,9 @@ export const addCalendar = async (calendar) => {
 }
 
 // 일정 수정하기
-export const updateCalendar = async (calendar) => {
+export const updateCalendar = async (calendarId, calendar) => {
   try {
-    const response = await axios.put(`/api/calendar/edit/${calendar.calendarId}`, calendar);
+    const response = await axios.put(`/api/calendar/edit/${calendarId}`, calendar);
     return response.data;  
   } catch (error) {
     console.error("일정 수정 오류 발생: ", error);

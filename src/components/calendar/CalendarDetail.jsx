@@ -78,7 +78,7 @@ const CalendarDetail = () => {
                 <label className="text-sm font-semibold w-24">작성자</label>
                 <input
                   type="text"
-                  value={`${event.memberDto.name}    (부서명으로 변경${event.memberDto.empId})`}
+                  value={`${event.memberDto.name} ${event.memberDto.positionName} [${event.memberDto.departmentName}]`}
                   className="w-full border-none text-[#006D2C]"
                   readOnly
                 />

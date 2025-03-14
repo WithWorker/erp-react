@@ -24,13 +24,13 @@ const CalendarWrite = () => {
   // 일정 등록
   const handleSubmit = async () => {
 
-    if (!applicantId || isNaN(applicantId)) {
-      alert("사번을 입력해주세요.");
-      return;
-    }
-  
     if (!startDate || !endDate) {
       alert("시작일과 종료일을 모두 입력해주세요.");
+      return;
+    }
+
+    if (!title) {
+      alert("일정 제목을 입력해주세요.");
       return;
     }
 
@@ -39,7 +39,7 @@ const CalendarWrite = () => {
       content,
       start_date: startDate ? new Date(startDate).toISOString().split("T")[0] : "",  // `yyyy-MM-dd` 형식으로 전환
       end_date: endDate ? new Date(endDate).toISOString().split("T")[0] : "",  
-      applicant_id: applicantId, 
+      applicantId, 
     };
 
     const confirmAdd = window.confirm("일정을 등록하시겠습니까?"); 

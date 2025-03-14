@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import { ChevronDown } from "react-bootstrap-icons";
 import Sidebar from "../include/Sidebar";
 import Header from "../include/Header";
-import categoryColors from "../../utils/categoryColors";
 import { useNavigate, useParams } from "react-router-dom";
-import { readCalendar, updateCalendar } from "../../service/calendarLogic"; // 수정 API 추가
+import { readCalendar, updateCalendar } from "../../service/calendarLogic";
 
 const CalendarEdit = () => {
   const navigate = useNavigate();
@@ -12,14 +11,14 @@ const CalendarEdit = () => {
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [applicantId, setApplicantId] = useState(""); // 사원번호 추가
+  const [applicantId, setApplicantId] = useState(""); 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState(""); 
-
-  // calendarId가 String 형태로 전달되므로 Integer로 변환
+  const [applicantName, setApplicantName] = useState("");
   const parsedCalendarId = parseInt(calendarId, 10);  // calendarId를 Integer로 변환
-
+  
   useEffect(() => {
+
     if (!isNaN(parsedCalendarId)) {
       const fetchEventDetail = async () => {
         try {
@@ -29,26 +28,29 @@ const CalendarEdit = () => {
           setStartDate(data.start_date);
           setEndDate(data.end_date);
           setApplicantId(data.applicant_id); 
+          setApplicantName(data.memberDto.name);  
         } catch (error) {
           console.error("일정 상세 조회 오류:", error);
         }
       };
-
+  
       fetchEventDetail();
     } else {
       console.error("잘못된 calendarId:", calendarId);
+      navigate("/calendar");  // 잘못된 calendarId가 들어오면 일정 목록으로 리다이렉트
     }
-  }, [calendarId, parsedCalendarId]);
+  }, [calendarId, navigate]);
 
   // 일정 수정
   const handleSubmit = async () => {
-    if (!applicantId || isNaN(applicantId)) {
-      alert("사번을 입력해주세요.");
+    
+    if (!startDate || !endDate) {
+      alert("시작일과 종료일을 모두 입력해주세요.");
       return;
     }
 
-    if (!startDate || !endDate) {
-      alert("시작일과 종료일을 모두 입력해주세요.");
+    if (!title) {
+      alert("일정 제목을 입력해주세요.");
       return;
     }
 
@@ -57,7 +59,8 @@ const CalendarEdit = () => {
       content,
       start_date: startDate ? new Date(startDate).toISOString().split("T")[0] : "",  // `yyyy-MM-dd` 형식으로 전환
       end_date: endDate ? new Date(endDate).toISOString().split("T")[0] : "",  
-      applicant_id: applicantId, 
+      applicantId, 
+      name: applicantName
     };
 
     const confirmUpdate = window.confirm("일정을 수정하시겠습니까?"); 
@@ -103,10 +106,9 @@ const CalendarEdit = () => {
               <label className="text-sm font-semibold">작성자</label>
               <input
                 type="text"
-                value={applicantId}
-                onChange={(e) => setApplicantId(parseInt(e.target.value))}
-                className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-green-600"
+                value={applicantName}
                 readOnly
+                className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-green-600"
               />
             </div>
           </div>
