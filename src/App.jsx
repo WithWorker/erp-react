@@ -9,6 +9,7 @@ import EmployeeListPage from './components/pages/employeePage/EmployeeListPage';
 import ChatPage from './components/pages/ChatPage';
 import EmployeeAddPage from './components/pages/employeePage/EmployeeAddPage';
 import EmployeeEditPage from './components/pages/employeePage/EmployeeEditPage';
+import DocumentListPage from './components/pages/documentPage/DocumentListPage';
 
 function App() {
 
@@ -20,7 +21,7 @@ function App() {
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/write" element={<CalendarWritePage />} />
         <Route path="/event/:id" element={<EventDetailPage />} />
-        <Route path="/user/vacation" element={<div>휴가 페이지</div>} />
+        <Route path="/user/documents" element={<DocumentListPage />} />
         <Route path="/board" element={<div>게시판 페이지</div>} />
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/employees" element={<EmployeeListPage />} />
