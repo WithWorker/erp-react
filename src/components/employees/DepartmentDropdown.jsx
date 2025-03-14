@@ -2,14 +2,14 @@ import { useState } from "react";
 import categoryDepartment from "../../utils/categoryDepartment"; // category.js에서 import
 import { ChevronDown } from "react-bootstrap-icons";
 
-const DepartmentDropdown = ({ onSelectDepartment }) => {
+const DepartmentDropdown = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState("전체보기");
 
   const handleDepartmentSelect = (department) => {
     setSelectedDepartment(department);
     setDropdownOpen(false);
-    onSelectDepartment(department); // 부서 선택 시 부모로 전달
+    //onSelectDepartment(department); // 부서 선택 시 부모로 전달
   };
 
   return (

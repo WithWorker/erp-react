@@ -2,14 +2,14 @@ import { useState } from "react";
 import categoryPosition from "../../utils/categoryPosition"; // category.js에서 import
 import { ChevronDown } from "react-bootstrap-icons";
 
-const PositionDropdown = ({ onSelectPosition }) => {
+const PositionDropdown = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState("전체보기");
 
   const handlePositionSelect = (position) => {
     setSelectedPosition(position);
     setDropdownOpen(false);
-    onSelectPosition(position); // 직급 선택 시 부모로 전달
+    //onSelectPosition(position); // 직급 선택 시 부모로 전달
   };
 
   return (
