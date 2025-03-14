@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+//import axios from 'axios';
 //import { fetchEmployees } from '../../service/employeeService';
 
 /* 백엔드 연결시 해제
@@ -15,6 +15,8 @@ const mockData = [
     employeeId: 'WW001',
     name: '김민수',
     department: '개발팀',
+    incom: '2020.03.01',
+    outcom: '재직중',
     position: '팀장',
     phone: '010-0011-2233',
     email: 'kimminsoo@withworker.com',
@@ -25,6 +27,8 @@ const mockData = [
     employeeId: 'WW002',
     name: '나신일',
     department: '개발팀',
+    incom: '01.02.03',
+    outcom: '11.02.04',
     position: '팀원',
     phone: '010-1122-3344',
     email: 'nasinyip@withworker.com',
@@ -46,7 +50,7 @@ const mockData = [
 export const addEmployee = createAsyncThunk(
   'employee/addEmployee', 
   async (newEmployee) => {
-    const response = await axios.post('/api/employees', newEmployee);
+    //const response = await axios.post('/api/employees', newEmployee);
     return response.data;
 });
 
@@ -57,13 +61,23 @@ export const updateEmployee = createAsyncThunk('employee/updateEmployee', async 
 });
 
 export const loadEmployees = createAsyncThunk('employee/loadEmployees', async () => {
-  const response = await axios.get('/api/employees');
-  return response.data;
+  /* const response = await axios.get('/api/employees');
+  return response.data; */
   // 백엔드 연결 없이 mock data 사용
-  //return mockData;
+  return mockData;
 });
 
 const initialState = {
+  salaryFormData: {
+    year: '',  // 초기값 설정
+    month: '',    // 초기값 설정
+    day: '',      // 초기값 설정
+  },
+  bonusFormData: {
+    year: '',
+    month: '',
+    day: '',
+  },
   employees: [], // 실제 직원 정보만 저장
   status: 'idle', // 'idle', 'loading', 'succeeded', 'failed'
   searchQuery: '',  // 검색어 상태 추가
@@ -90,6 +104,14 @@ const employeeSlice = createSlice({
     },
     setEmployees: (state, action) => {
       state.employees = action.payload;
+    },
+    updateSalary: (state, action) => {
+      // formData 값 업데이트
+      state.salaryFormData = { ...action.payload };
+    },
+    updateBonus: (state, action) => {
+      // formData 값 업데이트
+      state.bonusFormData = { ...action.payload };
     },
     loadEmployees: (state, action) => {
       // 예시로, 데이터를 서버에서 가져오는 것처럼 처리
@@ -120,6 +142,6 @@ const employeeSlice = createSlice({
     },
 });
 
-export const { setSearchQuery, setStatus, setCategory } = employeeSlice.actions;
+export const { setSearchQuery, setStatus, setCategory, updateSalary, updateBonus } = employeeSlice.actions;
 
 export default employeeSlice.reducer;
