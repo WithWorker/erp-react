@@ -3,6 +3,7 @@ import { BsGrid, BsCalendar, BsTree, BsFileText, BsChat, BsPerson } from "react-
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { clockIn, clockOut } from '../../redux/slice/attendanceSlice';
+import { BiMoney } from "react-icons/bi";
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -70,7 +71,7 @@ const Sidebar = () => {
   const menuItems = [
     { name: "DashBoard", icon: BsGrid, path: "/dashboard" },
     { name: "캘린더", icon: BsCalendar, path: "/calendar" },
-    { name: "휴가", icon: BsTree, path: "/vacation" },
+    { name: "결재", icon: BiMoney, path: "/user/documents" },
     { name: "게시판", icon: BsFileText, path: "/board" },
     { name: "채팅", icon: BsChat, path: "/chat" },
     { name: "사원조회", icon: BsPerson, path: "/employees" },
