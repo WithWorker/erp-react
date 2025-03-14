@@ -141,7 +141,7 @@ const handleClose = () => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <Sidebar className='fixed'/> {/* 사이드바 픽스시키기 --- 금요일 수정 --- */}
+      <Sidebar className='fixed'/> 
       <div className="flex-1 p-6">
         <Header />
         <div className="flex flex-row md:flex-row items-start justify-between space-y-4 md:space-y-0 md:space-x-4 w-full mb-6">
