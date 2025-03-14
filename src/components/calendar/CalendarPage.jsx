@@ -18,7 +18,7 @@ const CalendarPage = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const today = new Date().toISOString().split("T")[0]; // 오늘 날짜를 YYYY-MM-DD 형식으로 저장
   const [selectedDate, setSelectedDate] = useState(today); // 초기값을 today로 설정
-  const [events, setEvents] = useState([]); // 전체 일정
+  const [events, setEvents] = useState([]); 
   const [viewMode, setViewMode] = useState('all'); // 'all', 'personal', 'department'
   const [selectedEvents, setSelectedEvents] = useState([]); // 선택된 날짜의 일정 목록
 
@@ -47,10 +47,6 @@ const CalendarPage = () => {
 
           const startDate = new Date(event.start_date);
           const endDate = new Date(event.end_date);
-
-          // UTC 시간으로 변환된 날짜를 로컬 시간대로 변환하여 날짜 비교
-          const localStartDate = startDate.toLocaleDateString('en-CA'); // 'YYYY-MM-DD' 형식
-          const localEndDate = endDate.toLocaleDateString('en-CA'); // 'YYYY-MM-DD' 형식
 
           // 날짜가 유효한지 체크
           if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {

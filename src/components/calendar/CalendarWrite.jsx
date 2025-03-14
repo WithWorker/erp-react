@@ -90,7 +90,6 @@ const CalendarWrite = () => {
           </div>
         </div>
 
-
         <div className="bg-white p-6 rounded-2xl shadow-lg space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
@@ -121,7 +120,7 @@ const CalendarWrite = () => {
             </div>
           </div>
 
-          {/* (db테스트용 삭제 예정) */}
+          {/* (db테스트용 로그인 연결 시 삭제 예정) */}
           <div>
               <label className="text-sm font-semibold">사번(db테스트용 삭제 예정)</label>
               <input
