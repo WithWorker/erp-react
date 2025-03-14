@@ -6,7 +6,7 @@ import googleCalendarPlugin from '@fullcalendar/google-calendar';
 import { ChevronLeft, ChevronRight } from "react-bootstrap-icons"; // Search 아이콘 추가
 import Sidebar from "../include/Sidebar";
 import Header from "../include/Header";
-import TopNav from "../include/TopNav";
+import TopNav from "./TopNav";
 import { useNavigate } from "react-router-dom";
 import '/src/assets/calendar.css';
 import { getAllCalendars, getDeptCalendars, getMyCalendars } from "../../service/calendarLogic";
