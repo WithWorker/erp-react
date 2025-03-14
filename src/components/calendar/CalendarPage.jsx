@@ -178,31 +178,53 @@ const CalendarPage = () => {
             </div>
             <div className="flex-1"></div> {/* 빈 공간을 추가하여 요소들이 가운데 정렬되게 함 */}
           </div>
-            <FullCalendar
-              ref={calendarRef}
-              plugins={[dayGridPlugin, interactionPlugin, googleCalendarPlugin]}
-              initialView="dayGridMonth"
-              googleCalendarApiKey={import.meta.env.VITE_GOOGLE_CALENDAR_API_KEY}
-              events={events}
-              eventSources={[{
-                googleCalendarId: 'ko.south_korea#holiday@group.v.calendar.google.com',
-                className: 'gcal-event',
-              }]}
-              eventContent={(eventInfo) => (
-                <div>
-                  <span>{eventInfo.event.title}</span>
-                </div>
-              )}
-              headerToolbar={false}
-              initialDate={today}
-              height="auto"
-              dateClick={handleDateClick} // 날짜 클릭 시 처리
-              dayCellClassNames={(arg) => {
-                const formattedDate = arg.date.toLocaleDateString('en-CA'); // 'YYYY-MM-DD' 형식으로 변환
-                return formattedDate === selectedDate ? "selected-date" : "";
-              }}
-              eventClick={handleEventClick}
-            />
+
+          <FullCalendar
+  ref={calendarRef}
+  plugins={[dayGridPlugin, interactionPlugin, googleCalendarPlugin]}
+  initialView="dayGridMonth"
+  googleCalendarApiKey={import.meta.env.VITE_GOOGLE_CALENDAR_API_KEY}
+  events={events}
+  eventSources={[
+    {
+      googleCalendarId: 'ko.south_korea#holiday@group.v.calendar.google.com',
+      className: 'gcal-event', // 구글 캘린더 공휴일을 위한 className
+    },
+  ]}
+  eventContent={(eventInfo) => (
+    <div>
+      <span>{eventInfo.event.title}</span>
+    </div>
+  )}
+  headerToolbar={false}
+  initialDate={today}
+  height="auto"
+  dateClick={handleDateClick}
+  dayCellClassNames={(arg) => {
+    const formattedDate = arg.date.toLocaleDateString('en-CA');
+    return formattedDate === selectedDate ? "selected-date" : "";
+  }}
+  eventClick={handleEventClick}
+  views={{
+    dayGridMonth: {
+      dayMaxEventRows: 3, // 하루에 최대 3개의 이벤트 행 표시
+    },
+  }}
+  eventRender={(info) => {
+    // 구글 캘린더 일정인지 확인하고 스타일을 강제로 적용
+    if (info.event.source.googleCalendarId) {
+      // 구글 캘린더 일정만 빨간색으로 변경
+      info.el.style.color = 'red';  // 텍스트를 빨간색으로 설정
+      info.el.style.fontWeight = 'bold'; // 글씨 두껍게
+    }
+  }}
+/>
+
+
+
+
+            
+
           </div>
           <EventList selectedDate={selectedDate} selectedEvents={selectedEvents} />
         </div>
