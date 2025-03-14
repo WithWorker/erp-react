@@ -2,11 +2,11 @@ import React from 'react'
 import { ChevronDown } from 'react-bootstrap-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
+import { updateBonus } from '../../../redux/slice/employeeSlice';
 const PBonus = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const formData = useSelector(state => state.employee.formData);
+  const formData = useSelector(state => state.employee.bonusFormData);
 
   // 닫기 버튼 클릭 시 /employees 페이지로 이동
   const handleClose = () => {
@@ -14,25 +14,28 @@ const PBonus = () => {
   };
 
   const handleYearChange = (e) => {
-    dispatch(updateSalary({ ...formData, year: e.target.value }));
+    console.log('Year Value:', e.target.value); // 디스패치 전 값 확인
+    dispatch(updateBonus({ ...formData, year: e.target.value }));
   };
 
   const handleMonthChange = (e) => {
-    dispatch(updateSalary({ ...formData, month: e.target.value }));
+    console.log('Month Value:', e.target.value); // 디스패치 전 값 확인
+    dispatch(updateBonus({ ...formData, month: e.target.value }));
   };
 
   const handleDayChange = (e) => {
-    dispatch(updateSalary({ ...formData, day: e.target.value }));
+    console.log('Day Value:', e.target.value); // 디스패치 전 값 확인
+    dispatch(updateBonus({ ...formData, day: e.target.value }));
   };
+  
 
   return (
     <div className='w-full h-30 bg-white text-center rounded-3xl p-8 shadow-md'>
       <h1 className='text-lg font-bold mb-10'>사원 성과급 비용</h1>
       <div className='flex flex-row space-x-8 items-center'>
         {/* 년 선택 appearance-none */}
-          
         <select 
-          className="appearance-none flex-1 bg-gray-100 rounded-full p-3 pr-6 focus:ring-2 focus:ring-[#323232]"
+          className="flex-1 bg-gray-100 rounded-full p-3 pr-6 focus:ring-2 focus:ring-[#323232]"
           value={formData.year}
           onChange={handleYearChange}
           >
@@ -42,9 +45,6 @@ const PBonus = () => {
             </option>
           ))}
         </select>
-        <div className='flex pr-8'>
-          <ChevronDown />
-        </div>
 
         {/* 월 선택 */}
         <select 
