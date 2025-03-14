@@ -2,11 +2,13 @@ import React from 'react'
 import { ChevronDown } from 'react-bootstrap-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { updateSalary } from '../../../redux/slice/employeeSlice';
+
 
 const PSalary = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const formData = useSelector(state => state.employee.formData);
+  const formData = useSelector(state => state.employee.salaryFormData);
 
   // 닫기 버튼 클릭 시 /employees 페이지로 이동
   const handleClose = () => {
