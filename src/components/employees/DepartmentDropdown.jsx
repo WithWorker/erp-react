@@ -1,20 +1,25 @@
-import { useState } from "react";
-import categoryDepartment from "../../utils/categoryDepartment"; // category.js에서 import
+import { useState, useEffect } from "react";
+import categoryDepartment from "../../utils/categoryDepartment"; 
 import { ChevronDown } from "react-bootstrap-icons";
 
-const DepartmentDropdown = ({ onSelectDepartment }) => {
+const DepartmentDropdown = ({ onSelectDepartment, selectedDepartment }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [selectedDepartment, setSelectedDepartment] = useState("전체보기");
+  const [currentDepartment, setCurrentDepartment] = useState("전체보기");
+
+  useEffect(() => {
+    if (selectedDepartment) {
+      setCurrentDepartment(selectedDepartment);
+    }
+  }, [selectedDepartment]);
 
   const handleDepartmentSelect = (department) => {
-    setSelectedDepartment(department);
+    setCurrentDepartment(department);
     setDropdownOpen(false);
-    onSelectDepartment(department); // 부서 선택 시 부모로 전달
-    console.log("Selected Department ID:", department);
+    onSelectDepartment(department); 
   };
 
   return (
-    <div className="relative w-full"> {/* w-full 추가 */}
+    <div className="relative w-full"> 
       <div
         className="bg-white p-3 pl-6 pr-10 rounded-full shadow-md w-full cursor-pointer flex items-center h-[48px] border border-gray-300"
         onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -23,12 +28,12 @@ const DepartmentDropdown = ({ onSelectDepartment }) => {
           className="w-4 h-4 rounded-full mr-2"
           style={{
             backgroundColor: categoryDepartment.find(
-              (cat) => cat.value === selectedDepartment
+              (cat) => cat.value === currentDepartment
             )?.color,
           }}
         />
         <span className="font-medium">
-          {categoryDepartment.find((cat) => cat.value === selectedDepartment)
+          {categoryDepartment.find((cat) => cat.value === currentDepartment)
             ?.label}
         </span>
         <ChevronDown className="ml-auto text-gray-500" />

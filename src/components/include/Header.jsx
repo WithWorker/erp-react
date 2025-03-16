@@ -35,12 +35,8 @@ const Header = () => {
         return "채팅";
       case "/employees":
         return "직원 조회";
-      case "/join":
-        return "직원 등록";
       case "/mypage":
         return "마이페이지";
-      default:
-        return "Dashboard"; // 기본 값
     }
   };
 

@@ -5,6 +5,7 @@ import DepartmentDropdown from "./DepartmentDropdown";
 import Sidebar from "../include/Sidebar";
 import Pagination from "./Pagination";  
 import { ThreeDots } from "react-bootstrap-icons";
+import { useNavigate } from "react-router";
 
 const departmentMap = {
   '전체보기': null,
@@ -17,12 +18,18 @@ const departmentMap = {
 };
 
 const EmployeeListPage = () => {
+  const navigate = useNavigate();
+
+  const handleEditClick = (empId) => {
+    navigate(`/update/${empId}`);
+  };
+  
   const [query, setQuery] = useState("");
   const [employees, setEmployees] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageGroup, setPageGroup] = useState(0);
   const itemsPerPage = 8;
-  const [department, setDepartment] = useState("전체보기"); // New state for department
+  const [department, setDepartment] = useState("전체보기"); 
 
   useEffect(() => {
     fetchEmployees();
@@ -44,7 +51,7 @@ const EmployeeListPage = () => {
   };
 
   const fetchEmployeesByDepartment = async (departmentKey) => {
-    setDepartment(departmentKey); // Update the department state
+    setDepartment(departmentKey); 
     const departmentId = departmentMap[departmentKey];
     if (!departmentId) {
       fetchEmployees();
@@ -113,12 +120,13 @@ const EmployeeListPage = () => {
               <thead>
                 <tr className="text-[#323232] text-sm">
                   <th className="p-2 text-center font-bold">프로필</th>
-                  <th className="p-2 text-center font-bold">사원번호</th>
                   <th className="p-2 text-center font-bold">이름</th>
                   <th className="p-2 text-center font-bold">부서</th>
                   <th className="p-2 text-center font-bold">직급</th>
                   <th className="p-2 text-center font-bold">전화번호</th>
                   <th className="p-2 text-center font-bold">이메일</th>
+                  <th className="p-2 text-center font-bold">입사일</th>
+                  <th className="p-2 text-center font-bold">퇴사일</th>
                   <th className="p-2 text-center font-bold"></th>
                 </tr>
               </thead>
@@ -126,20 +134,21 @@ const EmployeeListPage = () => {
                 {currentEmployees.map((employee) => (
                   <tr key={employee.empId} className="hover:bg-gray-50 border-b">
                     <td className="img-center">
-                      <img
-                        src={employee.imgUrl || "/default-profile.png"}
-                        alt="프로필"
-                        className="ml-9 w-10 h-10 rounded-full"
-                      />
+                    <img
+                      src={`http://localhost:7777/${employee.imgUrl}`}
+                      alt="프로필"
+                      className="ml-9 w-10 h-10 rounded-full"
+                    />
                     </td>
-                    <td className="p-4 text-center">{employee.empId}</td>
                     <td className="p-4 text-center">{employee.name}</td>
                     <td className="p-4 text-center">{employee.departmentName}</td>
                     <td className="p-4 text-center">{employee.positionName}</td>
                     <td className="p-4 text-center">{employee.phone}</td>
                     <td className="p-4 text-center">{employee.email}</td>
+                    <td className="p-4 text-center">{employee.hireDate}</td>
+                    <td className="p-4 text-center">{employee.resignDate}</td>
                     <td className="p-4 text-center">
-                      <button className="text-gray-500">
+                    <button onClick={() => handleEditClick(employee.empId)} className="text-gray-500">
                         <ThreeDots size={20} />
                       </button>
                     </td>

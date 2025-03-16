@@ -89,17 +89,17 @@ showModal && (
         )}
         <div className="flex justify-between gap-2 mt-4">
             <button
+            type="submit"
+            className="text-white bg-[#006D2C] p-2 w-32 rounded-lg hover:bg-[#004B1D]"
+            >
+            확인
+            </button>
+            <button
             type="button"
             className="text-white bg-gray-400 p-2 w-32 rounded-lg hover:bg-[#323232]"
             onClick={closeModal}
             >
             닫기
-            </button>
-            <button
-            type="submit"
-            className="text-white bg-[#006D2C] p-2 w-32 rounded-lg hover:bg-[#004B1D]"
-            >
-            확인
             </button>
         </div>
         </form>
