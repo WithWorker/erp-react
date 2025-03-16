@@ -4,6 +4,7 @@ import CalendarPage from './components/calendar/CalendarPage';
 import CalendarWrite from './components/calendar/CalendarWrite';
 import CalendarDetail from './components/calendar/CalendarDetail';
 import CalendarEdit from './components/calendar/CalendarEdit';
+import ApprovalPage from './components/approval/ApprovalPage';
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
         <Route path="/calendar/:calendarId" element={<CalendarDetail/>} />
         <Route path="/calendar/add" element={<CalendarWrite/>} />
         <Route path="/calendar/edit/:calendarId" element={<CalendarEdit/>} />
+        <Route path="/approval" element={<ApprovalPage/>} />
       </Routes>
     </Router>
   );
