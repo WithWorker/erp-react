@@ -25,6 +25,10 @@ const Header = () => {
     if (path.startsWith("/calendar")) {
       return "캘린더";
     }
+    
+    if (path.startsWith("/approval")) {
+      return "휴가";
+    }
 
     switch (path) {
       case "/calendar":
