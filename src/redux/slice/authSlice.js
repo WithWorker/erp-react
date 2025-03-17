@@ -14,6 +14,7 @@ const initialState = {
   password: "",
   isAuthenticated: false,
   isAdmin: true,  // 기본값은 관리자가 아닌 상태
+  isManager: true,
   error: null,
   count: 0, // 추가됨
 };
@@ -49,7 +50,9 @@ const authSlice = createSlice({
     setAdminStatus: (state, action) => {
       state.isAdmin = action.payload;  // 관리자인지 아닌지 설정
     },
-
+    setManagerStatus: (state, action) => {
+      state.isManager = action.payload;
+    },
     increment: (state) => { state.count += 1; },
     setUsername: (state, action) => {
       state.username = action.payload;
@@ -70,6 +73,7 @@ const authSlice = createSlice({
         state.isAuthenticated = true;
         state.error = null;
         state.isAdmin = true;  // ❤️ 로그인 후 관리자로 설정
+        state.isManager = true;
       })
       .addCase(login.rejected, (state, action) => {
         state.isAuthenticated = false;
@@ -78,5 +82,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { increment, setUsername, setPassword, logout, setAdminStatus } = authSlice.actions;
+export const { increment, setUsername, setPassword, logout, setAdminStatus, setManagerStatus } = authSlice.actions;
 export default authSlice;

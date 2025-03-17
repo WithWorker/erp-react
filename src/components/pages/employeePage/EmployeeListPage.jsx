@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,  } from 'react';
 import Header from '../../include/Header';
 import SearchBar from '../../include/SearchBar';
 import Sidebar from '../../include/Sidebar';
@@ -16,8 +16,7 @@ const EmployeeListPage = () => {
     dispatch(loadEmployees()); // 직원 목록 로드
   }, [dispatch]); */
 
-  useEffect(() => {
-  }, [dispatch]);
+  
   
 
   return (

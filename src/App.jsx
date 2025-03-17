@@ -10,6 +10,8 @@ import ChatPage from './components/pages/ChatPage';
 import EmployeeAddPage from './components/pages/employeePage/EmployeeAddPage';
 import EmployeeEditPage from './components/pages/employeePage/EmployeeEditPage';
 import DocumentListPage from './components/pages/documentPage/DocumentListPage';
+import DMDetailPage from './components/pages/documentPage/DMDetailPage';
+import AbsentWritePage from './components/pages/documentPage/AbsentWritePage';
 
 function App() {
 
@@ -22,6 +24,8 @@ function App() {
         <Route path="/write" element={<CalendarWritePage />} />
         <Route path="/event/:id" element={<EventDetailPage />} />
         <Route path="/user/documents" element={<DocumentListPage />} />
+        <Route path="/document/:id" element={<DMDetailPage />} />
+        <Route path="/create" element={<AbsentWritePage />} />
         <Route path="/board" element={<div>게시판 페이지</div>} />
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/employees" element={<EmployeeListPage />} />

@@ -2,9 +2,9 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchApprovalList, updateApprovalStatus, selectApprovalList, selectCurrentPage, selectTotalPages } from '../../../redux/slice/documentSlice';
-import { CardText, Files, Plus } from 'react-bootstrap-icons';
+import { Files, ThreeDots } from 'react-bootstrap-icons';
 
-const PendingList = () => {
+const PendingList = ({ setTabIndex }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -19,12 +19,18 @@ const PendingList = () => {
     dispatch(fetchApprovalList(currentPage));
   }, [dispatch, currentPage]);
 
-
+  const detailRedirect = (id) => {
+    navigate(`/document/${id}`);
+  }
   const handleApproval = async (id, status) => {
     try {
       // axios.put 대신, 더미 데이터 처리
       console.log('승인 처리:', id, status);
       dispatch(updateApprovalStatus({ id, status }));
+      if (status === '승인') { // ❤️ 승인 시 상태 변경 후 탭 인덱스를 2로 설정
+        console.log('승인 후 탭 변경: ', 2);
+        setTabIndex(2); // ❤️ 승인 완료 목록 탭으로 이동
+      }
     } catch (error) {
       console.error('Approval update failed:', error);
     }
@@ -39,8 +45,8 @@ const PendingList = () => {
       <div className="p-4 w-full bg-white rounded-2xl shadow-lg">
         {list.length > 0 ? (
           list.map(item => (
-            <div key={item.id} className="rounded-full mb-2 p-3 bg-gray-100">
-              <div className="flex justify-between ml-4 mr-4">
+            <div key={item.id} className="rounded-full mb-2 p-1 bg-gray-100">
+              <div className="flex justify-between ml-6 mr-4">
                 <div className='flex justify-between items-center space-x-4'>
                   <p className="text-xs mb-1 text-gray-500">{item.date}</p>
                   <div className='flex flex-between items-center space-x-4'>
@@ -48,27 +54,24 @@ const PendingList = () => {
                     <p className="text-xs text-gray-500">{item.author} / {item.department}</p>
                   </div>
                 </div>
-                <div>
+                <div className='flex justify-between items-center'>
                   {item.status === '대기' ? (
                     <div className="flex gap-2">
-                      <button
-                        onClick={() => handleApproval(item.id, '승인')}
-                        className="border-2 border-[#006D2C] text-[#006D2C] px-4 py-2 rounded-full"
+                      <div className="border-2 border-[#006D2C] text-[#006D2C] px-4 py-2 rounded-full"
                       >
                         승인 대기
-                      </button>
-                      {/* <button
-                        onClick={() => handleApproval(item.id, '반려')}
-                        className="border-2 border-[#006D2C] text-[#006D2C] px-4 py-2 rounded-full"
-                      >
-                        반려
-                      </button> */}
+                      </div>
                     </div>
                   ) : (
                     <span className={`text-${item.status === '승인' ? 'green' : 'red'}-500`}>
                       {item.status}
                     </span>
                   )}
+                    <div className="p-4 text-center">
+                      <button onClick={() => detailRedirect(item.id)} className="flex items-center text-gray-500">
+                        <ThreeDots size={20} />
+                      </button>
+                    </div>
                 </div>
               </div>
             </div>

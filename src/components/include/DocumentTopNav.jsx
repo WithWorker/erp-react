@@ -8,7 +8,7 @@ const DocumentTopNav = ({ setTabIndex }) => {
   const dispatch = useDispatch(); // dispatch 함수 선언
   const category = useSelector((state) => state.calendar.category); // 카테고리 값 가져오기
   const isAdmin = useSelector((state) => state.auth.isAdmin);  // authSlice에서 가져오기
-
+  //const isManager = document.author === "팀장";
   const handleClick = (index, category) => {
     setActive(index);
     dispatch(setCategory(category)); // dispatch를 사용해 category 상태 업데이트

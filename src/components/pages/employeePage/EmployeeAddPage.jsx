@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { loadEmployees } from '../../../redux/slice/employeeSlice';
@@ -10,30 +10,19 @@ const EmployeeAddPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // ✅ 로컬스토리지에서 값 불러오기 추가  
-  const [formData, setFormData] = useState(() => {  
-    const savedData = localStorage.getItem('formData');  
-    return savedData  
-      ? JSON.parse(savedData)  
-      : {  
-          employeeId: '',  
-          name: '',  
-          department: '',  
-          position: '',  
-          phone: '',  
-          email: '',  
-          status: 'active',  
-          profileImage: null  
-        };  
-  });  
+  const [formData, setFormData] = useState({
+    employeeId: '',
+    name: '',
+    department: '',
+    position: '',
+    phone: '',
+    email: '',
+    status: 'active',
+    profileImage: null
+  });
 
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // 🔥 드롭다운 상태 관리 추가
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // :fire: 드롭다운 상태 관리 추가
   const [isDepartmentDropdownOpen, setIsDepartmentDropdownOpen] = useState(false); // 부서 드롭다운 상태 추가
-
-  // ✅ 상태 변경 시 localStorage에 저장  
-  useEffect(() => {  
-    localStorage.setItem('formData', JSON.stringify(formData));  
-  }, [formData]);  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -53,36 +42,24 @@ const EmployeeAddPage = () => {
       profileImage: formData.profileImage ? URL.createObjectURL(formData.profileImage) : null
     };
 
-    /* await dispatch(addEmployee(newEmployee)); // 직원 추가
+    await dispatch(addEmployee(newEmployee)); // 직원 추가
     dispatch(loadEmployees()); // 직원 목록 갱신
-    navigate('/employees'); // 목록으로 이동 */
-    
-    try {
-      await dispatch(addEmployee(newEmployee)).unwrap(); // 완료 후 상태 갱신
-      await dispatch(loadEmployees()); // ✅ 추가 완료 후 상태 갱신 보장
-      navigate('/employees'); // 목록으로 이동
-    } catch (error) {
-      console.error('직원 추가 실패:', error);
-    }
+    navigate('/employees'); // 목록으로 이동
+  };
 
-    // ✅ 등록 후 로컬스토리지 삭제  
-    localStorage.removeItem('formData');  
-    };
-
-
-  // 🔥 직급 선택 핸들러 추가
+  // :fire: 직급 선택 핸들러 추가
   const handlePositionSelect = (value) => {
     setFormData(prev => ({ ...prev, position: value }));
     setIsDropdownOpen(false);
   };
 
-  // 🔥 부서 선택 핸들러 추가
+  // :fire: 부서 선택 핸들러 추가
   const handleDepartmentSelect = (value) => {
     setFormData(prev => ({ ...prev, department: value }));
     setIsDepartmentDropdownOpen(false);
   };
 
-  const handleSelect = (value) => { // 🔥 드롭다운 값 선택 핸들러 추가
+  const handleSelect = (value) => { // :fire: 드롭다운 값 선택 핸들러 추가
     setFormData(prev => ({ ...prev, position: value }));
     setIsDropdownOpen(false);
   };
@@ -130,7 +107,7 @@ const EmployeeAddPage = () => {
 
         <div className="flex-1 space-y-4">
           <div className='h-30 bg-white text-center rounded-3xl p-8 shadow-md mb-8'>
-            <h1 className='text-lg font-bold'>개인정보 추가</h1>
+            <h className='text-lg font-bold'>개인정보 추가</h>
             {/* 이름 */}
             <div className='flex justify-between items-center ml-5 mr-20 mt-8'>
               <label className="block text-sm font-medium w-40">이름</label>
@@ -171,7 +148,7 @@ const EmployeeAddPage = () => {
 
         <div className="flex flex-row space-x-8 items-center">
           <div className='w-full h-30 bg-white text-center rounded-3xl p-8 shadow-md'>
-            <h1 className='text-lg font-bold mb-10'>부서관리</h1>
+            <h className='text-lg font-bold mb-10'>부서관리</h>
             {/* 부서 */}
             <div className='flex flex-row space-x-8 items-center  mt-4'>
               <label className="block text-sm font-medium w-20">현재부서 : </label>
@@ -183,7 +160,7 @@ const EmployeeAddPage = () => {
                   disabled
                   className="border-none bg-gray-100 flex-1 rounded-md p-1 w-40"
                 />
-              {/* 🔥 부서 변경 버튼 추가 */}
+              {/* :fire: 부서 변경 버튼 추가 */}
               <div className="flex flex-1 flex-col items-center relative">
                     <button 
                       type="button"
@@ -192,7 +169,7 @@ const EmployeeAddPage = () => {
                       >
                       부서 변경하기
                     </button>
-                  {/* 🔥 부서 드롭다운 추가 */}
+                  {/* :fire: 부서 드롭다운 추가 */}
                   {isDepartmentDropdownOpen && (
                   <div div className="absolute inset-x-0 mt-12 w-34 bg-white border border-[#006D2C] rounded-2xl shadow-lg z-10">  
                     {['개발팀', '디자인팀', '경영지원팀', '마케팅팀', '사업기획팀', 'R&D팀'].map((department) => (
@@ -223,7 +200,7 @@ const EmployeeAddPage = () => {
                 disabled
                 className="border-none bg-gray-100 flex-1 rounded-md p-1 w-40"
               />
-            {/* 🔥 직급 변경 버튼 추가 */}
+            {/* :fire: 직급 변경 버튼 추가 */}
             <div className="flex flex-1 flex-col items-center relative">
                   <button 
                     type="button"
@@ -232,7 +209,7 @@ const EmployeeAddPage = () => {
                   >
                     직급 변경하기
                   </button>
-                {/* 🔥 드롭다운 메뉴 추가 */}
+                {/* :fire: 드롭다운 메뉴 추가 */}
                 {isDropdownOpen && (
                     <div className="absolute mt-12 w-40 bg-white border border-[#006D2C] rounded-2xl shadow-lg z-10">
                     {['사원', '주임', '대리', '과장', '차장', '부장'].map((position) => (
