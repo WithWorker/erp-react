@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-const PSalary = () => {
+const PSalary = ({ onSalaryChange }) => {
   const { id } = useParams(); 
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
@@ -57,6 +57,12 @@ const PSalary = () => {
     }
   };
 
+  const handleSalaryChange = (e) => {
+    const value = e.target.value.replace(/,/g, ""); // 콤마 제거
+    setSalary(value);
+    onSalaryChange(Number(value)); // 부모 컴포넌트에 숫자로 전달
+  };
+
   return (
     <div className='w-full h-30 bg-white text-center rounded-3xl p-8 shadow-md'>
       <div className='flex flex-row space-x-8 items-center'>
@@ -102,9 +108,9 @@ const PSalary = () => {
           <label className="text-sm font-medium">기본급</label>
           <input 
             type="text" 
-            className="bg-gray-100 border rounded-md w-32 p-2"
-            value={salary} 
-            readOnly 
+            className="bg-gray-100 border rounded-md w-32 p-2 text-right"
+            value={salary ? Number(salary).toLocaleString() : ""} 
+            onChange={handleSalaryChange} // 숫자 입력값 처리
           />
           <button 
             type="button" 

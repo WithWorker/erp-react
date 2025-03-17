@@ -42,6 +42,7 @@ const EmployeeEditPage = () => {
   const [departmentId, setDepartmentId] = useState(null);
   const [position, setPosition] = useState("");
   const [positionId, setPositionId] = useState(null);
+  const [updatedSalary, setUpdatedSalary] = useState(0); // 기본급 상태 초기값 숫자형
 
   // 직원 정보 불러오기
   useEffect(() => {
@@ -63,6 +64,7 @@ const EmployeeEditPage = () => {
           // 부서 & 직급 설정
           setDepartmentId(data.departmentId);
           setPositionId(data.positionId);
+          setUpdatedSalary(data.baseSalary || 0); // 기본급 초기값 설정
         } else {
           console.error("Failed to fetch employee data");
         }
@@ -94,13 +96,16 @@ const EmployeeEditPage = () => {
   const handleDepartmentSelect = (selectedDepartment) => {
     setDepartment(selectedDepartment);
     setDepartmentId(departmentMap[selectedDepartment] || null);
-    console.log("Selected Department:", selectedDepartment, "DepartmentId:", departmentMap[selectedDepartment]);
   };
 
   const handlePositionSelect = (selectedPosition) => {
     setPosition(selectedPosition);
     setPositionId(positionMap[selectedPosition] || null);
-    console.log("Selected Position:", selectedPosition, "PositionId:", positionMap[selectedPosition]);
+  };
+
+  // PSalary 컴포넌트에서 기본급 수정
+  const handleSalaryChange = (newSalary) => {
+    setUpdatedSalary(newSalary); // 기본급을 숫자로 업데이트
   };
 
   // 수정 요청
@@ -111,7 +116,8 @@ const EmployeeEditPage = () => {
       email: emailRef.current.value,
       phone: phoneRef.current.value,
       departmentId,
-      positionId
+      positionId,
+      baseSalary: updatedSalary, // 기본급을 숫자로 전송
     };
 
     console.log("Updated Data to Send:", updatedData);
@@ -146,7 +152,6 @@ const EmployeeEditPage = () => {
 
           <h1 className='text-lg text-center font-bold mb-4'>직원 수정</h1>
 
-
           {/* 부서관리 & 직급관리 */}
           <div className="w-full flex space-x-8 mb-6">
             <div className='flex-1 bg-gray-50 text-center rounded-2xl p-6 shadow-sm'>
@@ -168,7 +173,7 @@ const EmployeeEditPage = () => {
           {/* 개인정보 수정 */}
           <div className='w-full bg-gray-50 text-center rounded-2xl p-6 shadow-sm mb-6'>
             <div className='flex flex-row space-x-8'>
-            <div className='flex flex-col items-start flex-1'>
+              <div className='flex flex-col items-start flex-1'>
                 <label className="block text-sm font-medium mb-2">이름</label>
                 <input type="text" ref={nameRef} className="border rounded-md w-full p-2" />
               </div>
@@ -185,7 +190,7 @@ const EmployeeEditPage = () => {
 
           {/* 급여 & 보너스 */}
           <div className="w-full flex space-x-8 mb-6">
-            <PSalary />
+            <PSalary onSalaryChange={handleSalaryChange} />
             <PBonus />
           </div>
 

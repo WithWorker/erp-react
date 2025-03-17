@@ -72,6 +72,10 @@ const EmployeeAddPage = () => {
   };
 
   const handleSubmit = async () => {
+  if (!name.trim() || !phone.trim() || !email.trim() || !password.trim()) {
+    alert('입력하지 않은 항목이 존재합니다.');
+    return;
+  }
     try {
       const imgUrl = await handleImageUpload();
 

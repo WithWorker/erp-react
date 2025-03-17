@@ -93,8 +93,10 @@ const PBonus = () => {
       <div className="flex flex-row space-x-4 justify-center pt-4">
         <div className="flex flex-row space-x-4 items-center w-full">
           <label className="text-sm font-medium">성과급</label>
-          <input type="text" className="bg-gray-100 border rounded-md p-2 w-32" 
-            value={bonus} 
+          <input 
+            type="text" 
+            className="bg-gray-100 border rounded-md p-2 w-32 text-right"
+            value={bonus ? Number(bonus).toLocaleString() : ""} 
             readOnly 
           />
           <button
