@@ -96,6 +96,7 @@ const EmployeeAddPage = () => {
 
       if (response.ok) {
         alert('직원 등록 성공!');
+        navigate("/employees");
       } else {
         const errorMessage = await response.text();
         alert(`등록 실패: ${errorMessage}`);

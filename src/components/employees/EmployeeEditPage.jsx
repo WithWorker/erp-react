@@ -144,12 +144,8 @@ const EmployeeEditPage = () => {
         <Header />
         <div className="bg-white p-8 rounded-3xl shadow-md max-w-4xl w-[80%] mx-auto">
 
-          {/* 급여 & 보너스 */}
           <h1 className='text-lg text-center font-bold mb-4'>직원 수정</h1>
-          <div className="w-full flex space-x-8 mb-6">
-            <PSalary />
-            <PBonus />
-          </div>
+
 
           {/* 부서관리 & 직급관리 */}
           <div className="w-full flex space-x-8 mb-6">
@@ -185,6 +181,12 @@ const EmployeeEditPage = () => {
                 <input type="text" ref={phoneRef} className="border rounded-md w-full p-2" />
               </div>
             </div>
+          </div>
+
+          {/* 급여 & 보너스 */}
+          <div className="w-full flex space-x-8 mb-6">
+            <PSalary />
+            <PBonus />
           </div>
 
           {/* 버튼 */}

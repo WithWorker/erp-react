@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 const PSalary = () => {
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
-  const [month, setMonth] = useState(now.getMonth() + 1); 
+  const [month, setMonth] = useState(now.getMonth() + 1);
+  const [salary, setSalary] = useState(""); // 기본급 상태 추가
 
   const handleYearChange = (e) => setYear(Number(e.target.value));
   const handleMonthChange = (e) => setMonth(Number(e.target.value));
+  const handleSalaryChange = (e) => setSalary(e.target.value); // 기본급 입력 처리 함수
 
   return (
     <div className='w-full h-30 bg-white text-center rounded-3xl p-8 shadow-md'>
@@ -48,18 +50,18 @@ const PSalary = () => {
         </select>
 
       </div>
-
-      <div className='flex flex-col space-y-2 justify-center pt-4'>
-        <p className="border-1 border-dashed border-gray-400 w-full mt-2 mb-4"></p>
-
-        {/* 버튼 */}
-        <div className="flex flex-row space-x-4">
-          <button type="button" className="flex-1 border-2 border-[#006D2C] text-[#006D2C] py-2 rounded-full">
-            기본급 수정 
+      <p className="border-1 border-dashed border-gray-400 w-full mt-4 mb-2"></p>
+      <div className='flex flex-row space-x-4 justify-center pt-4'>
+        <div className="flex flex-row space-x-4 items-center">
+          <label className="text-sm font-medium">기본급</label>
+          <input type="text" className="bg-gray-100 border rounded-md w-32 p-2"
+            value={salary} 
+            onChange={handleSalaryChange} 
+          />
+          <button type="button" className="border-2 border-[#006D2C] text-[#006D2C] py-2 px-6 rounded-full">
+            내역저장
           </button>
-          <button type="button" className="flex-1 border-1 border-[#323232] text-[#323232] py-2 rounded-full">
-            기본급 입력 
-          </button>
+
         </div>
       </div>
     </div>

@@ -3,8 +3,10 @@ import React, { useState } from 'react';
 const PBonus = () => {
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
+  const [bonus, setBonus] = useState(""); // 성과급 상태 추가
 
   const handleYearChange = (e) => setYear(Number(e.target.value));
+  const handleBonusChange = (e) => setBonus(e.target.value); // 성과급 입력 처리 함수
 
   return (
     <div className='w-full h-30 bg-white text-center rounded-3xl p-8 shadow-md'>
@@ -42,17 +44,16 @@ const PBonus = () => {
         </select>
 
       </div>
-
-      <div className='flex flex-col space-y-2 justify-center pt-4'>
-        <p className="border-1 border-dashed border-gray-400 w-full mt-2 mb-4"></p>
-
-        {/* 버튼 */}
-        <div className="flex flex-row space-x-4">
-          <button type="button" className="flex-1 border-2 border-[#006D2C] text-[#006D2C] py-2 rounded-full">
-            성과급 수정 
-          </button>
-          <button type="button" className="flex-1 border-1 border-[#323232] text-[#323232] py-2 rounded-full">
-            성과급 입력 
+      <p className="border-1 border-dashed border-gray-400 w-full mt-4 mb-2"></p>
+      <div className='flex flex-row space-x-4 justify-center pt-4'>
+        <div className="flex flex-row space-x-4 items-center w-full">
+          <label className="text-sm font-medium">성과급</label>
+          <input type="text" className="bg-gray-100 border rounded-md p-2 w-32" 
+            value={bonus} 
+            onChange={handleBonusChange} 
+          />
+          <button type="button" className="border-2 border-[#006D2C] text-[#006D2C] py-2 px-4 rounded-full">
+            내역저장
           </button>
         </div>
       </div>
