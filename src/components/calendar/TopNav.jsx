@@ -15,7 +15,7 @@ const TopNav = ({ setViewMode }) => {
         className={`flex-1 bg-white shadow-lg rounded-full h-[56px] flex items-center justify-center cursor-pointer transition-all duration-300 ease-in-out 
           ${active === 0 ? `text-[#006D2C] border-2 border-[#006D2C]` : `text-black border-2 border-transparent`} 
           hover:text-[#006D2C] hover:border-2 hover:border-[#006D2C]`}
-        style={{ backgroundColor: active === 0 ? categoryColors['all'] : 'transparent' }} // 색상 변경
+        style={{ backgroundColor: active === 0 ? categoryColors['all'] : 'transparent' }} 
         onClick={() => handleButtonClick('all', 0)}
       >
         전체보기
@@ -24,7 +24,7 @@ const TopNav = ({ setViewMode }) => {
         className={`flex-1 bg-white shadow-lg rounded-full h-[56px] flex items-center justify-center cursor-pointer transition-all duration-300 ease-in-out 
           ${active === 1 ? `text-[#006D2C] border-2 border-[#006D2C]` : `text-black border-2 border-transparent`} 
           hover:text-[#006D2C] hover:border-2 hover:border-[#006D2C]`}
-        style={{ backgroundColor: active === 1 ? categoryColors['my-schedule'] : 'transparent' }} // 색상 변경
+        style={{ backgroundColor: active === 1 ? categoryColors['my-schedule'] : 'transparent' }} 
         onClick={() => handleButtonClick('personal', 1)}
       >
         내 일정
@@ -33,7 +33,7 @@ const TopNav = ({ setViewMode }) => {
         className={`flex-1 bg-white shadow-lg rounded-full h-[56px] flex items-center justify-center cursor-pointer transition-all duration-300 ease-in-out 
           ${active === 2 ? `text-[#006D2C] border-2 border-[#006D2C]` : `text-black border-2 border-transparent`} 
           hover:text-[#006D2C] hover:border-2 hover:border-[#006D2C]`}
-        style={{ backgroundColor: active === 2 ? categoryColors['team-members'] : 'transparent' }} // 색상 변경
+        style={{ backgroundColor: active === 2 ? categoryColors['team-members'] : 'transparent' }} 
         onClick={() => handleButtonClick('department', 2)}
       >
         부서 구성원

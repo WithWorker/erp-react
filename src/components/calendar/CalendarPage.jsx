@@ -10,7 +10,7 @@ import TopNav from "./TopNav";
 import { useNavigate } from "react-router-dom";
 import '/src/assets/calendar.css';
 import { getAllCalendars, getDeptCalendars, getMyCalendars } from "../../service/calendarLogic";
-import EventList from "./EventList"; // EventList 컴포넌트 import
+import EventList from "./EventList"; 
 
 const CalendarPage = () => {
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ const CalendarPage = () => {
         } else {
           data = await getAllCalendars();
         }
-        console.log("응답 받은 데이터:", data);
+        console.log("풀캘린더 데이터:", data);
 
         const calendarEvents = data.map(event => {
           if (!event.start_date || !event.end_date) {
@@ -67,7 +67,7 @@ const CalendarPage = () => {
           };
         }).filter(event => event !== null);
 
-        console.log("변환된 일정 데이터:", calendarEvents);
+        console.log("일정List 데이터:", calendarEvents);
         setEvents(calendarEvents);
 
         // 오늘 날짜에 맞는 일정 필터링
@@ -180,51 +180,37 @@ const CalendarPage = () => {
           </div>
 
           <FullCalendar
-  ref={calendarRef}
-  plugins={[dayGridPlugin, interactionPlugin, googleCalendarPlugin]}
-  initialView="dayGridMonth"
-  googleCalendarApiKey={import.meta.env.VITE_GOOGLE_CALENDAR_API_KEY}
-  events={events}
-  eventSources={[
-    {
-      googleCalendarId: 'ko.south_korea#holiday@group.v.calendar.google.com',
-      className: 'gcal-event', // 구글 캘린더 공휴일을 위한 className
-    },
-  ]}
-  eventContent={(eventInfo) => (
-    <div>
-      <span>{eventInfo.event.title}</span>
-    </div>
-  )}
-  headerToolbar={false}
-  initialDate={today}
-  height="auto"
-  dateClick={handleDateClick}
-  dayCellClassNames={(arg) => {
-    const formattedDate = arg.date.toLocaleDateString('en-CA');
-    return formattedDate === selectedDate ? "selected-date" : "";
-  }}
-  eventClick={handleEventClick}
-  views={{
-    dayGridMonth: {
-      dayMaxEventRows: 3, // 하루에 최대 3개의 이벤트 행 표시
-    },
-  }}
-  eventRender={(info) => {
-    // 구글 캘린더 일정인지 확인하고 스타일을 강제로 적용
-    if (info.event.source.googleCalendarId) {
-      // 구글 캘린더 일정만 빨간색으로 변경
-      info.el.style.color = 'red';  // 텍스트를 빨간색으로 설정
-      info.el.style.fontWeight = 'bold'; // 글씨 두껍게
-    }
-  }}
-/>
-
-
-
-
-            
-
+            ref={calendarRef}
+            plugins={[dayGridPlugin, interactionPlugin, googleCalendarPlugin]}
+            initialView="dayGridMonth"
+            googleCalendarApiKey={import.meta.env.VITE_GOOGLE_CALENDAR_API_KEY}
+            events={events}
+            eventSources={[
+              {
+                googleCalendarId: 'ko.south_korea#holiday@group.v.calendar.google.com',
+                className: 'gcal-event', // 구글 캘린더 공휴일을 위한 className
+              },
+            ]}
+            eventContent={(eventInfo) => (
+              <div>
+                <span>{eventInfo.event.title}</span>
+              </div>
+            )}
+            headerToolbar={false}
+            initialDate={today}
+            height="auto"
+            dateClick={handleDateClick}
+            dayCellClassNames={(arg) => {
+              const formattedDate = arg.date.toLocaleDateString('en-CA');
+              return formattedDate === selectedDate ? "selected-date" : "";
+            }}
+            eventClick={handleEventClick}
+            views={{
+              dayGridMonth: {
+                dayMaxEventRows: 3, // 하루에 최대 3개의 이벤트 행 표시
+              },
+            }}
+          />
           </div>
           <EventList selectedDate={selectedDate} selectedEvents={selectedEvents} />
         </div>

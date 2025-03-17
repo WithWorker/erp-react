@@ -12,6 +12,30 @@ export const getApplicant = async (applicantId) => {
   }
 };
 
+// 결재 신청 목록 (신청자)
+export const getApplicantPending = async (applicantId) => {
+  try {
+    const response = await axios.get(`/api/approval/applicantPending/${applicantId}`);
+    console.log('결재 대기 목록 (신청자):', response.data);
+    return response.data;  
+  } catch (error) {
+    console.error("결재 대기 목록 (신청자) 오류 발생: ", error);
+    throw error;  
+  }
+};
+
+// 결재 신청 목록 (신청자)
+export const getApplicantApproved = async (applicantId) => {
+  try {
+    const response = await axios.get(`/api/approval/applicantApproved/${applicantId}`);
+    console.log('결재 승인,반려 목록 (신청자):', response.data);
+    return response.data;  
+  } catch (error) {
+    console.error("결재 승인,반려 목록 (신청자) 오류 발생: ", error);
+    throw error;  
+  }
+};
+
 // 결재 확인 목록 (승인자)
 export const getApprover = async (approverId) => {
   try {

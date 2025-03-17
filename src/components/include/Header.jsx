@@ -27,7 +27,7 @@ const Header = () => {
     }
     
     if (path.startsWith("/approval")) {
-      return "휴가";
+      return "결재";
     }
 
     switch (path) {

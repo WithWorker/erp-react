@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
-const TopNav = ({ setTabIndex }) => {
-    const [active, setActive] = useState(0);
+const TopNav = ({ setViewMode }) => {
+  const [active, setActive] = useState(0); // 활성화된 탭을 추적
 
   const handleClick = (index) => {
     setActive(index);
-    setTabIndex(index); // 탭 인덱스를 상위 컴포넌트로 전달
+    setViewMode(index); // 클릭 시 부모 컴포넌트로 viewMode 변경
   };
 
   return (
@@ -24,7 +24,7 @@ const TopNav = ({ setTabIndex }) => {
           hover:text-[#006D2C] hover:border-2 hover:border-[#006D2C] hover:bg-[#E3F9E5]`}
         onClick={() => handleClick(1)}
       >
-        승인 대기 목록
+        결재 승인 목록
       </div>
       <div
         className={`flex-1 bg-white shadow-md rounded-full h-[56px] flex items-center justify-center cursor-pointer transition-all duration-300 ease-in-out 
@@ -32,7 +32,7 @@ const TopNav = ({ setTabIndex }) => {
           hover:text-[#006D2C] hover:border-2 hover:border-[#006D2C]`}
         onClick={() => handleClick(2)}
       >
-        결재 완료 목록
+        승인 대기 목록
       </div>
     </div>
   );

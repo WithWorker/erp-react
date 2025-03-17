@@ -34,7 +34,7 @@ const Sidebar = () => {
   const menuItems = [
     { name: "DashBoard", icon: BsGrid, path: "/dashboard" },
     { name: "캘린더", icon: BsCalendar, path: "/calendar" },
-    { name: "휴가", icon: BsTree, path: "/vacation" },
+    { name: "휴가", icon: BsTree, path: "/approval" },
     { name: "게시판", icon: BsFileText, path: "/board" },
     { name: "채팅", icon: BsChat, path: "/chat" },
     { name: "사원조회", icon: BsPerson, path: "/employees" },
