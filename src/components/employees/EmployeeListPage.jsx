@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import SearchBar from "../include/SearchBar";
-import Header from "../include/Header";
-import DepartmentDropdown from "./DepartmentDropdown";
-import Sidebar from "../include/Sidebar";
-import Pagination from "./Pagination";  
-import { ThreeDots } from "react-bootstrap-icons";
 import { useNavigate } from "react-router";
+import { ThreeDots } from "react-bootstrap-icons";
+import Sidebar from "../include/Sidebar";
+import Header from "../include/Header";
+import SearchBar from "../include/SearchBar";
+import DepartmentDropdown from "./DepartmentDropdown";
+import Pagination from "./Pagination";
+import AdminModal from "./AdminModal";  
 
 const departmentMap = {
   '전체보기': null,
@@ -19,17 +20,15 @@ const departmentMap = {
 
 const EmployeeListPage = () => {
   const navigate = useNavigate();
-
-  const handleEditClick = (empId) => {
-    navigate(`/update/${empId}`);
-  };
   
   const [query, setQuery] = useState("");
   const [employees, setEmployees] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageGroup, setPageGroup] = useState(0);
   const itemsPerPage = 8;
-  const [department, setDepartment] = useState("전체보기"); 
+  const [department, setDepartment] = useState("전체보기");
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(null); 
+  const [isModalOpen, setIsModalOpen] = useState(false); 
 
   useEffect(() => {
     fetchEmployees();
@@ -51,7 +50,7 @@ const EmployeeListPage = () => {
   };
 
   const fetchEmployeesByDepartment = async (departmentKey) => {
-    setDepartment(departmentKey); 
+    setDepartment(departmentKey);
     const departmentId = departmentMap[departmentKey];
     if (!departmentId) {
       fetchEmployees();
@@ -98,6 +97,20 @@ const EmployeeListPage = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentEmployees = employees.slice(startIndex, startIndex + itemsPerPage);
 
+  const handleEditClick = (empId) => {
+    setSelectedEmployeeId(empId); 
+    setIsModalOpen(true);
+  };
+
+  const handleEditConfirm = () => {
+    navigate(`/update/${selectedEmployeeId}`); 
+    setIsModalOpen(false); 
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false); 
+  };
+
   return (
     <div className="flex h-screen bg-gray-100">
       <Sidebar />
@@ -105,7 +118,6 @@ const EmployeeListPage = () => {
         <Header />
         <div>
           <div className="flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-4 w-full mb-6">
-            {/* flex로 너비 조절 */}
             <div className="flex items-center space-x-4 w-full">
               <div className="flex-none w-[200px]">
                 <DepartmentDropdown onSelectDepartment={fetchEmployeesByDepartment} />
@@ -115,6 +127,7 @@ const EmployeeListPage = () => {
               </div>
             </div>
           </div>
+
           <div className="overflow-x-auto bg-white shadow-lg rounded-3xl p-4 w-full border-none">
             <table className="w-full table-auto border-none border-spacing-0 items-center">
               <thead>
@@ -134,11 +147,11 @@ const EmployeeListPage = () => {
                 {currentEmployees.map((employee) => (
                   <tr key={employee.empId} className="hover:bg-gray-50 border-b">
                     <td className="img-center">
-                    <img
-                      src={`http://localhost:7777/${employee.imgUrl}`}
-                      alt="프로필"
-                      className="ml-9 w-10 h-10 rounded-full"
-                    />
+                      <img
+                        src={`http://localhost:7777/${employee.imgUrl}`}
+                        alt="프로필"
+                        className="ml-9 w-10 h-10 rounded-full"
+                      />
                     </td>
                     <td className="p-4 text-center">{employee.name}</td>
                     <td className="p-4 text-center">{employee.departmentName}</td>
@@ -148,7 +161,10 @@ const EmployeeListPage = () => {
                     <td className="p-4 text-center">{employee.hireDate}</td>
                     <td className="p-4 text-center">{employee.resignDate}</td>
                     <td className="p-4 text-center">
-                    <button onClick={() => handleEditClick(employee.empId)} className="text-gray-500">
+                      <button
+                        onClick={() => handleEditClick(employee.empId)}
+                        className="text-gray-500"
+                      >
                         <ThreeDots size={20} />
                       </button>
                     </td>
@@ -175,6 +191,17 @@ const EmployeeListPage = () => {
           />
         </div>
       </div>
+
+    {/* 모달 */}
+    {isModalOpen && (
+      <AdminModal
+        onClose={handleModalClose}
+        onEditConfirm={handleEditConfirm}
+        onAddEmployee={() => navigate('/join')}
+        employeeId={selectedEmployeeId}
+        fetchEmployees={fetchEmployees} 
+      />
+    )}
     </div>
   );
 };

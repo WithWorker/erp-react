@@ -42,7 +42,7 @@ const EmployeeEditPage = () => {
   const [departmentId, setDepartmentId] = useState(null);
   const [position, setPosition] = useState("");
   const [positionId, setPositionId] = useState(null);
-  const [updatedSalary, setUpdatedSalary] = useState(0); // 기본급 상태 초기값 숫자형
+  const [updatedSalary, setUpdatedSalary] = useState(0);
 
   // 직원 정보 불러오기
   useEffect(() => {
@@ -76,7 +76,7 @@ const EmployeeEditPage = () => {
     fetchEmployeeData();
   }, [id]);
 
-  // departmentId 변경 시 department 값을 동기화
+  // department 동기화
   useEffect(() => {
     if (departmentId !== null) {
       const matchedDepartment = Object.keys(departmentMap).find(key => departmentMap[key] === departmentId);
@@ -84,7 +84,7 @@ const EmployeeEditPage = () => {
     }
   }, [departmentId]);
 
-  // positionId 변경 시 position 값을 동기화
+  // position 동기화
   useEffect(() => {
     if (positionId !== null) {
       const matchedPosition = Object.keys(positionMap).find(key => positionMap[key] === positionId);
@@ -103,7 +103,7 @@ const EmployeeEditPage = () => {
     setPositionId(positionMap[selectedPosition] || null);
   };
 
-  // PSalary 컴포넌트에서 기본급 수정
+  // PSalary 기본급 수정
   const handleSalaryChange = (newSalary) => {
     setUpdatedSalary(newSalary); // 기본급을 숫자로 업데이트
   };
