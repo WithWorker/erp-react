@@ -23,7 +23,7 @@ const Sidebar = () => {
     }
 
     try {
-      const response = await fetch(`/api/info/attendance/in/${empId}`, {
+      const response = await fetch(`/api/attendance/in/${empId}`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -49,7 +49,7 @@ const Sidebar = () => {
     }
 
     try {
-      const response = await fetch(`/api/info/attendance/out/${empId}`, {
+      const response = await fetch(`/api/attendance/out/${empId}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
