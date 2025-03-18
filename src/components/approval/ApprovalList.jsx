@@ -8,7 +8,7 @@ const ApprovalList = ({ viewMode }) => {
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태
   const totalPages = 3; // 예시로 총 3페이지로 설정 (실제 데이터에 따라 동적으로 설정 가능)
   const applicantId = 1; // 임의로 설정된 applicant_id
-  const approverId = 4; // 임의로 설정된 approver_id
+  const approverId = 3; // 임의로 설정된 approver_id
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,7 +35,13 @@ const ApprovalList = ({ viewMode }) => {
   };
 
   const detailRedirect = (approvalId) => {
-    navigate(`/approval/${approvalId}`);
+    if (viewMode === 2) {
+      // viewMode가 2일 때는 상태 수정 페이지로 이동
+      navigate(`/approval/edit/${approvalId}`);
+    } else {
+      // 상세보기 페이지로 이동
+      navigate(`/approval/${approvalId}`);
+    }
   };
 
   return (
@@ -48,18 +54,23 @@ const ApprovalList = ({ viewMode }) => {
                 <p className="text-xs mb-1 text-gray-500">{item.start_date}</p>
                 <div className='flex flex-between items-center space-x-4'>
                   <p className="font-bold text-[#323232]">{item.title}</p>
-                  <p className="text-xs text-gray-500">{item.applicant.name} / {item.applicant.departmentName}</p>
+                  <p className="text-xs text-gray-500">{item.applicant.name} {item.applicant.positionName} / {item.applicant.departmentName}</p>
                 </div>
               </div>
               <div className='flex justify-between items-center'>
-                {item.statusName === '대기' ? (
-                  <div className="border-2 border-[#006D2C] text-[#006D2C] px-4 py-2 rounded-full">
+                {/* 승인 대기 목록일 때만 approverStatusName 출력 */}
+                {viewMode === 2 ? (
+                  item.approvers?.map((approver, index) => (
+                    <div key={index} 
+                        className={`px-4 py-2 rounded-full ${approver.approverStatusName === '승인' ? 'bg-green-500  text-white' : approver.approverStatusName === '반려' ? 'bg-red-500  text-white' : 'border-2 border-[#006D2C] text-[#006D2C]'}`}>
+                      {approver.approverStatusName}
+                    </div>
+                  ))
+                ) : (
+                  <div 
+                        className={`px-4 py-2 rounded-full  ${item.statusName === '승인' ? 'bg-green-500 text-white' : item.statusName === '반려' ? 'bg-red-500 text-white' : 'border-2 border-[#006D2C] text-[#006D2C]'}`}>
                     {item.statusName}
                   </div>
-                ) : (
-                  <span className={`px-4 py-2 rounded-full text-white ${item.statusName === '승인' ? 'bg-green-500' : 'bg-red-500'}`}>
-                    {item.statusName}
-                  </span>
                 )}
                 <div className="p-4 text-center">
                   <button onClick={() => detailRedirect(item.approvalId)} className="flex items-center text-gray-500">
@@ -71,7 +82,7 @@ const ApprovalList = ({ viewMode }) => {
           </div>
         ))
       ) : (
-        <p className="text-center text-gray-500">결재 목록이 없습니다.</p>
+        <p className="text-center text-gray-500 mt-10">결재 목록이 없습니다.</p>
       )}
 
       {/* 페이지네이션 */}
@@ -89,7 +100,6 @@ const ApprovalList = ({ viewMode }) => {
         </div>
       )}
 
-      {/* 기안문 작성 버튼 */}
       <div className="flex justify-end mt-4">
         <button className="bg-[#006D2C] text-white px-4 py-3 rounded-full shadow-lg flex items-center"
                 onClick={() => navigate("/approval/add")}>

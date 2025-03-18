@@ -2,18 +2,18 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "../include/Sidebar";
 import Header from "../include/Header";
-import { readApproval } from "../../service/approvalLogic";
+import { deleteapproval, readApproval } from "../../service/approvalLogic";
 import DetailLine from "./DetailLine";
 
 const ApprovalDetail = () => {
   const navigate = useNavigate();
-  const { approvalId } = useParams(); // URL 파라미터로 approvalId 가져오기
+  const { approvalId } = useParams(); 
   const [approval, setApproval] = useState(null); // 결재 데이터를 저장할 상태
 
   useEffect(() => {
     const fetchApprovalDetail = async () => {
       try {
-        const data = await readApproval(approvalId); // API 호출로 결재 상세 데이터 가져오기
+        const data = await readApproval(approvalId); // 결재 상세 조회 api 호출
         setApproval(data); // 상태에 데이터 저장
       } catch (error) {
         console.error("결재 상세 조회 오류:", error);
@@ -21,19 +21,29 @@ const ApprovalDetail = () => {
     };
 
     fetchApprovalDetail();
-  }, [approvalId]); // approvalId가 바뀔 때마다 데이터 새로 불러오기
+  }, [approvalId]); 
 
   if (!approval) {
     return <div>Loading...</div>; // 데이터를 기다리는 동안 로딩 화면
   }
 
-  // 결재 삭제
+  // 결재 삭제 
   const handleDeleteApproval = async () => {
-    const confirmDelete = window.confirm("이 결재를 삭제하시겠습니까?"); // 삭제 확인 창
+
+    // 모든 approver의 상태가 모두 '대기'인지 확인 
+    const isAllPending = approval.approvers.every(
+      (approver) => approver.approverStatusName === '대기'
+    );
+    if (!isAllPending) {
+      alert('이미 결재중입니다.');
+      return;
+    }
+
+    const confirmDelete = window.confirm("이 결재를 삭제하시겠습니까?"); 
     if (confirmDelete) {
       try {
-        await deleteApproval(approvalId); // 삭제 API 호출
-        navigate("/approval"); // 삭제 후 결재 목록 페이지로 리다이렉트
+        await deleteapproval(approvalId); 
+        navigate("/approval"); 
       } catch (error) {
         console.error("결재 삭제 실패:", error);
       }
@@ -48,9 +58,10 @@ const ApprovalDetail = () => {
       <div className="flex-1 w-screen p-6">
         <Header />
 
-        <div className="flex space-x-4">
-          {/* 글 상세보기 영역: 70% */}
-          <div className="flex-[0.7] space-y-4"> {/* flex-[0.6]로 60% 설정 */}
+        <div className="flex justify-between space-x-4">
+
+          {/* 결재 정보 */}
+          <div className="flex-1 space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="w-full bg-white p-6 rounded-full shadow-md flex items-center">
                 <label className="text-sm font-semibold w-24">유형</label>
@@ -61,17 +72,15 @@ const ApprovalDetail = () => {
                   readOnly
                 />
               </div>
-
               <div className="w-full bg-white p-6 rounded-full shadow-md flex items-center">
                 <label className="text-sm font-semibold w-24">작성자</label>
                 <input
                   type="text"
-                  value={`${approval.applicant.name} ${approval.applicant.positionName} [${approval.applicant.departmentName}]`}
+                  value={`${approval.applicant.name} ${approval.applicant.positionName} / ${approval.applicant.departmentName}`}
                   className="w-full border-none text-[#006D2C]"
                   readOnly
                 />
               </div>
-
               <div className="w-full bg-white p-6 rounded-full shadow-md flex items-center">
                 <label className="text-sm font-semibold w-24">상태</label>
                 <input
@@ -82,7 +91,6 @@ const ApprovalDetail = () => {
                 />
               </div>
             </div>
-
             <div className="w-full bg-white p-6 rounded-full shadow-md flex items-center">
               <label className="text-sm font-semibold w-24">제목</label>
               <input
@@ -92,7 +100,6 @@ const ApprovalDetail = () => {
                 readOnly
               />
             </div>
-
             <div className="bg-white p-6 rounded-2xl shadow-lg h-[calc(80vh-18rem)] overflow-hidden">
               <span className="text-sm font-semibold text-[#323232]">사유</span>
               <textarea
@@ -103,10 +110,11 @@ const ApprovalDetail = () => {
             </div>
           </div>
 
-          {/* 결재선 영역: 30% */}
-          <div className="flex-[0.3] "> {/* flex-[0.4]로 40% 설정 */}
+          {/* 결재선 */}
+          <div className="w-[350px] h-[calc(90vh-14rem)]">
             <DetailLine approvers={approval.approvers} />
           </div>
+          
         </div>
 
         <div className="flex justify-end gap-2 mt-4">

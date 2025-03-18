@@ -7,6 +7,7 @@ import CalendarEdit from './components/calendar/CalendarEdit';
 import ApprovalPage from './components/approval/ApprovalPage';
 import ApprovalDetail from './components/approval/ApprovalDetail';
 import ApprovalWrite from './components/approval/ApprovalWrite';
+import ApprovalEdit from './components/approval/ApprovalEdit';
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
         <Route path="/approval" element={<ApprovalPage/>} />
         <Route path="/approval/:approvalId" element={<ApprovalDetail/>} />
         <Route path="/approval/add" element={<ApprovalWrite/>} />
+        <Route path="/approval/edit/:approvalId" element={<ApprovalEdit/>} />
       </Routes>
     </Router>
   );

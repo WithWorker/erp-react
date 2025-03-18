@@ -24,7 +24,7 @@ const TopNav = ({ setViewMode }) => {
           hover:text-[#006D2C] hover:border-2 hover:border-[#006D2C] hover:bg-[#E3F9E5]`}
         onClick={() => handleClick(1)}
       >
-        결재 승인 목록
+        결재 완료 목록
       </div>
       <div
         className={`flex-1 bg-white shadow-md rounded-full h-[56px] flex items-center justify-center cursor-pointer transition-all duration-300 ease-in-out 
