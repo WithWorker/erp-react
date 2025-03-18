@@ -69,26 +69,26 @@ return (
 
         <div className="flex flex-col mt-3 gap-2">
             <button
-            className="px-14 py-2 border-2 border-[#006D2C] text-[#006D2C] rounded-lg font-bold" 
+            className="px-14 py-2 border-2 border-[#006D2C] text-[#006D2C] rounded-lg" 
             onClick={onAddEmployee}
             >
             직원 등록
             </button>
             <button
-            className="px-14 py-2 border-2 border-[#006D2C] text-[#006D2C] rounded-lg font-bold"
+            className="px-14 py-2 border-2 border-[#006D2C] text-[#006D2C] rounded-lg"
             onClick={onEditConfirm}
             >
             직원 수정
             </button>
             <button
-            className="px-14 py-2 border-2 border-[#006D2C] text-[#006D2C] rounded-lg font-bold"
+            className="px-14 py-2 border-2 border-[#006D2C] text-[#006D2C] rounded-lg"
             onClick={handleDeleteEmployee}  
             disabled={loading}  
             >
             직원 삭제
             </button>
             <button
-            className="px-14 py-2 border-2 border-[#006D2C] text-[#006D2C] rounded-lg font-bold"
+            className="px-14 py-2 border-2 border-[#006D2C] text-[#006D2C] rounded-lg"
             onClick={handleResignEmployee}  
             disabled={loading}  
             >
