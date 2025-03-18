@@ -4,6 +4,9 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   base: "/",
   plugins: [react()],
+  css: {
+    postcss: "./postcss.config.js",
+  },
   resolve: { alias: { '@': '/src' }, // 필요 시 경로 별칭 설정
             extensions: ['.js', '.jsx', '.json'], // 확장자 우선 순위
   },
