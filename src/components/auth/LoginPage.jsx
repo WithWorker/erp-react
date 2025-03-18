@@ -40,10 +40,12 @@ const LoginPage = () => {
       const token = response.headers["authorization"]?.split(" ")[1];
       if (token) {
         const payload = JSON.parse(atob(token.split(".")[1])); 
-        const empId = payload.empId; 
+        const empId = payload.empId;
+        const role = payload.role; 
   
         localStorage.setItem("token", token);
         localStorage.setItem("empId", empId); 
+        localStorage.setItem("role", role);
   
         navigate("/dashboard");
       } else {

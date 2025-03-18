@@ -59,7 +59,7 @@ return (
             <X size={24} />
         </button>
 
-        <div className="text-center mb-4 text-md">
+        <div className="text-center mb-4 text-lg font-bold">
             관리자 권한
         </div>
 
@@ -69,26 +69,26 @@ return (
 
         <div className="flex flex-col mt-3 gap-2">
             <button
-            className="px-14 py-2 border-2 border-[#006D2C] rounded-lg"
+            className="px-14 py-2 border-2 border-[#006D2C] text-[#006D2C] rounded-lg font-bold" 
             onClick={onAddEmployee}
             >
             직원 등록
             </button>
             <button
-            className="px-14 py-2 border-2 border-[#006D2C] rounded-lg"
+            className="px-14 py-2 border-2 border-[#006D2C] text-[#006D2C] rounded-lg font-bold"
             onClick={onEditConfirm}
             >
             직원 수정
             </button>
             <button
-            className="px-14 py-2 border-2 border-red-500 rounded-lg"
+            className="px-14 py-2 border-2 border-[#006D2C] text-[#006D2C] rounded-lg font-bold"
             onClick={handleDeleteEmployee}  
             disabled={loading}  
             >
             직원 삭제
             </button>
             <button
-            className="px-14 py-2 border-2 border-yellow-500 rounded-lg"
+            className="px-14 py-2 border-2 border-[#006D2C] text-[#006D2C] rounded-lg font-bold"
             onClick={handleResignEmployee}  
             disabled={loading}  
             >

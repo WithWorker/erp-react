@@ -29,6 +29,7 @@ const EmployeeListPage = () => {
   const [department, setDepartment] = useState("전체보기");
   const [selectedEmployeeId, setSelectedEmployeeId] = useState(null); 
   const [isModalOpen, setIsModalOpen] = useState(false); 
+  const isAdmin = localStorage.getItem("role") === "ADMIN";
 
   useEffect(() => {
     fetchEmployees();
@@ -161,12 +162,14 @@ const EmployeeListPage = () => {
                     <td className="p-4 text-center">{employee.hireDate}</td>
                     <td className="p-4 text-center">{employee.resignDate}</td>
                     <td className="p-4 text-center">
+                    {isAdmin && (
                       <button
                         onClick={() => handleEditClick(employee.empId)}
                         className="text-gray-500"
                       >
                         <ThreeDots size={20} />
                       </button>
+                    )}
                     </td>
                   </tr>
                 ))}
