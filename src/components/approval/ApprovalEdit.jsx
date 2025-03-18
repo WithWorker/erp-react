@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "../include/Sidebar";
 import Header from "../include/Header";
-import { deleteapproval, readApproval, updateStatus } from "../../service/approvalLogic";
+import { readApproval, updateStatus } from "../../service/approvalLogic";
 import EditLine from "./EditLine";
 
 const ApprovalEdit = () => {

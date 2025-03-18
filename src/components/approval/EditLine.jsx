@@ -6,7 +6,7 @@ import { FaTimesCircle } from 'react-icons/fa';  // 반려 아이콘 추가
 const EditLine = ({ approvers, onUpdateStatus }) => {
   return (
     <div className="w-full h-full bg-white p-8 rounded-2xl shadow-lg flex flex-col items-center">
-      <span className="text-lg font-bold text-[#323232] pt-8">결재선 수정</span>
+      <span className="text-lg font-bold text-[#323232] pt-8">결재선</span>
       <div className="mt-20 mb-20 flex flex-col items-center space-y-8 w-full h-full">
         {approvers.map((approver, index) => (
           <div key={index} className="flex flex-col items-center relative w-full">
