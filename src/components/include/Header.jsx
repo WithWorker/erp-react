@@ -12,6 +12,14 @@ const Header = () => {
     // 정규식으로 '/event/:id' 형태의 경로 처리
     const eventMatch = path.match(/^\/event\/\d+/); // 숫자 ID를 가진 '/event/:id' 경로에 매칭
 
+    if (path.startsWith("/calendar")) {
+      return "캘린더";
+    }
+    
+    if (path.startsWith("/approval")) {
+      return "결재";
+    }
+    
     switch (path) {
       case "/calendar":
         return "캘린더";
