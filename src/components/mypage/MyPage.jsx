@@ -1,7 +1,7 @@
 import React from 'react'
 import Header from '../include/Header'
 import Sidebar from '../include/Sidebar'
-import ProfileCard from './ProfileCard'
+import ImageCard from './ImageCard'
 import SalaryCard from './SalaryCard'
 import AttendanceCalendar from './AttendanceCalendar'
 import Personal from './Personal'
@@ -17,7 +17,7 @@ const MyPage = () => {
                     <div className="flex flex-col space-y-4 w-full ml-6 mr-8 p-4">
                         <div className="flex-row space-x-s space-y-8 items-center w-full">
                             <div className="w-full flex-1 flex space-x-8">
-                                <ProfileCard />
+                                <ImageCard />
                                 <Personal />
                                 <SalaryCard />
                             </div>
