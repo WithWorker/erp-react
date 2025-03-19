@@ -3,10 +3,11 @@ import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'; // 반려 아이�
 import { IoIosArrowDown } from 'react-icons/io';
 
 const DetailLine = ({ approvers }) => {
+
   return (
-    <div className="w-full h-full bg-white p-8 rounded-2xl shadow-lg flex flex-col items-center">
+    <div className="w-full h-full bg-white p-8 rounded-2xl shadow-lg flex flex-col items-center overflow-y-auto">
       <span className="text-lg font-bold text-[#323232] pt-8">결재선</span>
-      <div className="mt-20 mb-20 flex flex-col items-center space-y-8 w-full h-full">
+      <div className="mt-20 mb-20 flex flex-col items-center space-y-8 w-full">
         {approvers.map((approver, index) => (
           <div key={index} className="flex flex-col items-center relative w-full">
             {/* 프로필 이미지 */}
@@ -30,10 +31,14 @@ const DetailLine = ({ approvers }) => {
               <div className="text-base text-gray-600">{approver.departmentName} {approver.positionName}</div>
             </div>
             {/* 상태 표시 */}
-            <div className={`px-4 py-2 rounded-full text-base font-semibold mt-2 ${
-                approver.approverStatusName === '승인' ? 'bg-green-200 text-green-800' :
-                approver.approverStatusName === '반려' ? 'bg-red-200 text-red-800' :
-                'bg-yellow-200 text-yellow-800'}`}
+            <div
+              className={`px-4 py-2 rounded-full text-base font-semibold mt-2 ${
+                approver.approverStatusName === '승인'
+                  ? 'bg-green-200 text-green-800'
+                  : approver.approverStatusName === '반려'
+                  ? 'bg-red-200 text-red-800'
+                  : 'bg-yellow-200 text-yellow-800'
+              }`}
             >
               {approver.approverStatusName || '대기'}
             </div>
