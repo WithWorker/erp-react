@@ -1,9 +1,45 @@
 import React from 'react';
-import { FaCheckCircle } from 'react-icons/fa';
+import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import { IoIosArrowDown } from 'react-icons/io';
-import { FaTimesCircle } from 'react-icons/fa'; // 반려 아이콘 추가
+import { updateStatus } from '../../service/approvalLogic'; // API 함수 import
+import { useParams } from 'react-router';
 
-const EditLine = ({ approvers, onUpdateStatus }) => {
+const EditLine = ({ approvers, setApprovers }) => {
+  const { approvalId } = useParams();
+  console.log("받은 approvalId: ", approvalId);
+
+  const approvalIdNumber = Number(approvalId); // 숫자로 변환
+
+  // 상태 업데이트 함수
+  const onUpdateStatus = async (index, status) => {
+    const approverStatusId = status === '승인' ? 2 : 3;
+    const approverId = approvers[index].empId; // empId를 approverId로 사용
+
+    console.log("Approval ID: ", approvalIdNumber);
+    console.log("Approver ID: ", approverId); // approverId 확인
+    console.log("Approver Status ID: ", approverStatusId);
+
+    const confirmUpdate = window.confirm(`결재를 ${status}하시겠습니까?`);
+    if (!confirmUpdate) return;
+
+    try {
+      await updateStatus(approvalIdNumber, approverId, approverStatusId);
+
+      // 상태 업데이트 (프론트 반영)
+      const updatedApprovers = [...approvers];
+      updatedApprovers[index] = { 
+        ...updatedApprovers[index], 
+        approverStatusName: status 
+      };
+      setApprovers(updatedApprovers);
+    } catch (error) {
+      console.error("결재 상태 수정 실패", error);
+    }
+  };
+
+  if (!approvers || approvers.length === 0) {
+    return <div>결재선 정보가 없습니다.</div>; // approvers 배열이 없거나 비어있으면 표시할 메시지
+  }
 
   return (
     <div className="w-full h-full bg-white p-8 rounded-2xl shadow-lg flex flex-col items-center overflow-y-auto">
@@ -17,7 +53,6 @@ const EditLine = ({ approvers, onUpdateStatus }) => {
                 alt={approver.name}
                 className="w-24 h-24 rounded-full object-cover border-4 border-gray-300"
               />
-              {/* 상태에 따른 체크 아이콘 표시 */}
               {approver.approverStatusName === '승인' && (
                 <FaCheckCircle className="absolute bottom-0 right-0 text-green-500 text-2xl" />
               )}
@@ -41,7 +76,7 @@ const EditLine = ({ approvers, onUpdateStatus }) => {
               {approver.approverStatusName || '대기'}
             </div>
 
-            {approver.approverStatusName === '대기' && approver.empId === 3 && (
+            {approver.approverStatusName === '대기' && approver.empId === 4 && (
               <div className="flex mt-4 space-x-4">
                 <button
                   className="bg-green-500 text-white px-4 py-2 rounded-full"

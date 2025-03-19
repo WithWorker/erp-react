@@ -108,15 +108,18 @@ export const addApproval = async (approval) => {
 }
 
 // 결재 수정(status) : 승인자 각각 상태 변경
-export const updateStatus = async (approvalId, approval) => {
+export const updateStatus = async (approvalId, approverId, approverStatusId) => {
   try {
-    const response = await axios.put(`/api/approval/edit/${approvalId}`, approval);
-    return response.data;  
+    const response = await axios.put(`/api/approval/edit/${approvalId}`, {
+      approverId, // 승인자 ID 추가
+      approverStatusId
+    });
+    return response.data;
   } catch (error) {
     console.error("결재 상태 수정 오류 발생: ", error);
-    throw error;  
+    throw error;
   }
-}
+};
 
 // 결재 삭제하기
 export const deleteapproval = async (approvalId) => {

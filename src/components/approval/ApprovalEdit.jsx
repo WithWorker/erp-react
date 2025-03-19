@@ -24,7 +24,7 @@ const ApprovalEdit = () => {
   }, [approvalId]);
 
   if (!approval) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>; // approval 객체가 없으면 로딩 화면을 보여줍니다.
   }
 
   // 결재 상태 변경 (승인 / 반려)
@@ -73,7 +73,7 @@ const ApprovalEdit = () => {
                 <label className="text-sm font-semibold w-24">작성자</label>
                 <input
                   type="text"
-                  value={`${approval.applicant.name} ${approval.applicant.positionName} / ${approval.applicant.departmentName}`}
+                  value={approval.applicant ? `${approval.applicant.name} ${approval.applicant.positionName} / ${approval.applicant.departmentName}` : ""}
                   className="w-full border-none text-[#006D2C]"
                   readOnly
                 />
@@ -109,7 +109,7 @@ const ApprovalEdit = () => {
 
           {/* 결재선 */}
           <div className="w-[350px] h-[calc(90vh-14rem)]">
-            <EditLine approvers={approval.approvers} onUpdateStatus={handleStatusUpdate} />
+            <EditLine approvers={approval.approvers} setApprovers={setApproval} />
           </div>
         </div>
 
