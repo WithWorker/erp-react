@@ -21,6 +21,20 @@ const mockData = [
     phone: '010-0011-2233',
     email: 'kimminsoo@withworker.com',
     status: '외근',
+    salary: {
+      '2025-02': { base: '2,500,000', bonus: '500,000', total: '3,000,000' },
+      '2025-03': { base: '2,500,000', bonus: null, total: '2,500,000' }, // 성과급 없음
+      '2025-04': { base: '2,500,000', bonus: '700,000', total: '3,200,000' }
+    },
+    remainingLeave: 15,
+    usedLeave: 1.25,
+    attendance: {
+      '2025-03-01': '출근',
+      '2025-03-11': '연차',
+      '2025-03-15': '출근',
+      '2025-03-18': '조퇴',
+      '2025-03-20': '출근'
+    }
   },
   {
     id: 2,
@@ -78,7 +92,7 @@ const initialState = {
     month: '',
     day: '',
   },
-  employees: [], // 실제 직원 정보만 저장
+  employees: {}, // 실제 직원 정보만 저장
   status: 'idle', // 'idle', 'loading', 'succeeded', 'failed'
   searchQuery: '',  // 검색어 상태 추가
   category: 'all',  // 카테고리 상태
@@ -90,6 +104,7 @@ const employeeSlice = createSlice({
   name: 'employee',
   initialState,
   reducers: {
+    
     setSearchQuery: (state, action) => {
       state.searchQuery = action.payload;  // 검색어 상태 업데이트
     },
@@ -112,6 +127,13 @@ const employeeSlice = createSlice({
     updateBonus: (state, action) => {
       // formData 값 업데이트
       state.bonusFormData = { ...action.payload };
+    },
+
+    // 수정된 부분 ✅
+    setEmployee: (state, action) => {
+      if (state.employee) {
+        state.employee = { ...state.employee, ...action.payload };
+      }
     },
     loadEmployees: (state, action) => {
       // 예시로, 데이터를 서버에서 가져오는 것처럼 처리
@@ -142,6 +164,6 @@ const employeeSlice = createSlice({
     },
 });
 
-export const { setSearchQuery, setStatus, setCategory, updateSalary, updateBonus } = employeeSlice.actions;
+export const { setEmployee, setSearchQuery, setStatus, setCategory, updateSalary, updateBonus } = employeeSlice.actions;
 
 export default employeeSlice.reducer;

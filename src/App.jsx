@@ -12,6 +12,7 @@ import EmployeeEditPage from './components/pages/employeePage/EmployeeEditPage';
 import DocumentListPage from './components/pages/documentPage/DocumentListPage';
 import DMDetailPage from './components/pages/documentPage/DMDetailPage';
 import AbsentWritePage from './components/pages/documentPage/AbsentWritePage';
+import MyPage from './components/pages/mypage/MyPage';
 
 function App() {
 
@@ -31,7 +32,7 @@ function App() {
         <Route path="/employees" element={<EmployeeListPage />} />
         <Route path="/employee/add" element={<EmployeeAddPage />} />
         <Route path="/employee/edit/:id" element={<EmployeeEditPage />} />
-        <Route path="/mypage" element={<div>마이페이지</div>} />
+        <Route path="/mypage" element={<MyPage />} />
       </Routes>
     </Router>
   );
