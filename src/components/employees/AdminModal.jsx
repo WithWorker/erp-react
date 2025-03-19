@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { X } from "react-bootstrap-icons";
 
-const AdminModal = ({ onClose, onEditConfirm, onAddEmployee, employeeId, fetchEmployees }) => {
+const AdminModal = ({ onClose, onEditConfirm, employeeId, fetchEmployees }) => {
 const [loading, setLoading] = useState(false);
 const [error, setError] = useState(null);
 
@@ -68,12 +68,6 @@ return (
         )}
 
         <div className="flex flex-col mt-3 gap-2">
-            <button
-            className="px-14 py-2 border-2 border-[#006D2C] text-[#006D2C] rounded-lg" 
-            onClick={onAddEmployee}
-            >
-            직원 등록
-            </button>
             <button
             className="px-14 py-2 border-2 border-[#006D2C] text-[#006D2C] rounded-lg"
             onClick={onEditConfirm}

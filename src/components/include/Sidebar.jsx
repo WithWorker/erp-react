@@ -1,12 +1,19 @@
 import { useState, useEffect } from "react";
 import { BsGrid, BsCalendar, BsTree, BsFileText, BsChat, BsPerson } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { Modal } from "react-bootstrap";
+import { CheckCircle } from "react-bootstrap-icons";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const [isWorking, setIsWorking] = useState(false);
-  const [clockMessage, setClockMessage] = useState(""); 
-  const [empId, setEmpId] = useState(null); 
+  const [empId, setEmpId] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  
+  // 관리자 역할 확인
+  const isAdmin = localStorage.getItem("role") === "ADMIN";
 
   useEffect(() => {
     const storedEmpId = localStorage.getItem("empId");
@@ -15,10 +22,17 @@ const Sidebar = () => {
     }
   }, []);
 
-  // 출근하기 버튼 클릭
+  // 알림 모달 표시 함수
+  const showNotificationModal = (message) => {
+    setModalMessage(message);
+    setShowModal(true);
+    setTimeout(() => setShowModal(false), 3000); // 3초 후 자동 닫힘
+  };
+
+  // 출근 요청
   const handleClockIn = async () => {
     if (!empId) {
-      alert("로그인이 필요합니다.");
+      showNotificationModal("로그인이 필요합니다.");
       return;
     }
 
@@ -33,18 +47,18 @@ const Sidebar = () => {
       if (!response.ok) throw new Error("출근 기록 실패");
 
       const message = await response.text();
-      setClockMessage(message); // 메시지 업데이트
-      setIsWorking(true); // 출근 상태로 변경
+      showNotificationModal(message);
+      setIsWorking(true);
     } catch (error) {
       console.error("출근 오류:", error);
-      alert("출근 기록에 실패했습니다.");
+      showNotificationModal("출근 기록에 실패했습니다.");
     }
   };
 
-  // 퇴근하기 버튼 클릭
+  // 퇴근 요청
   const handleClockOut = async () => {
     if (!empId) {
-      alert("로그인이 필요합니다.");
+      showNotificationModal("로그인이 필요합니다.");
       return;
     }
 
@@ -59,11 +73,11 @@ const Sidebar = () => {
       if (!response.ok) throw new Error("퇴근 기록 실패");
 
       const message = await response.text();
-      setClockMessage(message); // 메시지 업데이트
-      setIsWorking(false); // 퇴근 상태로 변경
+      showNotificationModal(message);
+      setIsWorking(false);
     } catch (error) {
       console.error("퇴근 오류:", error);
-      alert("퇴근 기록에 실패했습니다.");
+      showNotificationModal("퇴근 기록에 실패했습니다.");
     }
   };
 
@@ -75,6 +89,7 @@ const Sidebar = () => {
     { name: "게시판", icon: BsFileText, path: "/board" },
     { name: "채팅", icon: BsChat, path: "/chat" },
     { name: "직원조회", icon: BsPerson, path: "/employees" },
+    ...(isAdmin ? [{ name: "직원등록", icon: BsPerson, path: "/join" }] : []), // 관리자일 때만 "직원등록" 메뉴 추가
   ];
 
   return (
@@ -92,32 +107,48 @@ const Sidebar = () => {
             onClick={() => navigate(menu.path)}
             className="flex items-center gap-2 mb-2 hover:bg-gray-100 rounded-lg cursor-pointer p-2"
           >
-            <menu.icon className="text-xl" />
-            <span>{menu.name}</span>
+            <menu.icon
+              className={`${menu.name === "직원등록" ? "text-[#006D2C]" : "text-gray-600"}`} // "직원등록" 아이콘만 색상 변경
+            />
+            <span className={`${menu.name === "직원등록" ? "text-[#006D2C]" : "text-gray-600"}`}>
+              {menu.name}
+            </span>
           </div>
         ))}
       </nav>
 
-      {/* 출퇴근 메시지 & 버튼 */}
+      {/* 출퇴근 버튼 */}
       <div className="mt-auto flex flex-col gap-2">
-        {clockMessage && <div className="text-center py-2 text-[#006D2C]">{clockMessage}</div>}
-
         {!isWorking ? (
           <button
             onClick={handleClockIn}
-            className="flex items-center justify-center gap-2 bg-[#006D2C] text-white py-2 rounded-full"
+            className="flex items-center justify-center gap-2 bg-[#006D2C] text-white py-2 rounded-full shadow-md hover:bg-[#005024] transition"
           >
             <i className="bi bi-box-arrow-in-right"></i> 출근하기
           </button>
         ) : (
           <button
             onClick={handleClockOut}
-            className="flex items-center justify-center gap-2 border-2 border-[#006D2C] text-[#006D2C] py-2 rounded-full"
+            className="flex items-center justify-center gap-2 border-2 border-[#006D2C] text-[#006D2C] py-2 rounded-full shadow-md hover:bg-gray-100 transition"
           >
             <i className="bi bi-box-arrow-left"></i> 퇴근하기
           </button>
         )}
       </div>
+
+      {/* 알림 모달 */}
+      <Modal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        centered
+        contentClassName="w-60 h-60 flex items-center justify-center rounded-lg shadow-lg"
+        dialogClassName="d-flex justify-content-center align-items-center"
+      >
+        <Modal.Body className="flex flex-col items-center justify-center">
+          <CheckCircle className="text-green-500 text-4xl mb-2" />
+          <p className="text-lg font-medium text-center">{modalMessage}</p>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

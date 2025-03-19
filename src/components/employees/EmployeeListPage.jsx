@@ -200,7 +200,6 @@ const EmployeeListPage = () => {
       <AdminModal
         onClose={handleModalClose}
         onEditConfirm={handleEditConfirm}
-        onAddEmployee={() => navigate('/join')}
         employeeId={selectedEmployeeId}
         fetchEmployees={fetchEmployees} 
       />
