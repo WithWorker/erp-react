@@ -12,6 +12,7 @@ import ApprovalEdit from './components/approval/ApprovalEdit';
 import EmployeeListPage from './components/employees/EmployeeListPage';
 import EmployeeAddPage from './components/employees/EmployeeAddPage';
 import EmployeeEditPage from './components/employees/EmployeeEditPage';
+import MyPage from './components/mypage/MyPage';
 
 function App() {
 
@@ -23,7 +24,7 @@ function App() {
         <Route path="/employees" element={<EmployeeListPage />} />
         <Route path="/join" element={<EmployeeAddPage />} />
         <Route path="/update/:id" element={<EmployeeEditPage />} />
-        <Route path="/mypage" element={<div>마이페이지</div>} />
+        <Route path="/info" element={<MyPage/>} />
         <Route path="/calendar" element={<CalendarPage/>} />
         <Route path="/calendar/:calendarId" element={<CalendarDetail/>} />
         <Route path="/calendar/add" element={<CalendarWrite/>} />

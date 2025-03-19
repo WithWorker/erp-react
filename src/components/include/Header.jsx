@@ -47,7 +47,7 @@ const Header = () => {
         return "채팅";
       case "/employees":
         return "직원 조회";
-      case "/mypage":
+      case "/info":
         return "마이페이지";
     }
   };
