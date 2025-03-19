@@ -27,6 +27,15 @@ const ApprovalDetail = () => {
     return <div>Loading...</div>; // 데이터를 기다리는 동안 로딩 화면
   }
 
+  // 총 일수 계산
+  const calculateDays = (startDate, endDate) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diffTime = end - start;
+    const diffDays = diffTime / (1000 * 60 * 60 * 24) + 1; // 1일 추가하여 포함
+    return diffDays;
+  };
+
   // 결재 삭제 
   const handleDeleteApproval = async () => {
 
@@ -100,7 +109,16 @@ const ApprovalDetail = () => {
                 readOnly
               />
             </div>
-            <div className="bg-white p-6 rounded-2xl shadow-lg h-[calc(80vh-18rem)] overflow-hidden">
+            <div className="w-full bg-white p-6 rounded-full shadow-md flex items-center">
+              <label className="text-sm font-semibold w-24">기한</label>
+              <input
+                type="text"
+                value={`${approval.start_date} ~ ${approval.end_date} (총 ${calculateDays(approval.start_date, approval.end_date)}일)`}
+                className="w-full border-none bg-none"
+                readOnly
+              />
+            </div>
+            <div className="bg-white p-6 rounded-2xl shadow-lg h-[calc(75vh-20rem)] overflow-hidden">
               <span className="text-sm font-semibold text-[#323232]">사유</span>
               <textarea
                 value={approval.content}

@@ -1,64 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { ChevronDown } from "react-bootstrap-icons";
 import Sidebar from "../include/Sidebar";
 import Header from "../include/Header";
 import categoryColors from "../../utils/categoryColors";
 import { useNavigate } from "react-router-dom";
-import { addCalendar } from "../../service/calendarLogic";
 
 const CalendarWrite = () => {
 
   const navigate = useNavigate();
-
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [applicantId, setApplicantId] = useState(""); // 사원번호 추가
-
-  const [startDate, setStartDate] = useState(
-    new Date().toLocaleDateString("en-CA")
-  );
-  const [endDate, setEndDate] = useState(
-    new Date().toLocaleDateString("en-CA")
-  ); 
-
-  // 일정 등록
-  const handleSubmit = async () => {
-
-    if (!startDate || !endDate) {
-      alert("시작일과 종료일을 모두 입력해주세요.");
-      return;
-    }
-
-    if (!title) {
-      alert("일정 제목을 입력해주세요.");
-      return;
-    }
-
-    const calendar = {
-      title,
-      content,
-      start_date: startDate ? new Date(startDate).toISOString().split("T")[0] : "",  // `yyyy-MM-dd` 형식으로 전환
-      end_date: endDate ? new Date(endDate).toISOString().split("T")[0] : "",  
-      applicantId, 
-    };
-
-    const confirmAdd = window.confirm("일정을 등록하시겠습니까?"); 
-    if (confirmAdd) {
-      try {
-        await addCalendar(calendar);  // 등록 API 호출
-        navigate("/calendar"); 
-      } catch (error) {
-        console.error("일정 등록 실패");
-        console.log("Title:", title);
-        console.log("Content:", content);
-        console.log("Start Date:", startDate);
-        console.log("End Date:", endDate);
-        console.log("Applicant ID:", applicantId);
-      }
-    } else {
-      console.log("일정 등록 취소");
-    }
-  };
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -80,8 +29,8 @@ const CalendarWrite = () => {
               <ChevronDown className="ml-auto text-gray-500" />
             </div>
           </div>
-           {/* 참석자 검색 영역 */}
-            <div className="relative md:w-4/5 w-full">
+          {/* 참석자 검색 영역 */}
+          <div className="relative md:w-4/5 w-full">
             <input
               type="text"
               placeholder="참석자 이름 검색"
@@ -96,8 +45,6 @@ const CalendarWrite = () => {
               <label className="text-sm font-semibold">시작 일자</label>
               <input
                 type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
                 className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-green-600"
               />
             </div>
@@ -105,8 +52,6 @@ const CalendarWrite = () => {
               <label className="text-sm font-semibold">종료 일자</label>
               <input
                 type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
                 className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-green-600"
               />
             </div>
@@ -125,8 +70,6 @@ const CalendarWrite = () => {
               <label className="text-sm font-semibold">사번(db테스트용 삭제 예정)</label>
               <input
                 type="text"
-                value={applicantId}
-                onChange={(e) => setApplicantId(parseInt(e.target.value))}
                 className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-green-600"
                 placeholder="사번 applicantId"
               />
@@ -137,8 +80,6 @@ const CalendarWrite = () => {
             <label className="text-sm font-semibold">일정 제목</label>
             <input
               type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
               className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-green-600"
               placeholder="일정 제목을 입력하세요."
             />
@@ -146,12 +87,36 @@ const CalendarWrite = () => {
           <div>
             <label className="text-sm font-semibold">일정 내용</label>
             <textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
               className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-green-600 h-96"
               placeholder="일정 내용을 입력하세요."
             />
           </div>
+
+          {/* 결재선 디자인 영역 */}
+          <div className="space-y-4">
+            <span className="font-semibold text-lg">결재선</span>
+            <div className="relative bg-white p-4 rounded-xl shadow-md">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <span className="font-medium">홍길동, 팀장</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <ChevronDown className="text-gray-400" />
+                </div>
+              </div>
+            </div>
+            <div className="relative bg-white p-4 rounded-xl shadow-md">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <span className="font-medium">김철수, 과장</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <ChevronDown className="text-gray-400" />
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* 버튼 영역 */}
           <div className="flex justify-end space-x-3">
             <button
@@ -161,7 +126,6 @@ const CalendarWrite = () => {
               취소
             </button>
             <button 
-              onClick={() => handleSubmit()}
               className="bg-[#006D2C] text-white px-6 py-2 rounded-full hover:bg-green-800 transition">
               등록
             </button>
