@@ -11,7 +11,7 @@ const Sidebar = () => {
   const [empId, setEmpId] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
-  
+
   // 관리자 역할 확인
   const isAdmin = localStorage.getItem("role") === "ADMIN";
 
@@ -20,13 +20,17 @@ const Sidebar = () => {
     if (storedEmpId) {
       setEmpId(storedEmpId);
     }
+
+    // 📌 localStorage에서 출근 상태 가져오기
+    const workingStatus = localStorage.getItem("isWorking");
+    setIsWorking(workingStatus === "true"); // "true" 문자열을 boolean으로 변환
   }, []);
 
   // 알림 모달 표시 함수
   const showNotificationModal = (message) => {
     setModalMessage(message);
     setShowModal(true);
-    setTimeout(() => setShowModal(false), 3000); // 3초 후 자동 닫힘
+    setTimeout(() => setShowModal(false), 2000); // 2초 후 자동 닫힘
   };
 
   // 출근 요청
@@ -48,7 +52,14 @@ const Sidebar = () => {
 
       const message = await response.text();
       showNotificationModal(message);
+
+      // 📌 출근 상태를 localStorage에 저장
+      localStorage.setItem("isWorking", "true");
       setIsWorking(true);
+
+      if (window.location.pathname === "/info") {
+        setTimeout(() => window.location.reload(), 2000);
+      }
     } catch (error) {
       console.error("출근 오류:", error);
       showNotificationModal("출근 기록에 실패했습니다.");
@@ -74,23 +85,30 @@ const Sidebar = () => {
 
       const message = await response.text();
       showNotificationModal(message);
+
+      // 📌 퇴근 상태를 localStorage에 저장
+      localStorage.setItem("isWorking", "false");
       setIsWorking(false);
+
+      if (window.location.pathname === "/info") {
+        setTimeout(() => window.location.reload(), 2000);
+      }
     } catch (error) {
       console.error("퇴근 오류:", error);
       showNotificationModal("퇴근 기록에 실패했습니다.");
     }
   };
 
-  // 메뉴 목록
-  const menuItems = [
-    { name: "DashBoard", icon: BsGrid, path: "/dashboard" },
-    { name: "캘린더", icon: BsCalendar, path: "/calendar" },
-    { name: "휴가", icon: BsTree, path: "/approval" },
-    { name: "게시판", icon: BsFileText, path: "/board" },
-    { name: "채팅", icon: BsChat, path: "/chat" },
-    { name: "직원조회", icon: BsPerson, path: "/employees" },
-    ...(isAdmin ? [{ name: "직원등록", icon: BsPerson, path: "/join" }] : []), // 관리자일 때만 "직원등록" 메뉴 추가
-  ];
+    // 메뉴 목록
+    const menuItems = [
+      { name: "DashBoard", icon: BsGrid, path: "/dashboard" },
+      { name: "캘린더", icon: BsCalendar, path: "/calendar" },
+      { name: "휴가", icon: BsTree, path: "/approval" },
+      { name: "게시판", icon: BsFileText, path: "/board" },
+      { name: "채팅", icon: BsChat, path: "/chat" },
+      { name: "직원조회", icon: BsPerson, path: "/employees" },
+      ...(isAdmin ? [{ name: "직원등록", icon: BsPerson, path: "/join" }] : []), // 관리자일 때만 "직원등록" 메뉴 추가
+    ];
 
   return (
     <div className="w-64 h-screen bg-white shadow-lg flex flex-col p-4">
@@ -99,8 +117,8 @@ const Sidebar = () => {
         <h1 className="text-[#006D2C] text-2xl font-bold">with worker</h1>
       </div>
 
-      {/* 메뉴 목록 */}
-      <nav className="flex-1">
+            {/* 메뉴 목록 */}
+            <nav className="flex-1">
         {menuItems.map((menu) => (
           <div
             key={menu.name}
@@ -137,13 +155,7 @@ const Sidebar = () => {
       </div>
 
       {/* 알림 모달 */}
-      <Modal
-        show={showModal}
-        onHide={() => setShowModal(false)}
-        centered
-        contentClassName="w-60 h-60 flex items-center justify-center rounded-lg shadow-lg"
-        dialogClassName="d-flex justify-content-center align-items-center"
-      >
+      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Body className="flex flex-col items-center justify-center">
           <CheckCircle className="text-green-500 text-4xl mb-2" />
           <p className="text-lg font-medium text-center">{modalMessage}</p>
