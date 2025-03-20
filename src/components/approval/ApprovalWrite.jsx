@@ -41,6 +41,7 @@ const ApprovalWrite = () => {
       start_date: dateRange[0] ? dateRange[0].toISOString().split("T")[0] : null,
       end_date: dateRange[1] ? dateRange[1].toISOString().split("T")[0] : null,
       applicantId,
+      approverId
     };
 
     const confirmAdd = window.confirm("결재를 등록하시겠습니까?");
