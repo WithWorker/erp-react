@@ -99,7 +99,7 @@ const WriteModal = ({ isModalOpen, handleCloseModal, handleSelectApprovers }) =>
           <h3 className="font-bold mb-2">선택된 결재자</h3>
           {selectedLabels.length > 0 ? (
             selectedLabels.map((label, index) => (
-              <p key={index} className="text-sm text-gray-700">- {label}</p>
+              <p key={index} className="text-base text-gray-700">- {label}</p>
             ))
           ) : (
             <p className="text-gray-400">결재자를 선택하세요.</p>
