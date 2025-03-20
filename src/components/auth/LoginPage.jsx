@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { EnvelopeFill, LockFill } from 'react-bootstrap-icons';
 import axios from 'axios';
-import PasswordResetModal from './PasswordResetModal ';
+import PasswordResetModal from './PasswordResetModal';
 
 const LoginPage = () => {
   const navigate = useNavigate();

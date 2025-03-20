@@ -19,7 +19,7 @@ const Personal = () => {
 
     return (
         <div className="w-1/3">
-            <div className="w-full p-4 bg-white rounded-full mb-4 shadow flex justify-center flex-1 items-center border-2 border-[#006D2C]">
+            <div className="w-full p-4 bg-white rounded-full mb-4 shadow flex justify-center flex-1 items-center border-2">
                 <h2 className='text-md font-bold'>개인정보</h2>
             </div>
             <div className="p-4 bg-white rounded-3xl shadow">

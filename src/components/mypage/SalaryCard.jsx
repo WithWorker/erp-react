@@ -56,7 +56,7 @@ const SalaryCard = () => {
 
     return (
         <div className="w-1/3">
-            <div className="w-full p-4 bg-white rounded-full mb-4 shadow flex justify-center flex-1 items-center border-2 border-[#006D2C]">
+            <div className="w-full p-4 bg-white rounded-full mb-4 shadow flex justify-center flex-1 items-center border-2">
                 <h2 className='text-md font-bold'>급여정보</h2>
             </div>
             <div className="p-4 bg-white rounded-3xl shadow">
@@ -64,7 +64,7 @@ const SalaryCard = () => {
                     <button onClick={handlePrevMonth} className="text-gray-500 hover:text-gray-700">
                         <ArrowLeft />
                     </button>
-                    <h2 className="text-lg font-semibold">
+                    <h2 className="text-lg text-[#006D2C] font-semibold">
                         {currentYear}년 {currentMonth}월
                     </h2>
                     <button onClick={handleNextMonth} className="text-gray-500 hover:text-gray-700">
@@ -74,7 +74,7 @@ const SalaryCard = () => {
                 <div className="flex flex-col justify-center flex-1 items-center">
                     <p className='mb-4'>기본급: {formatCurrency(salary.baseSalary)}원</p>
                     {salary.bonusSalary > 0 && <p className='mb-4'>성과급: {formatCurrency(salary.bonusSalary)}원</p>} {/* 성과급이 있을 경우만 표시 */}
-                    <p className="font-semibold">총 급여: {formatCurrency(salary.totalSalary)}원</p>
+                    <p className="font-semibold">지급액: {formatCurrency(salary.totalSalary)}원</p>
                 </div>
             </div>
         </div>

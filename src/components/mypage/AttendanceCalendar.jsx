@@ -93,7 +93,7 @@ const AttendanceCalendar = () => {
           </div>
         </div>
         <Calendar
-          className="w-full border-none p-3 text-[#323232]"
+          className="w-full border-none p-3 text-[#006D2C]"
           tileContent={tileContent}
           onActiveStartDateChange={handleMonthChange} // 📌 월 변경 시 데이터 다시 불러오기
         />

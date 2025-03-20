@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Modal } from "react-bootstrap";
 import { CheckCircle } from "react-bootstrap-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "../../assets/modal.css";
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -102,9 +103,9 @@ const Sidebar = () => {
     // 메뉴 목록
     const menuItems = [
       { name: "DashBoard", icon: BsGrid, path: "/dashboard" },
+      { name: "MyPage", icon: BsPerson, path: "/info" },
       { name: "캘린더", icon: BsCalendar, path: "/calendar" },
       { name: "휴가", icon: BsTree, path: "/approval" },
-      { name: "게시판", icon: BsFileText, path: "/board" },
       { name: "채팅", icon: BsChat, path: "/chat" },
       { name: "직원조회", icon: BsPerson, path: "/employees" },
       ...(isAdmin ? [{ name: "직원등록", icon: BsPerson, path: "/join" }] : []), // 관리자일 때만 "직원등록" 메뉴 추가
@@ -155,12 +156,18 @@ const Sidebar = () => {
       </div>
 
       {/* 알림 모달 */}
-      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-        <Modal.Body className="flex flex-col items-center justify-center">
-          <CheckCircle className="text-green-500 text-4xl mb-2" />
-          <p className="text-lg font-medium text-center">{modalMessage}</p>
-        </Modal.Body>
-      </Modal>
+      <Modal
+  show={showModal}
+  onHide={() => setShowModal(false)}
+  centered
+  dialogClassName="custom-square-modal"
+>
+  <Modal.Body className="flex flex-col items-center justify-center">
+    <CheckCircle className="text-green-500 text-4xl mb-2" />
+    <p className="text-lg font-medium text-center">{modalMessage}</p>
+  </Modal.Body>
+</Modal>
+
     </div>
   );
 };
