@@ -10,10 +10,9 @@ const CalendarWrite = () => {
 
   const navigate = useNavigate();
 
+  const [applicantId, setApplicantId] = useState(""); // 사원번호 추가
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [applicantId, setApplicantId] = useState(""); // 사원번호 추가
-
   const [startDate, setStartDate] = useState(
     new Date().toLocaleDateString("en-CA")
   );
@@ -161,7 +160,7 @@ const CalendarWrite = () => {
               취소
             </button>
             <button 
-              onClick={() => handleSubmit()}
+              onClick={handleSubmit}
               className="bg-[#006D2C] text-white px-6 py-2 rounded-full hover:bg-green-800 transition">
               등록
             </button>

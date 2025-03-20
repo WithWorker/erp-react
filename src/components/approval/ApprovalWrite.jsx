@@ -6,26 +6,56 @@ import Sidebar from '../include/Sidebar';
 import Header from '../include/Header';
 import WriteLine from './WriteLine';
 import WriteModal from './WriteModal';
+import { addApproval } from '../../service/approvalLogic';
 
 const ApprovalWrite = () => {
   const navigate = useNavigate();
 
+  const [applicantId, setApplicantId] = useState("");
   const [typeId, setTypeId] = useState('');
   const [title, setTitle] = useState('');
   const [dateRange, setDateRange] = useState([null, null]);
   const [content, setContent] = useState('');
-  const [selectedApprovers, setSelectedApprovers] = useState([]); // 결재자 상태
-
+  const [selectedApprovers, setSelectedApprovers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
   const handleDateChange = (date) => setDateRange(date);
-
-  // 모달에서 결재자 선택 시 업데이트
+  
   const handleSelectApprovers = (approvers) => {
-    setSelectedApprovers(approvers); // 결재자 업데이트
+    setSelectedApprovers(approvers);
     handleCloseModal();
+  };
+
+  const handleSubmit = async () => {
+    if (!typeId || !title) {
+      alert("결재 유형과 제목을 모두 입력해주세요.");
+      return;
+    }
+
+    const approval = {
+      typeId,
+      title,
+      content,
+      start_date: dateRange[0] ? dateRange[0].toISOString().split("T")[0] : null,
+      end_date: dateRange[1] ? dateRange[1].toISOString().split("T")[0] : null,
+      applicantId,
+    };
+
+    const confirmAdd = window.confirm("결재를 등록하시겠습니까?");
+    if (confirmAdd) {
+      try {
+        await addApproval(approval);
+        console.log("등록 성공한 approval Data : ",approval);
+        navigate("/approval");
+      } catch (error) {
+        console.error("결재 등록 실패", error);
+        console.log("Approval Data:", approval);
+      }
+    } else {
+      console.log("결재 등록 취소");
+    }
   };
 
   return (
@@ -63,6 +93,16 @@ const ApprovalWrite = () => {
                     placeholder="제목을 입력하세요."
                   />
                 </div>
+                <div>
+                  <label className="text-sm font-semibold">사번(db테스트용 삭제 예정)</label>
+                  <input
+                    type="text"
+                    value={applicantId}
+                    onChange={(e) => setApplicantId(parseInt(e.target.value))}
+                    className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-green-600"
+                    placeholder="사번 applicantId"
+                  />
+                </div>
               </div>
               <div className="mb-4">
                 <label className="font-bold block text-[#323232] mb-1">날짜 선택</label>
@@ -89,18 +129,18 @@ const ApprovalWrite = () => {
                 <button className="px-6 py-2 border border-gray-300 rounded-full text-gray-600" onClick={() => navigate("/approval")}>
                   취소
                 </button>
-                <button className="px-6 py-2 bg-[#006D2C] text-white rounded-full">
+                <button 
+                  onClick={handleSubmit}
+                  className="px-6 py-2 bg-[#006D2C] text-white rounded-full">
                   등록
                 </button>
               </div>
             </div>
           </div>
-          {/* 결재선 */}
           <div className="w-[350px] h-[calc(90vh-9rem)]">
             <WriteLine approvers={selectedApprovers} handleOpenModal={handleOpenModal} />
           </div>
         </div>
-        {/* 결재선 모달 */}
         <WriteModal isModalOpen={isModalOpen} handleCloseModal={handleCloseModal} handleSelectApprovers={handleSelectApprovers} />
       </div>
     </div>

@@ -2,52 +2,38 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "../include/Sidebar";
 import Header from "../include/Header";
-import { readApproval, updateStatus } from "../../service/approvalLogic";
+import { readApproval } from "../../service/approvalLogic";
 import EditLine from "./EditLine";
 
 const ApprovalEdit = () => {
   const navigate = useNavigate();
   const { approvalId } = useParams(); 
-  const [approval, setApproval] = useState(null);
+  const [approval, setApproval] = useState(null); // 결재 데이터를 저장할 상태
 
   useEffect(() => {
-    const fetchApprovalDetail = async () => {
+    const fetchApprovalEdit = async () => {
       try {
-        const data = await readApproval(approvalId);
-        setApproval(data);
+        const data = await readApproval(approvalId); // 결재 상세 조회 api 호출
+        setApproval(data); // 상태에 데이터 저장
       } catch (error) {
         console.error("결재 상세 조회 오류:", error);
       }
     };
 
-    fetchApprovalDetail();
-  }, [approvalId]);
+    fetchApprovalEdit();
+  }, [approvalId]); 
 
   if (!approval) {
-    return <div>Loading...</div>; // approval 객체가 없으면 로딩 화면을 보여줍니다.
+    return <div>Loading...</div>; // 데이터를 기다리는 동안 로딩 화면
   }
 
-  // 결재 상태 변경 (승인 / 반려)
-  const handleStatusUpdate = async (index, status) => {
-    const updatedApprovers = [...approval.approvers];
-    
-    // '대기' 상태일 때만 변경 가능
-    if (updatedApprovers[index].approverStatusName !== '대기') {
-      alert("이미 결재 처리된 항목입니다.");
-      return;
-    }
-
-    updatedApprovers[index].approverStatusName = status;
-
-    const updatedApproval = { ...approval, approvers: updatedApprovers };
-
-    try {
-      await updateStatus(approvalId, updatedApproval);  // DB에 상태 업데이트
-      setApproval(updatedApproval); // UI 업데이트
-    } catch (error) {
-      console.error("결재 상태 업데이트 오류:", error);
-      alert("결재 상태 변경에 실패했습니다.");
-    }
+  // 총 일수 계산
+  const calculateDays = (startDate, endDate) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diffTime = end - start;
+    const diffDays = diffTime / (1000 * 60 * 60 * 24) + 1; // 1일 추가하여 포함
+    return diffDays;
   };
 
   return (
@@ -57,6 +43,7 @@ const ApprovalEdit = () => {
         <Header />
 
         <div className="flex justify-between space-x-4">
+
           {/* 결재 정보 */}
           <div className="flex-1 space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -73,7 +60,7 @@ const ApprovalEdit = () => {
                 <label className="text-sm font-semibold w-24">작성자</label>
                 <input
                   type="text"
-                  value={approval.applicant ? `${approval.applicant.name} ${approval.applicant.positionName} / ${approval.applicant.departmentName}` : ""}
+                  value={`${approval.applicant.name} ${approval.applicant.positionName} / ${approval.applicant.departmentName}`}
                   className="w-full border-none text-[#006D2C]"
                   readOnly
                 />
@@ -97,7 +84,16 @@ const ApprovalEdit = () => {
                 readOnly
               />
             </div>
-            <div className="bg-white p-6 rounded-2xl shadow-lg h-[calc(80vh-18rem)] overflow-hidden">
+            <div className="w-full bg-white p-6 rounded-full shadow-md flex items-center">
+              <label className="text-sm font-semibold w-24">기한</label>
+              <input
+                type="text"
+                value={`${approval.start_date} ~ ${approval.end_date} (총 ${calculateDays(approval.start_date, approval.end_date)}일)`}
+                className="w-full border-none bg-none"
+                readOnly
+              />
+            </div>
+            <div className="bg-white p-6 rounded-2xl shadow-lg h-[calc(75vh-20rem)] overflow-hidden">
               <span className="text-sm font-semibold text-[#323232]">사유</span>
               <textarea
                 value={approval.content}
@@ -109,8 +105,9 @@ const ApprovalEdit = () => {
 
           {/* 결재선 */}
           <div className="w-[350px] h-[calc(90vh-14rem)]">
-            <EditLine approvers={approval.approvers} setApprovers={setApproval} />
+          <EditLine approvers={approval.approvers} setApprovers={setApproval} />
           </div>
+          
         </div>
 
         <div className="flex justify-end gap-2 mt-4">

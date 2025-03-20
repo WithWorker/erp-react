@@ -8,7 +8,7 @@ const ApprovalList = ({ viewMode }) => {
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태
   const totalPages = 3; // 예시로 총 3페이지로 설정 (실제 데이터에 따라 동적으로 설정 가능)
   const applicantId = 1; // 임의로 설정된 applicant_id
-  const approverId = 4; // 임의로 설정된 approver_id
+  const approverId = 3; // 임의로 설정된 approver_id
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -57,9 +57,6 @@ const ApprovalList = ({ viewMode }) => {
                   {item.typeName}
                   </p>
                   <p className="font-bold text-[#323232]">{item.title}</p>
-                  {/* <p className={"px-2 py-1 text-sm rounded-xl bg-[#323232] text-white"}>
-                  {item.typeName}
-                  </p> */}
                   <p className="text-xs text-gray-500">{item.applicant.name} {item.applicant.positionName} / {item.applicant.departmentName}</p>
                 </div>
               </div>

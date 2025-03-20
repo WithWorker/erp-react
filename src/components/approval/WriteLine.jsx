@@ -1,7 +1,7 @@
 import React from 'react';
 import { BsCheckCircleFill } from 'react-icons/bs';
 
-const WriteLine = ({ approvers, handleOpenModal }) => {
+const WriteLine = ({ approvers, handleOpenModal, showModal }) => {
   return (
     <div className="flex flex-col justify-start w-full bg-white p-6 rounded-2xl shadow-lg h-full">
       <span className="text-lg font-bold text-[#323232] pt-3 text-center">결재선</span>

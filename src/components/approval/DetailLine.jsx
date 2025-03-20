@@ -7,6 +7,7 @@ const DetailLine = ({ approvers }) => {
   return (
     <div className="w-full h-full bg-white p-8 rounded-2xl shadow-lg flex flex-col items-center overflow-y-auto">
       <span className="text-lg font-bold text-[#323232] pt-8">결재선</span>
+      
       <div className="mt-20 mb-20 flex flex-col items-center space-y-8 w-full">
         {approvers.map((approver, index) => (
           <div key={index} className="flex flex-col items-center relative w-full">
