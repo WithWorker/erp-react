@@ -110,8 +110,8 @@ export const addApproval = async (approval) => {
 // 결재 수정(status) : 승인자 각각 상태 변경
 export const updateStatus = async (approvalId, approverId, approverStatusId) => {
   try {
-    const response = await axios.put(`/api/approval/edit/${approvalId}`, {
-      approverId, // 승인자 ID 추가
+    const response = await axios.put(`/api/approval/edit/${Number(approvalId)}`, {
+      approverId, 
       approverStatusId
     });
     return response.data;
