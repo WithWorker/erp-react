@@ -10,7 +10,7 @@ const Personal = () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ empId: empId }), 
+            body: JSON.stringify({ empId }), 
         })
         .then((response) => response.json())
         .then((data) => setEmployee(data))
@@ -18,28 +18,76 @@ const Personal = () => {
     }, [empId]);
 
     return (
-        <div className="w-1/3">
-            <div className="w-full p-4 bg-white rounded-full mb-4 shadow flex justify-center flex-1 items-center border-2">
-                <h2 className='text-md font-bold'>개인정보</h2>
+        <div className="mx-auto bg-white shadow-lg rounded-lg p-6 grid grid-cols-3">
+            {/* 프로필 이미지 */}
+            <div className="flex flex-col items-center justify-center col-span-1">
+                <img
+                    src={`http://localhost:7777/${employee.imgUrl}`}
+                    alt="Profile"
+                    className="w-24 h-24 rounded-full"
+                />
             </div>
-            <div className="p-4 bg-white rounded-3xl shadow">
-                <div className='flex justify-between mt-3 ml-4 mr-4'>
-                    <div className="flex justify-start items-center space-x-14 mb-4">
-                        <h4 className="font-bold text-[#323232]">이름</h4>
-                        <span className="text-gray-600">{employee.name || '이름 없음'}</span>
-                    </div>
+
+            {/* 인사정보 */}
+            <div className="grid grid-cols-2 col-span-2 gap-4">
+                {/* 이름 */}
+                <div className="flex items-center gap-2">
+                    <label className="flex-1 min-w-[100px] text-gray-700 font-semibold text-right">이름</label>
+                    <input type="text" value={employee.name || ''} className="flex-[2] min-w-[150px] p-2 rounded-md text-left text-gray-500" readOnly />
                 </div>
-                <div className='flex justify-between mt-2 ml-4 mr-4'>
-                    <div className="flex justify-start items-center space-x-10 mb-4">
-                        <h4 className="font-bold text-[#323232]">이메일</h4>
-                        <span className='text-gray-600'>{employee.email || '이메일 없음'}</span>
-                    </div>
+
+                {/* 사번 */}
+                <div className="flex items-center gap-2">
+                    <label className="flex-1 min-w-[100px] text-gray-700 font-semibold text-right">사번</label>
+                    <input type="text" value={employee.empId || ''} className="flex-[2] min-w-[150px] p-2 rounded-md text-left text-gray-500" readOnly />
                 </div>
-                <div className='flex justify-between mt-2 ml-4 mr-4'>
-                    <div className="flex justify-start items-center space-x-7 mb-4">
-                        <h4 className="font-bold text-[#323232]">전화번호</h4>
-                        <span className='text-gray-600'>{employee.phone || '전화번호 없음'}</span>
-                    </div>
+
+                {/* 전화번호 */}
+                <div className="flex items-center gap-2">
+                    <label className="flex-1 min-w-[100px] text-gray-700 font-semibold text-right">전화번호</label>
+                    <input type="text" value={employee.phone || ''} className="flex-[2] min-w-[150px] p-2 rounded-md text-left text-gray-500" readOnly />
+                </div>
+
+                {/* 이메일 */}
+                <div className="flex items-center gap-2">
+                    <label className="flex-1 min-w-[100px] text-gray-700 font-semibold text-right">이메일</label>
+                    <input type="email" value={employee.email || ''} className="flex-[2] min-w-[150px] p-2 rounded-md text-left text-gray-500" readOnly />
+                </div>
+
+                {/* 주소 */}
+                <div className="flex items-center gap-2">
+                    <label className="flex-1 min-w-[100px] text-gray-700 font-semibold text-right">주소</label>
+                    <input type="text" value={employee.address || ''} className="flex-[2] min-w-[150px] p-2 rounded-md text-left text-gray-500" readOnly />
+                </div>
+
+                {/* 입사일 */}
+                <div className="flex items-center gap-2">
+                    <label className="flex-1 min-w-[100px] text-gray-700 font-semibold text-right">입사일</label>
+                    <input type="text" value={employee.hireDate || ''} className="flex-[2] min-w-[150px] p-2 rounded-md text-left text-gray-500" readOnly />
+                </div>
+
+                {/* 주민등록번호 */}
+                <div className="flex items-center gap-2">
+                    <label className="flex-1 min-w-[100px] text-gray-700 font-semibold text-right">주민등록번호</label>
+                    <input type="text" value={employee.residentNumber || ''} className="flex-[2] min-w-[150px] p-2 rounded-md text-left text-gray-500" readOnly />
+                </div>
+
+                {/* 부서 */}
+                <div className="flex items-center gap-2">
+                    <label className="flex-1 min-w-[100px] text-gray-700 font-semibold text-right">부서</label>
+                    <input type="text" value={employee.departmentName || ''} className="flex-[2] min-w-[150px] p-2 rounded-md text-left text-gray-500" readOnly />
+                </div>
+
+                {/* 계좌번호 */}
+                <div className="flex items-center gap-2">
+                    <label className="flex-1 min-w-[100px] text-gray-700 font-semibold text-right">계좌번호</label>
+                    <input type="text" value={employee.accountNumber || ''} className="flex-[2] min-w-[150px] p-2 rounded-md text-left text-gray-500" readOnly />
+                </div>
+
+                {/* 직급 */}
+                <div className="flex items-center gap-2">
+                    <label className="flex-1 min-w-[100px] text-gray-700 font-semibold text-right">직급</label>
+                    <input type="text" value={employee.positionName || ''} className="flex-[2] min-w-[150px] p-2 rounded-md text-left text-gray-500" readOnly />
                 </div>
             </div>
         </div>

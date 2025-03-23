@@ -83,14 +83,9 @@ const AttendanceCalendar = () => {
 
   return (
     <div className="w-full flex flex-col items-center">
-      <div className="p-8 bg-white rounded-3xl mb-8 shadow">
-        <div className="ml-8 mr-8">
-          <div className="flex flex-1 justify-between items-center space-y-4">
-            <h4 className="font-bold text-[#323232]">근태정보</h4>
-          </div>
-        </div>
+      <div className="p-8 bg-white rounded-lg mb-8 shadow">
         <Calendar
-          className="w-full border-none p-3 text-[#006D2C]"
+          className="w-full border-none p-3"
           tileContent={tileContent}
           onActiveStartDateChange={handleMonthChange} 
         />

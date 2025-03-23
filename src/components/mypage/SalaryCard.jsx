@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, ArrowRight } from 'react-bootstrap-icons';
+import { BsPrinter } from "react-icons/bs";
+import { useReactToPrint } from 'react-to-print';
+import SalarySlip from './SalarySlip';
 
 const SalaryCard = () => {
     const [salary, setSalary] = useState({});
     const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
     const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
     const empId = localStorage.getItem("empId"); 
+    const slipRef = useRef();
 
     useEffect(() => {
-        // 급여 조회 API 호출
         fetch(`/api/paymentHistory/${empId}`, {
             method: 'POST',
             headers: {
@@ -54,12 +57,16 @@ const SalaryCard = () => {
         return value !== undefined && value !== null ? value.toLocaleString() : '0';
     };
 
+    const handlePrint = useReactToPrint({
+        content: () => slipRef.current,
+    });
+
     return (
         <div className="w-1/3">
-            <div className="w-full p-4 bg-white rounded-full mb-4 shadow flex justify-center flex-1 items-center border-2">
+            <div className="w-full p-4 bg-white rounded-lg mb-4 shadow flex justify-center flex-1 items-center border-2">
                 <h2 className='text-md font-bold'>급여정보</h2>
             </div>
-            <div className="p-4 bg-white rounded-3xl shadow">
+            <div className="p-4 bg-white rounded-lg shadow">
                 <div className="flex justify-between items-center mb-4">
                     <button onClick={handlePrevMonth} className="text-gray-500 hover:text-gray-700">
                         <ArrowLeft />
@@ -73,9 +80,19 @@ const SalaryCard = () => {
                 </div>
                 <div className="flex flex-col justify-center flex-1 items-center">
                     <p className='mb-4'>기본급: {formatCurrency(salary.baseSalary)}원</p>
-                    {salary.bonusSalary > 0 && <p className='mb-4'>성과급: {formatCurrency(salary.bonusSalary)}원</p>} {/* 성과급이 있을 경우만 표시 */}
+                    {salary.bonusSalary > 0 && <p className='mb-4'>성과급: {formatCurrency(salary.bonusSalary)}원</p>} 
                     <p className="font-semibold">지급액: {formatCurrency(salary.totalSalary)}원</p>
                 </div>
+                <div className="flex justify-end mt-4">
+                    <button onClick={handlePrint} className="border-2 rounded-md text-gray-500 hover:text-gray-700 flex items-center">
+                        <BsPrinter className="mr-2" />
+                        인쇄
+                    </button>
+                </div>
+            </div>
+            {/* 급여명세서 */}
+            <div style={{ display: "none" }}>
+                <SalarySlip ref={slipRef} salary={salary} year={currentYear} month={currentMonth} />
             </div>
         </div>
     );

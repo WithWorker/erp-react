@@ -140,7 +140,7 @@ const EmployeeListPage = () => {
                   <th className="p-2 text-center font-bold">전화번호</th>
                   <th className="p-2 text-center font-bold">이메일</th>
                   <th className="p-2 text-center font-bold">입사일</th>
-                  <th className="p-2 text-center font-bold">퇴사일</th>
+                  <th className="p-2 text-center font-bold">상태</th>
                   <th className="p-2 text-center font-bold"></th>
                 </tr>
               </thead>
@@ -160,7 +160,14 @@ const EmployeeListPage = () => {
                     <td className="p-4 text-center">{employee.phone}</td>
                     <td className="p-4 text-center">{employee.email}</td>
                     <td className="p-4 text-center">{employee.hireDate}</td>
-                    <td className="p-4 text-center">{employee.resignDate}</td>
+                    <td className="p-4 text-center">
+                      <span
+                        className={`px-2 py-1 text-sm rounded-full ${employee.memberRole === "USER"? "border-2 border-green-500 text-green-500 bg-white"
+                            : employee.memberRole === "SUSPENDED"? "border-2 border-yellow-500 text-yellow-500 bg-white"
+                            : "border-2 border-[#006D2C] text-[#006D2C] bg-white"}`}>
+                      {employee.memberRole === "USER" ? "재직" : employee.memberRole === "SUSPENDED" ? "퇴사" : "-"}
+                      </span>
+                    </td>
                     <td className="p-4 text-center">
                     {isAdmin && (
                       <button

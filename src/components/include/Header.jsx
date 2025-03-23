@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { BsBell, BsEnvelopeFill, BsKeyFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -8,7 +9,26 @@ const Header = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token);
+    if (token) {
+      setIsLoggedIn(true);
+
+      try {
+        const decoded = jwtDecode(token); 
+        const expTime = decoded.exp * 1000; 
+        const currentTime = Date.now(); 
+        const timeLeft = expTime - currentTime; 
+
+        if (timeLeft <= 0) {
+          handleLogout(); // 만료 시 로그아웃
+        } else {
+          // 30분 자동 로그아웃
+          setTimeout(handleLogout, timeLeft);
+        }
+      } catch (error) {
+        console.error("Invalid token", error);
+        handleLogout(); 
+      }
+    }
   }, []);
 
   const handleLogout = async () => {
