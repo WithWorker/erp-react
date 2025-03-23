@@ -35,7 +35,21 @@ const WriteModal = ({ isModalOpen, handleCloseModal, handleSelectApprovers }) =>
   .map((employee) => `${employee.name} / ${employee.positionName}`);
 
   const handleConfirm = () => {
-    handleSelectApprovers(selectedLabels); // 선택된 결재자 라벨을 부모로 전달
+    const selectedApprovers = checked
+      .map((id) => {
+        const empId = parseInt(id, 10);
+        return organizationData
+          .flatMap((department) => department.employees || [])
+          .find((employee) => employee.empId === empId);
+      })
+      .filter(Boolean)
+      .map((employee) => ({
+        empId: employee.empId, 
+        name: employee.name,
+        positionName: employee.positionName,
+      }));
+  
+    handleSelectApprovers(selectedApprovers); // 객체 배열 전달
   };
 
   // 조직도 데이터를 CheckboxTree에 맞게 변환

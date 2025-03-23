@@ -72,7 +72,7 @@ const EditLine = () => {
               >
                 {approver.approverStatusName || '대기'}
               </div>
-              {approver.approverStatusName === '대기' && approver.empId === 3 && (
+              {approver.approverStatusName === '대기' && approver.empId === 1 && (
                 <div className="flex mt-4 space-x-4">
                   <button
                     className="bg-green-500 text-white px-4 py-2 rounded-full"
