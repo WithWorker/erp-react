@@ -21,7 +21,7 @@ const WriteModal = ({ isModalOpen, handleCloseModal, handleSelectApprovers }) =>
           console.error("조직도 불러오기 오류:", error);
         });
     }
-  }, [isModalOpen]); // 모달이 열릴 때마다 데이터 새로 불러오기
+  }, [isModalOpen]);
 
   // 선택된 결재자 라벨을 가져오기
   const selectedLabels = checked
@@ -55,25 +55,25 @@ const WriteModal = ({ isModalOpen, handleCloseModal, handleSelectApprovers }) =>
   // 조직도 데이터를 CheckboxTree에 맞게 변환
   const nodes = [
     {
-      value: "전체", // '전체' 노드 추가
+      value: "전체",
       label: (
         <div className="flex items-center">
           <span>전체</span>
         </div>
       ),
       children: organizationData.map((department) => ({
-        value: department.departmentName || `department-${Math.random()}`, // 부서명으로 value 설정
+        value: department.departmentName || `department-${Math.random()}`, 
         label: (
           <div className="flex items-center">
-            <span>{department.departmentName}</span> {/* 부서 이름 */}
+            <span>{department.departmentName}</span>
           </div>
         ),
         children: department.employees?.map((employee) => ({
-          value: employee.empId || `emp-${Math.random()}`, // 직원 고유값
+          value: employee.empId || `emp-${Math.random()}`, 
           label: (
             <div className="flex items-center">
-              <FaUser className="mr-2" /> {/* 직원 아이콘 */}
-              {employee.name} / {employee.positionName} {/* 직원 이름과 직책 */}
+              <FaUser className="mr-2" /> 
+              {employee.name} / {employee.positionName} 
             </div>
           ),
         })),

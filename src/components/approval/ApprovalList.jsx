@@ -60,7 +60,7 @@ const ApprovalList = ({ viewMode }) => {
               <div className='flex justify-between items-center space-x-4'>
                 <p className="text-xs mb-1 text-gray-500">{item.start_date}</p>
                 <div className='flex flex-between items-center space-x-3'>
-                  <p className={"px-2 py-1 text-sm rounded-xl bg-[#323232] text-white"}>
+                  <p className={"px-2 py-1 text-sm rounded-xl bg-gray-500 text-white"}>
                     {item.typeName}
                   </p>
                   <p className="font-bold text-[#323232]">{item.title}</p>

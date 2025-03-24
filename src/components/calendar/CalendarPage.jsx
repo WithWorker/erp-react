@@ -3,7 +3,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import googleCalendarPlugin from '@fullcalendar/google-calendar';
-import { ChevronLeft, ChevronRight } from "react-bootstrap-icons"; // Search 아이콘 추가
+import { ChevronLeft, ChevronRight } from "react-bootstrap-icons"; 
 import Sidebar from "../include/Sidebar";
 import Header from "../include/Header";
 import TopNav from "./TopNav";
@@ -23,7 +23,7 @@ const CalendarPage = () => {
   const [selectedEvents, setSelectedEvents] = useState([]); // 선택된 날짜의 일정 목록
 
   const applicantId = 2; // 특정 사용자의 ID (임시 값)
-  const departmentId = 3; // 부서명
+  const departmentId = 1; // 부서명
 
   // 일정 데이터 불러오기
   useEffect(() => {

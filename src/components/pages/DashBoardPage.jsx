@@ -1,108 +1,144 @@
 import { useNavigate } from "react-router-dom";
-import { Plus } from "lucide-react"; // 플러스 아이콘 추가
+import { Plus } from "lucide-react";
 import Sidebar from "../include/Sidebar";
 import Header from "../include/Header";
 import WeeklyCalendar from "./WeeklyCalendar";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { getApplicant } from "../../service/approvalLogic";
+import { getAllCalendars } from "../../service/calendarLogic";
+import { ChevronLeft, ChevronRight } from "react-bootstrap-icons";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const applicantId = 1;
+  const timeRef = useRef(null); // useRef를 사용하여 리렌더링 방지
 
-  const applicantId = 1; // 특정 사용자의 ID (임시 값)
-
-  // // 결재 목록 (예제 데이터)
-  // const approvals = [
-  //   { id: 1, title: "보고서 결재 요청" },
-  //   { id: 2, title: "휴가 신청 승인" },
-  //   { id: 3, title: "예산안 검토" },
-  //   { id: 4, title: "프로젝트 승인 요청" }, // 이 항목은 표시되지 않음
-  // ];
-
-  // 알림 목록 (예제 데이터)
   const notifications = [
     { id: 1, message: "프로젝트 미팅이 다가오고 있습니다." },
     { id: 2, message: "휴가 신청서가 승인되었습니다." },
     { id: 3, message: "예산안 검토 마감일이 다가옵니다." },
   ];
 
-   // 실시간 시간을 위한 상태 변수
-  const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
-
-  // 결재 목록
   const [approvals, setApprovals] = useState([]);
+  const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentTime(new Date().toLocaleTimeString());
-    }, 1000);
+    const updateClock = () => {
+      if (timeRef.current) {
+        timeRef.current.innerText = new Date().toLocaleTimeString();
+      }
+    };
 
-    const fetchapprovals = async () => {
+    const intervalId = setInterval(updateClock, 1000);
+    updateClock(); // 초기 한 번 실행
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    const fetchApprovals = async () => {
       try {
         const response = await getApplicant(applicantId);
-        console.log(response);
         setApprovals(response);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-    };   
-    fetchapprovals();
+    };
 
-     // 컴포넌트가 언마운트 될 때 setInterval을 정리해줌
-    return () =>  clearInterval(intervalId);
+    const fetchCalendars = async () => {
+      try {
+        const response = await getAllCalendars();
 
-  }, [applicantId]);
+        if (!response || !Array.isArray(response)) {
+          console.error("유효하지 않은 일정 데이터:", response);
+          return;
+        }
+
+        const calendarEvents = response
+          .map((event) => {
+            if (!event.start_date || !event.end_date) {
+              console.error("start_date 또는 end_date가 없습니다. 이벤트: ", event);
+              return null;
+            }
+
+            const startDate = new Date(event.start_date);
+            const endDate = new Date(event.end_date);
+
+            if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+              console.error("유효하지 않은 날짜 값: ", event.start_date, event.end_date);
+              return null;
+            }
+
+            return {
+              id: event.calendarId,
+              title: event.title,
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+              description: event.content,
+              extendedProps: {
+                applicant: event.memberDto?.name || "알 수 없음",
+                dept: event.memberDto?.dept || "알 수 없음",
+              },
+            };
+          })
+          .filter((event) => event !== null);
+
+        console.log("일정List 데이터:", calendarEvents);
+        setEvents((prevEvents) => {
+          const prevString = JSON.stringify(prevEvents);
+          const newString = JSON.stringify(calendarEvents);
+          return prevString === newString ? prevEvents : calendarEvents;
+        });
+      } catch (error) {
+        console.error("Error fetching calendar data:", error);
+      }
+    };
+
+    fetchApprovals();
+    fetchCalendars();
+  }, []);
+
+  // WeeklyCalendar를 memoize하여 불필요한 리렌더링 방지
+  const memoizedWeeklyCalendar = useMemo(() => <WeeklyCalendar events={events} />, [events]);
+
+  const moveWeek = (direction) => {
+    // 주간 일정 이동 로직을 여기서 구현하세요
+    console.log(direction === "prev" ? "이전 주로 이동" : "다음 주로 이동");
+  };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex flex-col md:flex-row h-screen bg-gray-100">
       <Sidebar />
-
       <div className="flex flex-col flex-1">
         <Header />
-
-        <main className="p-6 grid grid-cols-12 gap-6">
-          {/* 출퇴근 체크 */}
-          <div className="col-span-4 bg-white p-6 rounded-2xl shadow-md flex flex-col items-center">
-            <img
-              src="/src/assets/default.jpg"
-              alt="User"
-              className="w-30 h-30 rounded-full mb-3"
-            />
-            <p className="text-[#006D2C] font-semibold text-lg">{currentTime}</p>
-            <button className="mt-3 bg-[#006D2C] text-white px-6 py-3 rounded-lg shadow-md 
-                              hover:bg-green-600 transition-all">
+        <main className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="bg-white p-6 rounded-2xl shadow-md flex flex-col items-center">
+            <img src="/src/assets/default.jpg" alt="User" className="w-35 h-35 rounded-full mb-3" />
+            <p ref={timeRef} className="text-[#006D2C] font-semibold text-lg"></p>
+            <button className="mt-3 bg-[#006D2C] text-white px-6 py-3 rounded-lg shadow-md hover:bg-green-600 transition-all">
               퇴근 체크하기
             </button>
           </div>
-
-          {/* 내 결재함 */}
-          <div className="col-span-4 bg-white p-6 rounded-2xl shadow-md">
+          <div className="bg-white p-6 rounded-2xl shadow-md">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-center w-full">📝 내 결재함</h2>
-              <button
-                className="bg-[#006D2C] text-white p-2 rounded-full shadow-md hover:bg-green-600 transition-all"
-                onClick={() => navigate("/approval")}
-              >
-                <Plus size={20} />
-              </button>
-            </div>
+            <h2 className="text-xl font-bold flex-grow text-center">📝 내 결재함</h2>
+            <button className="bg-[#006D2C] text-white p-2 rounded-full shadow-md hover:bg-green-600 transition-all" onClick={() => navigate("/approval")}>
+              <Plus size={20} />
+            </button>
+          </div>
             <ul className="space-y-3">
               {approvals.slice(0, 4).map((approval) => (
-                <li key={approval.approvalId} className="p-3 bg-gray-100 rounded-lg" onClick={() => navigate(`/approval/${approval.approvalId}`)}>
+                <li key={approval.approvalId} className="p-3 bg-gray-100 rounded-lg cursor-pointer" onClick={() => navigate("/approval/${approval.approvalId}")}>
+                  <span className="px-2 py-1 text-sm rounded-xl bg-gray-500 text-white mr-5">{approval.typeName}</span>
                   <span className="font-medium text-gray-800">{approval.title}</span>
                 </li>
               ))}
             </ul>
           </div>
-
-          {/* 알림함 */}
-          <div className="col-span-4 bg-white p-6 rounded-2xl shadow-md">
+          <div className="bg-white p-6 rounded-2xl shadow-md">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-center w-full">🔔 알림함</h2>
-              <button
-                className="bg-[#006D2C] text-white p-2 rounded-full shadow-md hover:bg-green-600 transition-all"
-                onClick={() => navigate("/notifications")}
-              >
+              <h2 className="text-xl font-bold flex-grow text-center">🔔 알림함</h2>
+              <button className="bg-[#006D2C] text-white p-2 rounded-full shadow-md hover:bg-green-600 transition-all" onClick={() => navigate("/notifications")}>
                 <Plus size={20} />
               </button>
             </div>
@@ -114,11 +150,19 @@ const Dashboard = () => {
               ))}
             </ul>
           </div>
-
-          {/* 일주일 일정 캘린더 */}
-          <div className="col-span-12 bg-white p-6 rounded-2xl shadow-md">
-            <h2 className="text-xl font-bold mb-4 text-center">📅 주간 일정</h2>
-            <WeeklyCalendar />
+          <div className="col-span-1 sm:col-span-2 lg:col-span-3 bg-white p-6 rounded-2xl shadow-md">
+            <div className="flex justify-between items-center mb-3">
+              <div className="flex items-center justify-center w-full">
+                <button onClick={() => moveWeek("prev")} className="p-2 rounded-full hover:bg-gray-200">
+                  <ChevronLeft size={24} />
+                </button>
+                <h2 className="text-xl font-bold">📅 주간 일정</h2>
+                <button onClick={() => moveWeek("next")} className="p-2 rounded-full hover:bg-gray-200 ml-3">
+                  <ChevronRight size={24} />
+                </button>
+              </div>
+            </div>
+            {memoizedWeeklyCalendar}
           </div>
         </main>
       </div>
@@ -126,4 +170,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Dashboard; 

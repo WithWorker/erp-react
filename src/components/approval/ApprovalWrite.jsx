@@ -35,6 +35,15 @@ const ApprovalWrite = () => {
       return;
     }
 
+    if (!dateRange[0] || !dateRange[1]) {
+      alert("시작일과 종료일을 모두 입력해주세요.");
+      return;
+    }
+
+    if (selectedApprovers.length === 0) {
+      alert("결재자를 선택해주세요.");
+      return;
+    }
     const approval = {
       typeId,
       title,

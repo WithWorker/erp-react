@@ -1,25 +1,30 @@
-import { useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
+import googleCalendarPlugin from "@fullcalendar/google-calendar";
 
-const WeeklyCalendar = () => {
-  const [events, setEvents] = useState([
-    { title: "프로젝트 미팅", start: "2025-03-25" },
-    { title: "주간 회의", start: "2025-03-27" },
-  ]);
-
+const WeeklyCalendar = ({ events }) => {
   return (
     <div className="p-4 bg-white rounded-xl shadow-md w-full">
       <FullCalendar
-        plugins={[dayGridPlugin]}
-        initialView="dayGridWeek" // 주간 단위만 표시
-        events={events}
-        height="auto"
-        headerToolbar={{
-          left: "prev,next",
-          center: "title",
-          right: "",
-        }}
+        plugins={[dayGridPlugin, googleCalendarPlugin]}
+        initialView="dayGridWeek"
+        eventSources={[
+          {
+            googleCalendarId: "ko.south_korea#holiday@group.v.calendar.google.com",
+            className: "gcal-event",
+            googleCalendarApiKey: import.meta.env.VITE_GOOGLE_CALENDAR_API_KEY, 
+          },
+          {
+            events: events, 
+          },
+        ]}
+        height="250px"
+        headerToolbar={false}
+        eventContent={(eventInfo) => (
+          <div>
+            <span>{eventInfo.event.title}</span>
+          </div>
+        )}
       />
     </div>
   );
