@@ -9,7 +9,7 @@ const ApprovalList = ({ viewMode }) => {
   const [totalPages, setTotalPages] = useState(0); // 총 페이지 수 상태
   const itemsPerPage = 8; 
   const applicantId = 1; // 임의로 설정된 applicant_id
-  const approverId = 1; // 임의로 설정된 approver_id
+  const approverId = 2; // 임의로 설정된 approver_id
   const navigate = useNavigate();
 
   useEffect(() => {
