@@ -128,7 +128,7 @@ const Dashboard = () => {
           </div>
             <ul className="space-y-3">
               {approvals.slice(0, 4).map((approval) => (
-                <li key={approval.approvalId} className="p-3 bg-gray-100 rounded-lg cursor-pointer" onClick={() => navigate("/approval/${approval.approvalId}")}>
+                <li key={approval.approvalId} className="p-3 bg-gray-100 rounded-lg cursor-pointer" onClick={() => navigate(`/approval/${approval.approvalId}`)}>
                   <span className="px-2 py-1 text-sm rounded-xl bg-gray-500 text-white mr-5">{approval.typeName}</span>
                   <span className="font-medium text-gray-800">{approval.title}</span>
                 </li>
@@ -153,13 +153,7 @@ const Dashboard = () => {
           <div className="col-span-1 sm:col-span-2 lg:col-span-3 bg-white p-6 rounded-2xl shadow-md">
             <div className="flex justify-between items-center mb-3">
               <div className="flex items-center justify-center w-full">
-                <button onClick={() => moveWeek("prev")} className="p-2 rounded-full hover:bg-gray-200">
-                  <ChevronLeft size={24} />
-                </button>
                 <h2 className="text-xl font-bold">📅 주간 일정</h2>
-                <button onClick={() => moveWeek("next")} className="p-2 rounded-full hover:bg-gray-200 ml-3">
-                  <ChevronRight size={24} />
-                </button>
               </div>
             </div>
             {memoizedWeeklyCalendar}

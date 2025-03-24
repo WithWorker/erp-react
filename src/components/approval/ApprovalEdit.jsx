@@ -19,7 +19,6 @@ const ApprovalEdit = () => {
         console.error("결재 상세 조회 오류:", error);
       }
     };
-
     fetchApprovalEdit();
   }, [approvalId]); 
 

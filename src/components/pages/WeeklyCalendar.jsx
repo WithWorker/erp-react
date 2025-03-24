@@ -19,7 +19,11 @@ const WeeklyCalendar = ({ events }) => {
           },
         ]}
         height="250px"
-        headerToolbar={false}
+        headerToolbar={{
+          left: "prev",
+          center: "title",
+          right: "next",
+        }}
         eventContent={(eventInfo) => (
           <div>
             <span>{eventInfo.event.title}</span>
