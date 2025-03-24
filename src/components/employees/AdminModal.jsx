@@ -35,6 +35,7 @@ const AdminModal = ({ onClose, onEditConfirm, employeeId, fetchEmployees }) => {
       const response = await fetch(`/api/resign/${employeeId}`, {
         method: "PUT",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });

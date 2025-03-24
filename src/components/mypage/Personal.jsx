@@ -8,8 +8,9 @@ const Personal = () => {
         fetch('/api/profile', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-            },
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
             body: JSON.stringify({ empId }), 
         })
         .then((response) => response.json())

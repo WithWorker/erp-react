@@ -12,7 +12,10 @@ const PBonus = () => {
     const fetchBonus = async () => {
       try {
         const response = await fetch(`/api/bonus/${id}`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         });
         if (response.ok) {
           const data = await response.json();

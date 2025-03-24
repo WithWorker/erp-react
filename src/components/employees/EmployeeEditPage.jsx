@@ -56,7 +56,10 @@ const EmployeeEditPage = () => {
     const fetchEmployeeData = async () => {
       try {
         const response = await fetch(`/api/emp/${id}`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         });
         if (response.ok) {
           const data = await response.json();
@@ -140,7 +143,7 @@ const EmployeeEditPage = () => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify(updatedData),
       });

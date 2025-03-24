@@ -37,8 +37,11 @@ const EmployeeListPage = () => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await fetch("api/employees", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      const response = await fetch("/api/employees", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
       if (!response.ok) throw new Error("직원 목록 조회 실패");
 
@@ -59,7 +62,7 @@ const EmployeeListPage = () => {
     }
 
     try {
-      const response = await fetch(`api/dept/${departmentId}`, {
+      const response = await fetch(`/api/dept/${departmentId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       if (!response.ok) throw new Error("부서별 직원 조회 실패");
@@ -75,7 +78,7 @@ const EmployeeListPage = () => {
 
   const handleSearch = async (name) => {
     try {
-      const response = await fetch("api/name", {
+      const response = await fetch("/api/name", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

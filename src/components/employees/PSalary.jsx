@@ -13,7 +13,10 @@ const PSalary = ({ onSalaryChange }) => {
     const fetchSalary = async () => {
       try {
         const response = await fetch(`/api/emp/${id}`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         });
         if (response.ok) {
           const data = await response.json();
@@ -42,7 +45,7 @@ const PSalary = ({ onSalaryChange }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify(paymentData),
       });

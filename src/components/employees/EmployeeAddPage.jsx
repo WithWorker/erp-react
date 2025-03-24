@@ -65,6 +65,7 @@ const EmployeeAddPage = () => {
     const response = await fetch("/api/upload", {
       method: "POST",
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: formData,

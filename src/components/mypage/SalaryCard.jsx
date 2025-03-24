@@ -15,8 +15,9 @@ const SalaryCard = () => {
         fetch(`/api/paymentHistory/${empId}`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-            },
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
             body: JSON.stringify({
                 year: currentYear,
                 month: currentMonth
