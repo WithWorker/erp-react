@@ -92,7 +92,7 @@ const initialState = {
     month: '',
     day: '',
   },
-  employees: {}, // 실제 직원 정보만 저장
+  employees: [], // 실제 직원 정보만 저장
   status: 'idle', // 'idle', 'loading', 'succeeded', 'failed'
   searchQuery: '',  // 검색어 상태 추가
   category: 'all',  // 카테고리 상태

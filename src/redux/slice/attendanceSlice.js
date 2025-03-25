@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isWorking: false,
+  clockInTime: null, // 출근 시간 추가
+  clockOutTime: null, // 퇴근 시간 추가
   attendance: {
     // 날짜별 출퇴근 시간, 휴가, 반반차 정보
     "2025-03-19": {
@@ -24,9 +26,11 @@ const attendanceSlice = createSlice({
   reducers: {
     clockIn: (state) => {
       state.isWorking = true;
+      state.clockInTime = new Date().toISOString(); // 출근 시간 저장
     },
     clockOut: (state) => {
       state.isWorking = false;
+      state.clockOutTime = new Date().toISOString(); // 퇴근 시간 저장
     },
     addAttendance: (state, action) => {
       const { date, type, time } = action.payload;

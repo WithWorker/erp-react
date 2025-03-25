@@ -5,6 +5,7 @@ import attendanceSlice from './slice/attendanceSlice.js';
 import employeeReducer from './slice/employeeSlice.js';
 import chatReducer from './slice/chatSlice.js';
 import documentReducer from './slice/documentSlice.js';
+import salesReducer from './slice/salesSlice.js';
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     employee: employeeReducer,
     chat: chatReducer,
     approval: documentReducer,
+    sales: salesReducer,
   },
 });
 

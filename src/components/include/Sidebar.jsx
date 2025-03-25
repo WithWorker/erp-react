@@ -49,20 +49,19 @@ const Sidebar = () => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500)); // 0.5초 딜레이
       console.log("출근 성공 (Mock)");
-      dispatch(clockIn());
-      setClockInMessage("출근 도장 성공!"); // 출근 메시지 설정
+      dispatch(clockIn()); // Redux 상태 업데이트
+      setClockInMessage("출근 도장 성공!");
     } catch (error) {
       console.error("출근 실패:", error);
     }
   };
-
-  // 퇴근하기 버튼 클릭
+  
   const handleClockOut = async () => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500)); // 0.5초 딜레이
+      await new Promise((resolve) => setTimeout(resolve, 500));
       console.log("퇴근 성공 (Mock)");
-      dispatch(clockOut());
-      setClockInMessage(""); // 퇴근 후 메시지 초기화
+      dispatch(clockOut()); // Redux 상태 업데이트
+      setClockInMessage("");
     } catch (error) {
       console.error("퇴근 실패:", error);
     }

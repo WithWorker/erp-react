@@ -52,7 +52,7 @@ const ApprovalList = () => {
   }); */
 
   return (
-    <div className="p-4 w-full bg-white rounded-2xl shadow-lg">
+    <div className="p-4 w-full bg-white rounded-3xl shadow-lg">
       {approvalList.length > 0 ? (
         approvalList
         .filter(item => item.status === '승인') // 승인된 문서만 필터링
