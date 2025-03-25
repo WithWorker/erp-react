@@ -59,7 +59,7 @@ const ApprovalWrite = () => {
       try {
         await addApproval(approval);
         console.log("등록 성공한 approval Data : ",approval);
-        navigate("/approval");
+        navigate("/user/approval");
       } catch (error) {
         console.error("결재 등록 실패", error);
         console.log("Approval Data:", approval);
@@ -131,7 +131,7 @@ const ApprovalWrite = () => {
                 ></textarea>
               </div>
               <div className="flex justify-end space-x-4 mt-6">
-                <button className="px-6 py-2 border border-gray-300 rounded-full text-gray-600" onClick={() => navigate("/approval")}>
+                <button className="px-6 py-2 border border-gray-300 rounded-full text-gray-600" onClick={() => navigate("/user/approval")}>
                   취소
                 </button>
                 <button 

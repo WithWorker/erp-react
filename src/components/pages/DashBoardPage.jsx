@@ -142,7 +142,7 @@ const Dashboard = () => {
           <div className="bg-white p-6 rounded-2xl shadow-md">
             <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold flex-grow text-center">📝 내 결재함</h2>
-            <button className="bg-[#006D2C] text-white p-2 rounded-full shadow-md hover:bg-green-600 transition-all" onClick={() => navigate("/approval")}>
+            <button className="bg-[#006D2C] text-white p-2 rounded-full shadow-md hover:bg-green-600 transition-all" onClick={() => navigate("/user/approval")}>
               <Plus size={20} />
             </button>
           </div>
@@ -152,7 +152,7 @@ const Dashboard = () => {
                 <li
                   key={approval.approvalId}
                   className="p-3 bg-gray-100 rounded-lg cursor-pointer"
-                  onClick={() => navigate(`/approval/${approval.approvalId}`)}
+                  onClick={() => navigate(`/user/approval/${approval.approvalId}`)}
                 >
                   <span className="px-2 py-1 text-sm rounded-xl bg-gray-500 text-white mr-5">
                     {approval.typeName}
@@ -168,7 +168,7 @@ const Dashboard = () => {
           <div className="bg-white p-6 rounded-2xl shadow-md">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold flex-grow text-center">🔔 알림함</h2>
-              <button className="bg-[#006D2C] text-white p-2 rounded-full shadow-md hover:bg-green-600 transition-all" onClick={() => navigate("/notifications")}>
+              <button className="bg-[#006D2C] text-white p-2 rounded-full shadow-md hover:bg-green-600 transition-all" onClick={() => navigate("/user/notifications")}>
                 <Plus size={20} />
               </button>
             </div>
