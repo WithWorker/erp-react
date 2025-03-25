@@ -12,6 +12,7 @@ import ApprovalEdit from './components/approval/ApprovalEdit';
 import EmployeeListPage from './components/employees/EmployeeListPage';
 import EmployeeAddPage from './components/employees/EmployeeAddPage';
 import EmployeeEditPage from './components/employees/EmployeeEditPage';
+import Test from './components/pages/Test';
 
 function App() {
 
