@@ -3,13 +3,13 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import googleCalendarPlugin from '@fullcalendar/google-calendar';
-import { ChevronLeft, ChevronRight } from "react-bootstrap-icons"; // Search 아이콘 추가
+import { ChevronLeft, ChevronRight } from "react-bootstrap-icons"; 
 import Sidebar from "../include/Sidebar";
 import Header from "../include/Header";
 import TopNav from "./TopNav";
 import { useNavigate } from "react-router-dom";
 import '/src/assets/calendar.css';
-import { getAllCalendars, getDeptCalendars, getMyCalendars } from "../../service/calendarLogic";
+import { findById, getAllCalendars, getDeptCalendars, getMyCalendars } from "../../service/calendarLogic";
 import EventList from "./EventList"; 
 
 const CalendarPage = () => {
@@ -21,9 +21,21 @@ const CalendarPage = () => {
   const [events, setEvents] = useState([]); 
   const [viewMode, setViewMode] = useState('all'); // 'all', 'personal', 'department'
   const [selectedEvents, setSelectedEvents] = useState([]); // 선택된 날짜의 일정 목록
-
-  const applicantId = 2; // 특정 사용자의 ID (임시 값)
-  const departmentId = 3; // 부서명
+  const [applicantId, setApplicantId] = useState(localStorage.getItem('empId'));
+  const [departmentId, setDepartmentId] = useState(null);
+  
+  // 로그인한 사원의 부서 데이터 가져오기
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const userInfo = await findById();
+        setDepartmentId(userInfo.departmentId);
+      } catch (error) {
+        console.error("부서 정보 불러오기 오류 발생: ", error);
+      }
+    };
+    fetchUserInfo();
+    }, []);
 
   // 일정 데이터 불러오기
   useEffect(() => {
@@ -62,6 +74,7 @@ const CalendarPage = () => {
             description: event.content,
             extendedProps: {
               applicant: event.memberDto.name,
+              applicantId: event.memberDto.empId,
               dept: event.memberDto.dept,
             }
           };

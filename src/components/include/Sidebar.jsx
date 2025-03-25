@@ -22,7 +22,7 @@ const Sidebar = () => {
       setEmpId(storedEmpId);
     }
 
-    // 📌 localStorage에서 출근 상태 가져오기
+    // localStorage에서 출근 상태 가져오기
     const workingStatus = localStorage.getItem("isWorking");
     setIsWorking(workingStatus === "true"); // "true" 문자열을 boolean으로 변환
   }, []);
@@ -54,7 +54,7 @@ const Sidebar = () => {
       const message = await response.text();
       showNotificationModal(message);
 
-      // 📌 출근 상태를 localStorage에 저장
+      // 출근 상태를 localStorage에 저장
       localStorage.setItem("isWorking", "true");
       setIsWorking(true);
 
@@ -87,7 +87,7 @@ const Sidebar = () => {
       const message = await response.text();
       showNotificationModal(message);
 
-      // 📌 퇴근 상태를 localStorage에 저장
+      // 퇴근 상태를 localStorage에 저장
       localStorage.setItem("isWorking", "false");
       setIsWorking(false);
 

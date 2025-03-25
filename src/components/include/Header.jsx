@@ -57,12 +57,6 @@ const Header = () => {
     if (path.startsWith("/approval")) return "결재";
 
     switch (path) {
-      case "/write":
-        return "일정등록";
-      case "/vacation":
-        return "휴가";
-      case "/board":
-        return "게시판";
       case "/chat":
         return "채팅";
       case "/employees":
