@@ -23,8 +23,8 @@ function App() {
         <Route path="/dashboard" element={<DashBoardPage />} />
         <Route path="/user/employees" element={<EmployeeListPage />} />
         <Route path="/admin/join" element={<EmployeeAddPage />} />
-        <Route path="/update/:id" element={<EmployeeEditPage />} />
-        <Route path="/info" element={<MyPage/>} />
+        <Route path="/admin/update/:id" element={<EmployeeEditPage />} />
+        <Route path="/user/info" element={<MyPage/>} />
         <Route path="/calendar" element={<CalendarPage/>} />
         <Route path="/calendar/:calendarId" element={<CalendarDetail/>} />
         <Route path="/calendar/add" element={<CalendarWrite/>} />

@@ -12,12 +12,12 @@ const SalaryCard = () => {
     const slipRef = useRef();
 
     useEffect(() => {
-        fetch(`/api/paymentHistory/${empId}`, {
+        fetch(`/api/user/paymentHistory/${empId}`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
+            },
             body: JSON.stringify({
                 year: currentYear,
                 month: currentMonth

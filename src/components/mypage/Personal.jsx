@@ -5,12 +5,12 @@ const Personal = () => {
     const empId = localStorage.getItem("empId");
 
     useEffect(() => {
-        fetch('/api/profile', {
+        fetch('/api/user/profile', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
+            },
             body: JSON.stringify({ empId }), 
         })
         .then((response) => response.json())

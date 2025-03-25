@@ -29,7 +29,7 @@ const EmployeeListPage = () => {
   const [department, setDepartment] = useState("전체보기");
   const [selectedEmployeeId, setSelectedEmployeeId] = useState(null); 
   const [isModalOpen, setIsModalOpen] = useState(false); 
-  const isAdmin = localStorage.getItem("role") === "ADMIN";
+  const isAdmin = localStorage.getItem("role") === "ROLE_ADMIN";
 
   useEffect(() => {
     fetchEmployees();
@@ -62,7 +62,7 @@ const EmployeeListPage = () => {
     }
 
     try {
-      const response = await fetch(`/api/dept/${departmentId}`, {
+      const response = await fetch(`/api/user/dept/${departmentId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       if (!response.ok) throw new Error("부서별 직원 조회 실패");
@@ -78,7 +78,7 @@ const EmployeeListPage = () => {
 
   const handleSearch = async (name) => {
     try {
-      const response = await fetch("/api/name", {
+      const response = await fetch("/api/user/name", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -107,7 +107,7 @@ const EmployeeListPage = () => {
   };
 
   const handleEditConfirm = () => {
-    navigate(`/update/${selectedEmployeeId}`); 
+    navigate(`/admin/update/${selectedEmployeeId}`); 
     setIsModalOpen(false); 
   };
 

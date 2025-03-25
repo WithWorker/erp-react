@@ -14,7 +14,7 @@ const AttendanceCalendar = () => {
     if (!empId) return;
     const requestBody = { year, month: String(month).padStart(2, '0') };
 
-    fetch(`/api/attendance/${empId}`, {
+    fetch(`/api/user/attendance/${empId}`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",

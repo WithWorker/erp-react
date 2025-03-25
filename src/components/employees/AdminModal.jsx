@@ -10,7 +10,7 @@ const AdminModal = ({ onClose, onEditConfirm, employeeId, fetchEmployees }) => {
   const handleDeleteEmployee = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/delete/${employeeId}`, {
+      const response = await fetch(`/api/admin/delete/${employeeId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -32,7 +32,7 @@ const AdminModal = ({ onClose, onEditConfirm, employeeId, fetchEmployees }) => {
   const handleResignEmployee = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/resign/${employeeId}`, {
+      const response = await fetch(`/api/admin/resign/${employeeId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

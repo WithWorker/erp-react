@@ -62,10 +62,9 @@ const EmployeeAddPage = () => {
     const formData = new FormData();
     formData.append("file", profileImage);
 
-    const response = await fetch("/api/upload", {
+    const response = await fetch("/api/admin/upload", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: formData,
@@ -114,7 +113,7 @@ const EmployeeAddPage = () => {
 
       if (response.ok) {
         alert("직원 등록 성공!");
-        navigate("/employees");
+        navigate("/user/employees");
       } else {
         const errorMessage = await response.text();
         alert(`등록 실패: ${errorMessage}`);
@@ -254,7 +253,7 @@ const EmployeeAddPage = () => {
               <button onClick={handleSubmit} className="bg-[#006D2C] text-white py-2 rounded-full w-40 text-lg">
                 등록하기
               </button>
-              <button type="button" onClick={() => navigate("/employees")} className="border-1 border-[#323232] text-[#323232] py-2 rounded-full w-40">닫기</button>
+              <button type="button" onClick={() => navigate("/user/employees")} className="border-1 border-[#323232] text-[#323232] py-2 rounded-full w-40">닫기</button>
             </div>
           </div>
         </div>

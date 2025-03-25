@@ -14,7 +14,7 @@ const Sidebar = () => {
   const [modalMessage, setModalMessage] = useState("");
 
   // 관리자 역할 확인
-  const isAdmin = localStorage.getItem("role") === "ADMIN";
+  const isAdmin = localStorage.getItem("role") === "ROLE_ADMIN";
 
   useEffect(() => {
     const storedEmpId = localStorage.getItem("empId");
@@ -42,7 +42,7 @@ const Sidebar = () => {
     }
 
     try {
-      const response = await fetch(`/api/attendance/in/${empId}`, {
+      const response = await fetch(`/api/user/attendance/in/${empId}`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -58,7 +58,7 @@ const Sidebar = () => {
       localStorage.setItem("isWorking", "true");
       setIsWorking(true);
 
-      if (window.location.pathname === "/info") {
+      if (window.location.pathname === "/user/info") {
         setTimeout(() => window.location.reload(), 2000);
       }
     } catch (error) {
@@ -75,7 +75,7 @@ const Sidebar = () => {
     }
 
     try {
-      const response = await fetch(`/api/attendance/out/${empId}`, {
+      const response = await fetch(`/api/user/attendance/out/${empId}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -91,7 +91,7 @@ const Sidebar = () => {
       localStorage.setItem("isWorking", "false");
       setIsWorking(false);
 
-      if (window.location.pathname === "/info") {
+      if (window.location.pathname === "/user/info") {
         setTimeout(() => window.location.reload(), 2000);
       }
     } catch (error) {
@@ -103,12 +103,12 @@ const Sidebar = () => {
     // 메뉴 목록
     const menuItems = [
       { name: "DashBoard", icon: BsGrid, path: "/dashboard" },
-      { name: "MyPage", icon: BsPerson, path: "/info" },
+      { name: "MyPage", icon: BsPerson, path: "/user/info" },
       { name: "캘린더", icon: BsCalendar, path: "/calendar" },
       { name: "휴가", icon: BsTree, path: "/approval" },
       { name: "채팅", icon: BsChat, path: "/chat" },
-      { name: "직원조회", icon: BsPerson, path: "/employees" },
-      ...(isAdmin ? [{ name: "직원등록", icon: BsPerson, path: "/join" }] : []), // 관리자일 때만 "직원등록" 메뉴 추가
+      { name: "직원조회", icon: BsPerson, path: "/user/employees" },
+      ...(isAdmin ? [{ name: "직원등록", icon: BsPerson, path: "/admin/join" }] : []), // 관리자일 때만 "직원등록" 메뉴 추가
     ];
 
   return (

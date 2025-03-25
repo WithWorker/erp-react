@@ -11,7 +11,7 @@ const PBonus = () => {
     // 성과급 조회 요청
     const fetchBonus = async () => {
       try {
-        const response = await fetch(`/api/bonus/${id}`, {
+        const response = await fetch(`/api/admin/bonus/${id}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -34,7 +34,7 @@ const PBonus = () => {
   // 급여 저장 요청
   const handleSavePayment = async () => {
     try {
-      const response = await fetch(`/api/savePayment/${id}`, {
+      const response = await fetch(`/api/admin/savePayment/${id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

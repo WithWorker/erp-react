@@ -55,7 +55,7 @@ const EmployeeEditPage = () => {
   useEffect(() => {
     const fetchEmployeeData = async () => {
       try {
-        const response = await fetch(`/api/emp/${id}`, {
+        const response = await fetch(`/api/admin/emp/${id}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -139,7 +139,7 @@ const EmployeeEditPage = () => {
     };
 
     try {
-      const response = await fetch(`/api/update/${id}`, {
+      const response = await fetch(`/api/admin/update/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -150,7 +150,7 @@ const EmployeeEditPage = () => {
 
       if (response.ok) {
         alert('수정이 완료되었습니다.');
-        navigate("/employees");
+        navigate("/user/employees");
       } else {
         alert('수정 실패');
       }
@@ -248,7 +248,7 @@ const EmployeeEditPage = () => {
           {/* 버튼 */}
           <div className='flex justify-end mt-6'>
             <button type="button" onClick={handleUpdate} className="bg-[#006D2C] text-white py-2 mr-4 rounded-full w-40">수정하기</button>
-            <button type="button" onClick={() => navigate("/employees")} className="border-1 border-[#323232] text-[#323232] py-2 rounded-full w-40">닫기</button>
+            <button type="button" onClick={() => navigate("/user/employees")} className="border-1 border-[#323232] text-[#323232] py-2 rounded-full w-40">닫기</button>
           </div>
 
         </div> 
