@@ -5,7 +5,7 @@ import Header from "../include/Header";
 import WeeklyCalendar from "./WeeklyCalendar";
 import { useEffect, useState, useRef, useMemo } from "react";
 import { getApplicant } from "../../service/approvalLogic";
-import { getAllCalendars } from "../../service/calendarLogic";
+import { findById, getAllCalendars } from "../../service/calendarLogic";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -21,6 +21,23 @@ const Dashboard = () => {
 
   const [approvals, setApprovals] = useState([]);
   const [events, setEvents] = useState([]);
+  const [name, setName] = useState('');
+  const [imgUrl, setImgUrl] = useState('');
+
+  // 로그인한 사원의 부서 데이터 가져오기
+    useEffect(() => {
+      const fetchUserInfo = async () => {
+        try {
+          const userInfo = await findById();
+          setName(userInfo.name);
+          setImgUrl(userInfo.imgUrl);
+        } catch (error) {
+          console.error("사원 정보 불러오기 오류 발생: ", error);
+        }
+      };
+      fetchUserInfo();
+      }, []);
+
 
   useEffect(() => {
     const updateClock = () => {
@@ -113,11 +130,14 @@ const Dashboard = () => {
         <Header />
         <main className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div className="bg-white p-6 rounded-2xl shadow-md flex flex-col items-center">
-            <img src="/src/assets/default.jpg" alt="User" className="w-35 h-35 rounded-full mb-3" />
+          <img
+          src={`http://localhost:7777/${imgUrl}`} // imgUrl이 없으면 기본 이미지 경로 사용
+          alt="User"
+          className="w-35 h-35 rounded-full mb-3"
+          />
+            <p>{name}</p>
             <p ref={timeRef} className="text-[#006D2C] font-semibold text-lg"></p>
-            <button className="mt-3 bg-[#006D2C] text-white px-6 py-3 rounded-lg shadow-md hover:bg-green-600 transition-all">
-              퇴근 체크하기
-            </button>
+        
           </div>
           <div className="bg-white p-6 rounded-2xl shadow-md">
             <div className="flex justify-between items-center mb-4">
