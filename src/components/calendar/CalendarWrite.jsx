@@ -1,25 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ChevronDown } from "react-bootstrap-icons";
 import Sidebar from "../include/Sidebar";
 import Header from "../include/Header";
 import categoryColors from "../../utils/categoryColors";
 import { useNavigate } from "react-router-dom";
-import { addCalendar } from "../../service/calendarLogic";
+import { addCalendar, findById } from "../../service/calendarLogic";
 
 const CalendarWrite = () => {
 
   const navigate = useNavigate();
 
+  const [applicantId, setApplicantId] = useState(Number(localStorage.getItem("empId"))); 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [applicantId, setApplicantId] = useState(""); // 사원번호 추가
-
   const [startDate, setStartDate] = useState(
     new Date().toLocaleDateString("en-CA")
   );
   const [endDate, setEndDate] = useState(
     new Date().toLocaleDateString("en-CA")
   ); 
+  const [name, setName] = useState("");
+
+  // 로그인한 사원의 부서 데이터 가져오기
+    useEffect(() => {
+      const fetchUserInfo = async () => {
+        try {
+          const userInfo = await findById();
+          setName(userInfo?.name || "");
+        } catch (error) {
+          console.error("이름 정보 불러오기 오류 발생: ", error);
+        }
+      };
+      fetchUserInfo();
+      }, []);
+  
 
   // 일정 등록
   const handleSubmit = async () => {
@@ -49,11 +63,6 @@ const CalendarWrite = () => {
         navigate("/calendar"); 
       } catch (error) {
         console.error("일정 등록 실패");
-        console.log("Title:", title);
-        console.log("Content:", content);
-        console.log("Start Date:", startDate);
-        console.log("End Date:", endDate);
-        console.log("Applicant ID:", applicantId);
       }
     } else {
       console.log("일정 등록 취소");
@@ -65,8 +74,6 @@ const CalendarWrite = () => {
       <Sidebar />
       <div className="flex-1 p-6">
         <Header />
-        
-        {/* 카테고리 디자인만 남겨두기 */}
         <div className="flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-4 w-full mb-6">
           <div className="relative md:w-1/5 w-full">
             <div
@@ -80,8 +87,7 @@ const CalendarWrite = () => {
               <ChevronDown className="ml-auto text-gray-500" />
             </div>
           </div>
-           {/* 참석자 검색 영역 */}
-            <div className="relative md:w-4/5 w-full">
+          <div className="relative md:w-4/5 w-full">
             <input
               type="text"
               placeholder="참석자 이름 검색"
@@ -89,7 +95,6 @@ const CalendarWrite = () => {
             />
           </div>
         </div>
-
         <div className="bg-white p-6 rounded-2xl shadow-lg space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
@@ -114,25 +119,12 @@ const CalendarWrite = () => {
               <label className="text-sm font-semibold">작성자</label>
               <input
                 type="text"
+                value={name || ""}
+                readOnly
                 className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-green-600"
-                placeholder="로그인 정보에서 불러온 작성자 이름"
               />
             </div>
           </div>
-
-          {/* (db테스트용 로그인 연결 시 삭제 예정) */}
-          <div>
-              <label className="text-sm font-semibold">사번(db테스트용 삭제 예정)</label>
-              <input
-                type="text"
-                value={applicantId}
-                onChange={(e) => setApplicantId(parseInt(e.target.value))}
-                className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-green-600"
-                placeholder="사번 applicantId"
-              />
-          </div>
-          {/* (db테스트용 삭제 예정) */}
-
           <div>
             <label className="text-sm font-semibold">일정 제목</label>
             <input
@@ -152,7 +144,6 @@ const CalendarWrite = () => {
               placeholder="일정 내용을 입력하세요."
             />
           </div>
-          {/* 버튼 영역 */}
           <div className="flex justify-end space-x-3">
             <button
               className="bg-gray-300 text-gray-700 px-6 py-2 rounded-full hover:bg-gray-400 transition"
@@ -161,7 +152,7 @@ const CalendarWrite = () => {
               취소
             </button>
             <button 
-              onClick={() => handleSubmit()}
+              onClick={handleSubmit}
               className="bg-[#006D2C] text-white px-6 py-2 rounded-full hover:bg-green-800 transition">
               등록
             </button>

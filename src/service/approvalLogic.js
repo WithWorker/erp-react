@@ -24,7 +24,7 @@ export const getApplicantPending = async (applicantId) => {
   }
 };
 
-// 결재 신청 목록 (신청자)
+// 결재 승인, 반려 목록 (신청자)
 export const getApplicantApproved = async (applicantId) => {
   try {
     const response = await axios.get(`/api/approval/applicantApproved/${applicantId}`);
@@ -72,6 +72,30 @@ export const readApproval = async (approvalId) => {
   }
 }
 
+// 승인자 검색
+export const searchApprover = async (keyword) => {
+  try {
+    const response = await axios.get(`/api/approval/search/${keyword}`);
+    console.log('검색결재 목록:', response.data);
+    return response.data;  
+  } catch (error) {
+    console.error("검색결재 목록 오류 발생: ", error);
+    throw error; 
+  }
+}
+
+// 승인자 조직도
+export const getOrganization = async () => {
+  try{
+    const response = await axios.get('/api/approval/organization');
+    console.log('승인자 조직도 목록:', response.data);
+    return response.data;  
+  } catch (error) {
+    console.error("승인자 조직도 목록 오류 발생: ", error);
+    throw error;
+  }
+}
+
 // 결재 등록하기 (신청자)
 export const addApproval = async (approval) => {
   try {
@@ -84,15 +108,18 @@ export const addApproval = async (approval) => {
 }
 
 // 결재 수정(status) : 승인자 각각 상태 변경
-export const updateStatus = async (approvalId, approval) => {
+export const updateStatus = async (approvalId, approverId, approverStatusId) => {
   try {
-    const response = await axios.put(`/api/approval/edit/${approvalId}`, approval);
-    return response.data;  
+    const response = await axios.put(`/api/approval/edit/${Number(approvalId)}`, {
+      approverId, 
+      approverStatusId
+    });
+    return response.data;
   } catch (error) {
     console.error("결재 상태 수정 오류 발생: ", error);
-    throw error;  
+    throw error;
   }
-}
+};
 
 // 결재 삭제하기
 export const deleteapproval = async (approvalId) => {

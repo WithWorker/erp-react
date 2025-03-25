@@ -22,6 +22,30 @@
     font-size: 14px;
 }
 
+/* 하루짜리 이벤트 hover */
+.fc-event:hover {
+    background-color: rgba(107, 114, 128, 0.4) !important;
+    color: white !important;  /* 글자색을 흰색으로 변경 */
+}
+
+/* 이틀 이상 지속되는 일정 hover */
+.fc-h-event:hover {
+    background-color: rgba(107, 114, 128, 0.4) !important;
+    color: white !important;  /* 글자색을 흰색으로 변경 */
+}
+
+/* 다중일 이벤트 hover (이틀 이상의 일정에도 적용) */
+.fc-event.fc-daygrid-block-event:hover {
+    background-color: rgba(107, 114, 128, 0.4) !important;
+    color: white !important;  /* 글자색을 흰색으로 변경 */
+}
+
+/* 다중일 이벤트의 각 조각에 hover 적용 */
+.fc-daygrid-event:hover {
+    background-color: rgba(107, 114, 128, 0.4) !important;
+    color: white !important;  /* 글자색을 흰색으로 변경 */
+}
+
 /* 공휴일 스타일 - 구글 캘린더 일정에 대해 빨간색 적용 */
 .gcal-event {
     background: none !important;
@@ -38,6 +62,14 @@
 .gcal-event span {
     color: red !important; /* 공휴일 글씨 빨간색 */
     padding-left: 3px !important; /* 왼쪽 여백 추가 */
+}
+
+/* 공휴일에 hover 스타일을 비활성화 */
+.gcal-event:hover {
+    background-color: transparent !important;
+    color: red !important; /* hover시 색상이 변경되지 않도록 */
+    cursor: default !important; /* hover 시 커서 변경 방지 */
+    pointer-events: none !important; /* hover 이벤트를 완전히 비활성화 */
 }
 
 /* 선택한 날짜에 배경색 주기 */
@@ -85,4 +117,10 @@
 .fc-h-event .fc-event-main,
 .fc-h-event .fc-event-title {
     color: black !important; /* 이틀 이상의 일정 글씨를 검정색으로 강제 설정 */
+}
+
+/* 이틀 이상의 일정 hover 시 글자색을 흰색으로 변경 */
+.fc-h-event:hover .fc-event-title,
+.fc-h-event:hover .fc-event-main {
+    color: white !important; /* hover 상태에서 글자색을 흰색으로 */
 }

@@ -1,5 +1,20 @@
 import axios from 'axios';
 
+// 로그인한 회원 정보 불러오기
+export const findById = async(empId) => {
+  try {
+    const empId = localStorage.getItem("empId");
+    if(!empId) throw new Error("로그인이 필요합니다.");
+
+    const response = await axios.get(`/api/emp/${empId}`);  // Vite의 프록시를 사용하여 '/api' 경로로 요청
+    console.log('로그인한 회원 정보 불러오기:', response.data); // 여기서 데이터를 확인
+    return response.data;  // 반환된 데이터
+  } catch (error) {
+    console.error("로그인한 회원 정보 불러오기 오류 발생: ", error);
+    throw error;  // 오류 처리
+  } 
+}
+
 // 사원 전체 일정 목록 
 export const getAllCalendars = async () => {
   try {

@@ -21,12 +21,6 @@ const Header = () => {
     }
     
     switch (path) {
-      case "/calendar":
-        return "캘린더";
-      case "/write":
-        return "일정등록";
-      case "/vacation":
-        return "휴가";
       case "/board":
         return "게시판";
       case "/chat":
