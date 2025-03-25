@@ -6,11 +6,11 @@ import WeeklyCalendar from "./WeeklyCalendar";
 import { useEffect, useState, useRef, useMemo } from "react";
 import { getApplicant } from "../../service/approvalLogic";
 import { getAllCalendars } from "../../service/calendarLogic";
-import { ChevronLeft, ChevronRight } from "react-bootstrap-icons";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const applicantId = 1;
+  const applicantId = localStorage.getItem("empId");
+
   const timeRef = useRef(null); // useRef를 사용하여 리렌더링 방지
 
   const notifications = [
@@ -126,14 +126,24 @@ const Dashboard = () => {
               <Plus size={20} />
             </button>
           </div>
+          {approvals.length > 0 ? (
             <ul className="space-y-3">
               {approvals.slice(0, 4).map((approval) => (
-                <li key={approval.approvalId} className="p-3 bg-gray-100 rounded-lg cursor-pointer" onClick={() => navigate(`/approval/${approval.approvalId}`)}>
-                  <span className="px-2 py-1 text-sm rounded-xl bg-gray-500 text-white mr-5">{approval.typeName}</span>
+                <li
+                  key={approval.approvalId}
+                  className="p-3 bg-gray-100 rounded-lg cursor-pointer"
+                  onClick={() => navigate(`/approval/${approval.approvalId}`)}
+                >
+                  <span className="px-2 py-1 text-sm rounded-xl bg-gray-500 text-white mr-5">
+                    {approval.typeName}
+                  </span>
                   <span className="font-medium text-gray-800">{approval.title}</span>
                 </li>
               ))}
             </ul>
+          ) : (
+            <p className="text-center text-gray-500 mt-4">결재할 문서가 없습니다.</p>
+          )}
           </div>
           <div className="bg-white p-6 rounded-2xl shadow-md">
             <div className="flex justify-between items-center mb-4">

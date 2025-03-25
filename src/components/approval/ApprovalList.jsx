@@ -8,8 +8,8 @@ const ApprovalList = ({ viewMode }) => {
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태
   const [totalPages, setTotalPages] = useState(0); // 총 페이지 수 상태
   const itemsPerPage = 8; 
-  const applicantId = 1; // 임의로 설정된 applicant_id
-  const approverId = 2; // 임의로 설정된 approver_id
+  const applicantId = localStorage.getItem('empId'); 
+  const approverId = localStorage.getItem('empId')
   const navigate = useNavigate();
 
   useEffect(() => {

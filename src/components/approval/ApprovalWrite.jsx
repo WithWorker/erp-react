@@ -11,7 +11,7 @@ import { addApproval } from '../../service/approvalLogic';
 const ApprovalWrite = () => {
   const navigate = useNavigate();
 
-  const [applicantId, setApplicantId] = useState("");
+  const [applicantId, setApplicantId] = useState(Number(localStorage.getItem("empId")));
   const [typeId, setTypeId] = useState('');
   const [title, setTitle] = useState('');
   const [dateRange, setDateRange] = useState([null, null]);
@@ -104,16 +104,10 @@ const ApprovalWrite = () => {
                     placeholder="제목을 입력하세요."
                   />
                 </div>
-                <div>
-                  <label className="text-sm font-semibold">사번(db테스트용 삭제 예정)</label>
-                  <input
-                    type="text"
-                    value={applicantId}
-                    onChange={(e) => setApplicantId(parseInt(e.target.value))}
-                    className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-green-600"
-                    placeholder="사번 applicantId"
-                  />
-                </div>
+                
+              </div>
+              <div className="mb-4">
+                
               </div>
               <div className="mb-4">
                 <label className="font-bold block text-[#323232] mb-1">날짜 선택</label>
