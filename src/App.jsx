@@ -21,8 +21,8 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/dashboard" element={<DashBoardPage />} />
-        <Route path="/employees" element={<EmployeeListPage />} />
-        <Route path="/join" element={<EmployeeAddPage />} />
+        <Route path="/user/employees" element={<EmployeeListPage />} />
+        <Route path="/admin/join" element={<EmployeeAddPage />} />
         <Route path="/update/:id" element={<EmployeeEditPage />} />
         <Route path="/info" element={<MyPage/>} />
         <Route path="/calendar" element={<CalendarPage/>} />

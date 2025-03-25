@@ -37,7 +37,7 @@ const EmployeeListPage = () => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await fetch("/api/employees", {
+      const response = await fetch("/api/user/employees", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

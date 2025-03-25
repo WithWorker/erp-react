@@ -103,7 +103,7 @@ const EmployeeAddPage = () => {
         accountNumber, 
       };
 
-      const response = await fetch("/api/join", {
+      const response = await fetch("/api/admin/join", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
