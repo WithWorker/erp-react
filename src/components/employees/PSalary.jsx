@@ -12,8 +12,11 @@ const PSalary = ({ onSalaryChange }) => {
   useEffect(() => {
     const fetchSalary = async () => {
       try {
-        const response = await fetch(`/api/emp/${id}`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        const response = await fetch(`/api/admin/emp/${id}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         });
         if (response.ok) {
           const data = await response.json();
@@ -38,11 +41,11 @@ const PSalary = ({ onSalaryChange }) => {
     };
 
     try {
-      const response = await fetch(`/api/savePayment/${id}`, {
+      const response = await fetch(`/api/admin/savePayment/${id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify(paymentData),
       });

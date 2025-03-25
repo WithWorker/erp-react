@@ -29,7 +29,7 @@ const EmployeeListPage = () => {
   const [department, setDepartment] = useState("전체보기");
   const [selectedEmployeeId, setSelectedEmployeeId] = useState(null); 
   const [isModalOpen, setIsModalOpen] = useState(false); 
-  const isAdmin = localStorage.getItem("role") === "ADMIN";
+  const isAdmin = localStorage.getItem("role") === "ROLE_ADMIN";
 
   useEffect(() => {
     fetchEmployees();
@@ -37,8 +37,11 @@ const EmployeeListPage = () => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await fetch("api/employees", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      const response = await fetch("/api/user/employees", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
       if (!response.ok) throw new Error("직원 목록 조회 실패");
 
@@ -59,7 +62,7 @@ const EmployeeListPage = () => {
     }
 
     try {
-      const response = await fetch(`api/dept/${departmentId}`, {
+      const response = await fetch(`/api/user/dept/${departmentId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       if (!response.ok) throw new Error("부서별 직원 조회 실패");
@@ -75,7 +78,7 @@ const EmployeeListPage = () => {
 
   const handleSearch = async (name) => {
     try {
-      const response = await fetch("api/name", {
+      const response = await fetch("/api/user/name", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -104,7 +107,7 @@ const EmployeeListPage = () => {
   };
 
   const handleEditConfirm = () => {
-    navigate(`/update/${selectedEmployeeId}`); 
+    navigate(`/admin/update/${selectedEmployeeId}`); 
     setIsModalOpen(false); 
   };
 
@@ -140,7 +143,7 @@ const EmployeeListPage = () => {
                   <th className="p-2 text-center font-bold">전화번호</th>
                   <th className="p-2 text-center font-bold">이메일</th>
                   <th className="p-2 text-center font-bold">입사일</th>
-                  <th className="p-2 text-center font-bold">퇴사일</th>
+                  <th className="p-2 text-center font-bold">상태</th>
                   <th className="p-2 text-center font-bold"></th>
                 </tr>
               </thead>
@@ -160,7 +163,14 @@ const EmployeeListPage = () => {
                     <td className="p-4 text-center">{employee.phone}</td>
                     <td className="p-4 text-center">{employee.email}</td>
                     <td className="p-4 text-center">{employee.hireDate}</td>
-                    <td className="p-4 text-center">{employee.resignDate}</td>
+                    <td className="p-4 text-center">
+                      <span
+                        className={`px-2 py-1 text-sm rounded-full ${employee.memberRole === "USER"? "border-2 border-green-500 text-green-500 bg-white"
+                            : employee.memberRole === "SUSPENDED"? "border-2 border-yellow-500 text-yellow-500 bg-white"
+                            : "border-2 border-[#006D2C] text-[#006D2C] bg-white"}`}>
+                      {employee.memberRole === "USER" ? "재직" : employee.memberRole === "SUSPENDED" ? "퇴사" : "-"}
+                      </span>
+                    </td>
                     <td className="p-4 text-center">
                     {isAdmin && (
                       <button
@@ -200,7 +210,6 @@ const EmployeeListPage = () => {
       <AdminModal
         onClose={handleModalClose}
         onEditConfirm={handleEditConfirm}
-        onAddEmployee={() => navigate('/join')}
         employeeId={selectedEmployeeId}
         fetchEmployees={fetchEmployees} 
       />
