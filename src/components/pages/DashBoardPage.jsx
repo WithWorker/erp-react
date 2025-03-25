@@ -24,7 +24,7 @@ const Dashboard = () => {
   const [name, setName] = useState('');
   const [imgUrl, setImgUrl] = useState('');
 
-  // 로그인한 사원의 부서 데이터 가져오기
+  // 로그인한 사원의 데이터 가져오기
     useEffect(() => {
       const fetchUserInfo = async () => {
         try {
