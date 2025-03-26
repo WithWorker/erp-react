@@ -3,6 +3,11 @@ import axios from 'axios';
 export const findById = async() => {
   try {
     const empId = localStorage.getItem("empId");
+    const token = localStorage.getItem("token");
+    console.log("Sending Token:", token); // 여기서도 확인
+    if (!token) {
+        throw new Error("토큰이 없습니다. 로그인 후 다시 시도하세요.");
+    }
     if(!empId) throw new Error("로그인이 필요합니다.");
     const response = await axios.get(`/api/user/emp/${empId}`, {
       headers: {
@@ -13,6 +18,8 @@ export const findById = async() => {
     return response.data;
   } catch (error) {
     console.error("로그인한 회원 정보 불러오기 오류 발생: ", error);
+    console.log("empId:"+localStorage.getItem("empId"));
+    console.log("token:"+localStorage.getItem("token"));
     throw error;
   }
 }
