@@ -29,7 +29,7 @@ const CalendarDetail = () => {
   
   // 일정 수정 페이지 이동
   const handleEditClick = () => {
-    navigate(`/calendar/edit/${calendarId}`)
+    navigate(`/user/calendar/edit/${calendarId}`)
   }
 
   // 일정 삭제
@@ -38,7 +38,7 @@ const CalendarDetail = () => {
     if (confirmDelete) {
       try {
         await deleteCalendar(calendarId);  // 삭제 API 호출
-        navigate("/calendar");  // 삭제 후 캘린더 페이지로 리다이렉트
+        navigate("/user/calendar");  // 삭제 후 캘린더 페이지로 리다이렉트
       } catch (error) {
         console.error("일정 삭제 실패:", error);
       }
@@ -120,7 +120,7 @@ const CalendarDetail = () => {
                     삭제
                   </button>
                   <button
-                  onClick={() => navigate("/calendar")}
+                  onClick={() => navigate("/user/calendar")}
                   className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400"
                 >
                   닫기
@@ -128,7 +128,7 @@ const CalendarDetail = () => {
                 </>
               ) : (
                 <button
-                  onClick={() => navigate("/calendar")}
+                  onClick={() => navigate("/user/calendar")}
                   className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400"
                 >
                   닫기

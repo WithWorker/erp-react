@@ -52,7 +52,7 @@ const ApprovalDetail = () => {
     if (confirmDelete) {
       try {
         await deleteapproval(approvalId); 
-        navigate("/approval"); 
+        navigate("/user/approval"); 
       } catch (error) {
         console.error("결재 삭제 실패:", error);
       }
@@ -143,7 +143,7 @@ const ApprovalDetail = () => {
             삭제
           </button>
           <button
-            onClick={() => navigate("/approval")}
+            onClick={() => navigate("/user/approval")}
             className="bg-gray-300 text-gray-700 px-4 py-2 rounded-full hover:bg-gray-400"
           >
             닫기

@@ -45,9 +45,9 @@ const ApprovalList = ({ viewMode }) => {
 
   const detailRedirect = (approvalId) => {
     if (viewMode === 2) {
-      navigate(`/approval/edit/${approvalId}`);
+      navigate(`/user/approval/edit/${approvalId}`);
     } else {
-      navigate(`/approval/${approvalId}`);
+      navigate(`/user/approval/${approvalId}`);
     }
   };
 
@@ -110,7 +110,7 @@ const ApprovalList = ({ viewMode }) => {
 
       <div className="flex justify-end mt-4">
         <button className="bg-[#006D2C] text-white px-4 py-3 rounded-full shadow-lg flex items-center"
-                onClick={() => navigate("/approval/add")}>
+                onClick={() => navigate("/user/approval/add")}>
           <Files size={20} className='mr-2' /> 기안지 작성
         </button>
       </div>

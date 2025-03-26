@@ -104,9 +104,9 @@ const Sidebar = () => {
     const menuItems = [
       { name: "DashBoard", icon: BsGrid, path: "/dashboard" },
       { name: "MyPage", icon: BsPerson, path: "/user/info" },
-      { name: "캘린더", icon: BsCalendar, path: "/calendar" },
-      { name: "휴가", icon: BsTree, path: "/approval" },
-      { name: "채팅", icon: BsChat, path: "/chat" },
+      { name: "캘린더", icon: BsCalendar, path: "/user/calendar" },
+      { name: "휴가", icon: BsTree, path: "/user/approval" },
+      { name: "채팅", icon: BsChat, path: "/user/chat" },
       { name: "직원조회", icon: BsPerson, path: "/user/employees" },
       ...(isAdmin ? [{ name: "직원등록", icon: BsPerson, path: "/admin/join" }] : []), // 관리자일 때만 "직원등록" 메뉴 추가
     ];

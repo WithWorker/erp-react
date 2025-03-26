@@ -110,7 +110,7 @@ const CalendarPage = () => {
   // 일정 클릭 시 상세 페이지로 이동
   const handleEventClick = (info) => {
     const calendarId = info.event.id;
-    navigate(`/calendar/${calendarId}`);
+    navigate(`/user/calendar/${calendarId}`);
   }
 
   // 이전 달 버튼 클릭

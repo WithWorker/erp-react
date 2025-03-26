@@ -36,7 +36,7 @@ const CalendarEdit = () => {
       fetchEventDetail();
     } else {
       console.error("잘못된 calendarId:", calendarId);
-      navigate("/calendar");  // 잘못된 calendarId가 들어오면 일정 목록으로 리다이렉트
+      navigate("/user/calendar");  // 잘못된 calendarId가 들어오면 일정 목록으로 리다이렉트
     }
   }, [calendarId, navigate]);
 
@@ -66,7 +66,7 @@ const CalendarEdit = () => {
     if (confirmUpdate) {
       try {
         await updateCalendar(parsedCalendarId, calendar);  // 수정 API 호출
-        navigate("/calendar"); 
+        navigate("/user/calendar"); 
       } catch (error) {
         console.error("일정 수정 실패", error);
       }
@@ -135,7 +135,7 @@ const CalendarEdit = () => {
           <div className="flex justify-end space-x-3">
             <button
               className="bg-gray-300 text-gray-700 px-6 py-2 rounded-full hover:bg-gray-400 transition"
-              onClick={() => navigate("/calendar")}
+              onClick={() => navigate("/user/calendar")}
             >
               취소
             </button>
