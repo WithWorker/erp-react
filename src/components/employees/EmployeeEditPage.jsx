@@ -55,7 +55,7 @@ const EmployeeEditPage = () => {
   useEffect(() => {
     const fetchEmployeeData = async () => {
       try {
-        const response = await fetch(`/api/admin/emp/${id}`, {
+        const response = await fetch(`/api/user/emp/${id}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

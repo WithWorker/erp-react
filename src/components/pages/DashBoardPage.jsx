@@ -119,11 +119,6 @@ const Dashboard = () => {
   // WeeklyCalendar를 memoize하여 불필요한 리렌더링 방지
   const memoizedWeeklyCalendar = useMemo(() => <WeeklyCalendar events={events} />, [events]);
 
-  const moveWeek = (direction) => {
-    // 주간 일정 이동 로직을 여기서 구현하세요
-    console.log(direction === "prev" ? "이전 주로 이동" : "다음 주로 이동");
-  };
-
   return (
     <div className="flex flex-col md:flex-row h-screen bg-gray-100">
       <Sidebar />

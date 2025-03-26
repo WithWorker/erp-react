@@ -7,8 +7,12 @@ export default defineConfig({
   css: {
     postcss: "./postcss.config.js",
   },
-  resolve: { alias: { '@': '/src' }, // 필요 시 경로 별칭 설정
-            extensions: ['.js', '.jsx', '.json'], // 확장자 우선 순위
+  resolve: { 
+    alias: { '@': '/src' }, // 필요 시 경로 별칭 설정
+    extensions: ['.js', '.jsx', '.json'], // 확장자 우선 순위
+  },
+  define: {
+    global: {},
   },
   server: {
     // 포트번호 변경
