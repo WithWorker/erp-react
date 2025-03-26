@@ -4,7 +4,6 @@ export const findById = async() => {
   try {
     const empId = localStorage.getItem("empId");
     const token = localStorage.getItem("token");
-    console.log("Sending Token:", token); // 여기서도 확인
     if (!token) {
         throw new Error("토큰이 없습니다. 로그인 후 다시 시도하세요.");
     }
