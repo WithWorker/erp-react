@@ -102,7 +102,7 @@ const Sidebar = () => {
 
     // 메뉴 목록
     const menuItems = [
-      { name: "DashBoard", icon: BsGrid, path: "/user/dashboard" },
+      { name: "DashBoard", icon: BsGrid, path: "/dashboard" },
       { name: "MyPage", icon: BsPerson, path: "/user/info" },
       { name: "캘린더", icon: BsCalendar, path: "/user/calendar" },
       { name: "휴가", icon: BsTree, path: "/user/approval" },

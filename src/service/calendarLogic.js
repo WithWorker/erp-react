@@ -1,10 +1,10 @@
 import axios from 'axios';
 // 로그인한 회원 정보 불러오기
-export const findById = async(empId) => {
+export const findById = async() => {
   try {
     const empId = localStorage.getItem("empId");
     if(!empId) throw new Error("로그인이 필요합니다.");
-    const response = await axios.get(`/api/admin/emp/${empId}`, {
+    const response = await axios.get(`/api/user/emp/${empId}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
