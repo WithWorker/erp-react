@@ -254,20 +254,33 @@ const ChatList = ({ onSelectChat, currentUserId, updateRoomCounts }) => {
   const handleDeleteRoom = async (room) => {
     if (!window.confirm("해당 대화방을 삭제하시겠습니까?")) return;
   
-    let url = room.roomId
-      ? `/api/messenger/room/delete?roomId=${room.roomId}`
-      : `/api/messenger/message/delete?roomId=0&empId=${currentUserId}&otherEmpId=${room.otherUserId}`;
+    const token = localStorage.getItem("token");
   
-    const res = await fetch(url, { method: "DELETE" });
-    if (res.ok) {
-      alert("대화방이 삭제되었습니다.");
-      await fetchChatRooms();
-      updateRoomCounts && updateRoomCounts();
-      onSelectChat(null);
-    } else {
-      alert("대화방 삭제에 실패했습니다.");
+    let url = room.roomId
+      ? `/api/user/messenger/room/delete?roomId=${room.roomId}`
+      : `/api/user/messenger/message/delete?roomId=0&empId=${currentUserId}&otherEmpId=${room.otherUserId}`;
+  
+    try {
+      const res = await fetch(url, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      if (res.ok) {
+        alert("대화방이 삭제되었습니다.");
+        await fetchChatRooms();
+        updateRoomCounts && updateRoomCounts();
+        onSelectChat(null);
+      } else {
+        alert("대화방 삭제에 실패했습니다.");
+      }
+    } catch (err) {
+      console.error("삭제 요청 오류", err);
+      alert("서버 요청 중 오류가 발생했습니다.");
     }
-  };
+  };  
 
   const handleSearch = () => {
     if (!searchText) {

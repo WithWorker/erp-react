@@ -32,14 +32,19 @@ const ChatRoom = ({
   // 📥 다운로드 요청 함수
   const handleDownload = async (filename) => {
     console.log("🚀 다운로드 함수 진입!", filename);
+    const token = localStorage.getItem("token"); // ✅ 토큰 가져오기
+  
     try {
       const res = await axios.get(
-        `/api/messenger/file/download?filename=${encodeURIComponent(filename)}`,
+        `/api/user/messenger/file/download?filename=${encodeURIComponent(filename)}`,
         {
-          responseType: "blob", // 중요한 부분: blob으로 받아야 다운로드 가능
+          responseType: "blob", // ✅ blob 설정은 그대로 유지
+          headers: {
+            ...(token && { Authorization: `Bearer ${token}` }), // ✅ 토큰 포함
+          },
         }
       );
-
+  
       const blob = new Blob([res.data]);
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -57,6 +62,7 @@ const ChatRoom = ({
 
   // 📤 파일 선택 → 업로드
   const handleFileChange = async (e) => {
+    const token = localStorage.getItem("token");
     const files = Array.from(e.target.files); // 여러 파일 배열
     const MAX_FILE_SIZE_MB = 100;
   
@@ -70,9 +76,10 @@ const ChatRoom = ({
       formData.append("file", file);
   
       try {
-        const res = await axios.post("/api/messenger/file/upload", formData, {
+        const res = await axios.post("/api/user/messenger/file/upload", formData, {
           headers: {
-            "Content-Type": "multipart/form-data", // 여러 개의 파일 전송 (합쳐서 100mb 이하)
+            "Content-Type": "multipart/form-data",
+            ...(token && { Authorization: `Bearer ${token}` }),// 여러 개의 파일 전송 (합쳐서 100mb 이하)
           },
         });
   

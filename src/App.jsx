@@ -1,43 +1,40 @@
-<<<<<<< HEAD
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LoginPage from "./components/auth/LoginPage";
-import DashBoardPage from "./components/pages/DashBoardPage";
-import ChatPage from "./components/messenger/ChatPage"; 
-import AlarmPage from "./components/alarm/AlarmPage";
-=======
-// src/App.jsx
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginPage from './components/auth/LoginPage';
-import CalendarPage from './components/pages/calendarPage/CalendarPage';
 import DashBoardPage from './components/pages/DashBoardPage';
-import CalendarWritePage from './components/pages/calendarPage/CalendarWritePage';
-import EventDetailPage from './components/pages/calendarPage/EventDetailPage';
-import EmployeeListPage from './components/pages/employeePage/EmployeeListPage';
-import ChatPage from './components/pages/ChatPage';
-import AlarmPage from './components/pages/AlarmPage';
+import CalendarPage from './components/calendar/CalendarPage';
+import CalendarWrite from './components/calendar/CalendarWrite';
+import CalendarDetail from './components/calendar/CalendarDetail';
+import CalendarEdit from './components/calendar/CalendarEdit';
+import ApprovalPage from './components/approval/ApprovalPage';
+import ApprovalDetail from './components/approval/ApprovalDetail';
+import ApprovalWrite from './components/approval/ApprovalWrite';
+import ApprovalEdit from './components/approval/ApprovalEdit';
+import EmployeeListPage from './components/employees/EmployeeListPage';
+import EmployeeAddPage from './components/employees/EmployeeAddPage';
+import EmployeeEditPage from './components/employees/EmployeeEditPage';
+import ChatPage from './components/messenger/ChatPage'; 
+import MyPage from './components/mypage/MyPage';
 
->>>>>>> ea512ccf4ad0f9fdec14815a09e742969db97f74
 function App() {
+
   return (
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/dashboard" element={<DashBoardPage />} />
-<<<<<<< HEAD
-        <Route path="/mypage" element={<div>마이페이지</div>} />
-        <Route path="/messenger" element={<ChatPage />} /> 
-        <Route path="/alarm" element={<AlarmPage />} />
-=======
-        <Route path="/calendar" element={<CalendarPage />} />
-        <Route path="/write" element={<CalendarWritePage />} />
-        <Route path="/event/:id" element={<EventDetailPage />} />
-        <Route path="/vacation" element={<div>휴가 페이지</div>} />
-        <Route path="/board" element={<div>게시판 페이지</div>} />
-        <Route path="/chat" element={<ChatPage />} />
-        <Route path="/alarm" element={<AlarmPage />} />
-        <Route path="/employees" element={<EmployeeListPage />} />
-        <Route path="/mypage" element={<div>마이페이지</div>} />
->>>>>>> ea512ccf4ad0f9fdec14815a09e742969db97f74
+        <Route path="/user/employees" element={<EmployeeListPage />} />
+        <Route path="/admin/join" element={<EmployeeAddPage />} />
+        <Route path="/admin/update/:id" element={<EmployeeEditPage />} />
+        <Route path="/user/info" element={<MyPage/>} />
+        <Route path="/user/calendar" element={<CalendarPage/>} />
+        <Route path="/user/calendar/:calendarId" element={<CalendarDetail/>} />
+        <Route path="/user/calendar/add" element={<CalendarWrite/>} />
+        <Route path="/user/calendar/edit/:calendarId" element={<CalendarEdit/>} />
+        <Route path="/user/approval" element={<ApprovalPage/>} />
+        <Route path="/user/approval/:approvalId" element={<ApprovalDetail/>} />
+        <Route path="/user/approval/add" element={<ApprovalWrite/>} />
+        <Route path="/user/approval/edit/:approvalId" element={<ApprovalEdit/>} />
+        <Route path="/user/messenger" element={<ChatPage />} />
       </Routes>
     </Router>
   );

@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback} from "react";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "../include/Sidebar";
 import Header from "../include/Header";
 import ChatList from "./ChatList";
@@ -16,7 +17,18 @@ import {
 } from "../../service/messengerLogic";
 
 const ChatPage = () => {
-  const currentUserId = 5; // 임의로 지정된 로그인 사용자 ID
+  const navigate = useNavigate();
+
+  // 로그인 정보를 localStorage에서 읽어와 currentUserId를 설정
+  const storedUserId = localStorage.getItem("empId");
+  const currentUserId = storedUserId ? parseInt(storedUserId, 10) : null;
+
+  // 로그인 정보가 없으면 로그인 페이지로 리다이렉트
+  useEffect(() => {
+    if (!currentUserId) {
+      navigate("/login");
+    }
+  }, [currentUserId, navigate]);
 
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
