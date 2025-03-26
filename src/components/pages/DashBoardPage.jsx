@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+const Dashboard = () => {
+  return (
+    <div className="dashboard">
+      <h1>Welcome to the Dashboard!</h1>
+      {/* 대시보드 내용 추가 */}
+=======
 import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
 import Sidebar from "../include/Sidebar";
@@ -190,8 +197,13 @@ const Dashboard = () => {
           </div>
         </main>
       </div>
+>>>>>>> develop
     </div>
   );
 };
 
+<<<<<<< HEAD
+export default Dashboard;
+=======
 export default Dashboard; 
+>>>>>>> develop

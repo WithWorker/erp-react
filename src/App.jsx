@@ -12,6 +12,7 @@ import ApprovalEdit from './components/approval/ApprovalEdit';
 import EmployeeListPage from './components/employees/EmployeeListPage';
 import EmployeeAddPage from './components/employees/EmployeeAddPage';
 import EmployeeEditPage from './components/employees/EmployeeEditPage';
+import ChatPage from './components/messenger/ChatPage'; 
 import MyPage from './components/mypage/MyPage';
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
         <Route path="/user/approval/:approvalId" element={<ApprovalDetail/>} />
         <Route path="/user/approval/add" element={<ApprovalWrite/>} />
         <Route path="/user/approval/edit/:approvalId" element={<ApprovalEdit/>} />
+        <Route path="/user/messenger" element={<ChatPage />} />
       </Routes>
     </Router>
   );
