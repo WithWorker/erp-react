@@ -6,6 +6,7 @@ import WeeklyCalendar from "./WeeklyCalendar";
 import { useEffect, useState, useRef, useMemo } from "react";
 import { getApplicant } from "../../service/approvalLogic";
 import { findById, getAllCalendars } from "../../service/calendarLogic";
+import SalesAnalysis from "./SalesAnalysis";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -128,10 +129,10 @@ const Dashboard = () => {
       <Sidebar />
       <div className="flex flex-col flex-1">
         <Header />
-        <main className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <main className="flex-1 h-full p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div className="bg-white p-6 rounded-2xl shadow-md flex flex-col items-center">
           <img
-          src={`http://localhost:7777/${imgUrl}`} // imgUrl이 없으면 기본 이미지 경로 사용
+          src={`http://localhost:7777/${imgUrl || 'upload/default.jpg'}`} 
           alt="User"
           className="w-35 h-35 rounded-full mb-3"
           />
@@ -188,8 +189,11 @@ const Dashboard = () => {
             </div>
             {memoizedWeeklyCalendar}
           </div>
-        </main>
-      </div>
+          <div className="col-span-1 sm:col-span-2 lg:col-span-3 bg-white p-6 rounded-2xl shadow-md">
+              <SalesAnalysis/>
+          </div>
+      </main>
+        </div>
     </div>
   );
 };

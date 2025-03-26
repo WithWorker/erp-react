@@ -14,7 +14,7 @@ const DetailLine = ({ approvers }) => {
             {/* 프로필 이미지 */}
             <div className="relative">
               <img
-                src={approver.imgUrl || '/src/assets/default.jpg'}
+                src={`http://localhost:7777/${approver.approverImgUrl}` || `http://localhost:7777/upload/default.jpg`}
                 alt={approver.name}
                 className="w-24 h-24 rounded-full object-cover border-4 border-gray-300"
               />
