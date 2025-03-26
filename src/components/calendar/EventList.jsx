@@ -25,7 +25,7 @@ const EventList = ({ selectedDate, selectedEvents }) => {
                 <li
                   key={event.id || `${event.title}-${event.start}`}
                   className="p-3 bg-gray-100 rounded-md cursor-pointer"
-                  onClick={() => navigate(`/calendar/${event.id}`)}
+                  onClick={() => navigate(`/user/calendar/${event.id}`)}
                 >
                   <p className="font-semibold ml-2">{event.title}</p>
                   <div className="mt-3 ml-4">
@@ -45,7 +45,7 @@ const EventList = ({ selectedDate, selectedEvents }) => {
       )}
       <button
         className="w-full p-2 mt-4 bg-[#006D2C] text-white rounded-md text-lg"
-        onClick={() => navigate("/calendar/add")}
+        onClick={() => navigate("/user/calendar/add")}
       >
         일정 추가
       </button>

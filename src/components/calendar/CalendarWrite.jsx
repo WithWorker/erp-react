@@ -60,7 +60,7 @@ const CalendarWrite = () => {
     if (confirmAdd) {
       try {
         await addCalendar(calendar);  // 등록 API 호출
-        navigate("/calendar"); 
+        navigate("/user/calendar"); 
       } catch (error) {
         console.error("일정 등록 실패");
       }
@@ -147,7 +147,7 @@ const CalendarWrite = () => {
           <div className="flex justify-end space-x-3">
             <button
               className="bg-gray-300 text-gray-700 px-6 py-2 rounded-full hover:bg-gray-400 transition"
-              onClick={() => navigate("/calendar")}
+              onClick={() => navigate("/user/calendar")}
             >
               취소
             </button>

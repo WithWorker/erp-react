@@ -111,7 +111,7 @@ const ApprovalEdit = () => {
 
         <div className="flex justify-end gap-2 mt-4">
           <button
-            onClick={() => navigate("/approval")}
+            onClick={() => navigate("/user/approval")}
             className="bg-gray-300 text-gray-700 px-4 py-2 rounded-full hover:bg-gray-400"
           >
             닫기

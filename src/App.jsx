@@ -25,14 +25,14 @@ function App() {
         <Route path="/admin/join" element={<EmployeeAddPage />} />
         <Route path="/admin/update/:id" element={<EmployeeEditPage />} />
         <Route path="/user/info" element={<MyPage/>} />
-        <Route path="/calendar" element={<CalendarPage/>} />
-        <Route path="/calendar/:calendarId" element={<CalendarDetail/>} />
-        <Route path="/calendar/add" element={<CalendarWrite/>} />
-        <Route path="/calendar/edit/:calendarId" element={<CalendarEdit/>} />
-        <Route path="/approval" element={<ApprovalPage/>} />
-        <Route path="/approval/:approvalId" element={<ApprovalDetail/>} />
-        <Route path="/approval/add" element={<ApprovalWrite/>} />
-        <Route path="/approval/edit/:approvalId" element={<ApprovalEdit/>} />
+        <Route path="/user/calendar" element={<CalendarPage/>} />
+        <Route path="/user/calendar/:calendarId" element={<CalendarDetail/>} />
+        <Route path="/user/calendar/add" element={<CalendarWrite/>} />
+        <Route path="/user/calendar/edit/:calendarId" element={<CalendarEdit/>} />
+        <Route path="/user/approval" element={<ApprovalPage/>} />
+        <Route path="/user/approval/:approvalId" element={<ApprovalDetail/>} />
+        <Route path="/user/approval/add" element={<ApprovalWrite/>} />
+        <Route path="/user/approval/edit/:approvalId" element={<ApprovalEdit/>} />
       </Routes>
     </Router>
   );
