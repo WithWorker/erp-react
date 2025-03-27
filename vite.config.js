@@ -15,6 +15,7 @@ export default defineConfig({
     global: {},
   },
   server: {
+    host: '0.0.0.0',
     // 포트번호 변경
     port: 3333,
     // 서버 프록시 설정
