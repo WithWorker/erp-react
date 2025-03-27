@@ -22,6 +22,35 @@ const ChatRoom = ({
   const scrollRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadedFilePath, setUploadedFilePath] = useState("");
+  const [inactiveMessage, setInactiveMessage] = useState(false);
+  const inactivityTimer = useRef(null);
+
+  // 일정 시간 움직임이 없으면 채팅방을 다시 선택하라고 알림으로 나오게 설정
+  useEffect(() => {
+    const resetInactivityTimer = () => {
+      if (inactivityTimer.current) {
+        clearTimeout(inactivityTimer.current);
+      }
+      setInactiveMessage(false);
+      inactivityTimer.current = setTimeout(() => {
+        setInactiveMessage(true);
+      }, 60000); // 1분
+    };
+
+    const activityEvents = ["keydown", "mousemove", "mousedown", "touchstart"];
+    activityEvents.forEach((event) =>
+      window.addEventListener(event, resetInactivityTimer)
+    );
+
+    resetInactivityTimer();
+
+    return () => {
+      if (inactivityTimer.current) clearTimeout(inactivityTimer.current);
+      activityEvents.forEach((event) =>
+        window.removeEventListener(event, resetInactivityTimer)
+      );
+    };
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -331,6 +360,12 @@ const ChatRoom = ({
           대화방을 선택하세요.
         </div>
       )}
+      {inactiveMessage && (
+      <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 px-4 py-2 bg-yellow-200 text-black rounded shadow-md z-50 text-sm text-center">
+        ⏱ 일정 시간 동안 활동이 없어 대화방이 비활성화되었습니다.<br />
+        👉 다시 대화방을 선택해주세요.
+      </div>
+    )}
     </div>
   );  
 };  
