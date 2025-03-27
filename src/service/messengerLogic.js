@@ -1,5 +1,3 @@
-const API_BASE_URL = "/api/user/messenger";
-
 // 인증 헤더 생성 함수
 function getAuthHeaders() {
   const token = localStorage.getItem("token");
@@ -12,7 +10,7 @@ function getAuthHeaders() {
 // 부서 목록 조회
 export const getDepartments = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/dept`, {
+    const response = await fetch(`/api/user/messenger/dept`, {
       headers: getAuthHeaders(),
     });
     if (!response.ok) throw new Error("Failed to fetch departments");
@@ -26,7 +24,7 @@ export const getDepartments = async () => {
 // 특정 부서 내 직원 조회
 export const getDepartmentEmployees = async (deptId) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/dept/person?deptId=${deptId}`, {
+    const response = await fetch(`/api/user/messenger/dept/person?deptId=${deptId}`, {
       headers: getAuthHeaders(),
     });
     if (!response.ok) throw new Error("Failed to fetch employees");
@@ -40,7 +38,7 @@ export const getDepartmentEmployees = async (deptId) => {
 // 선택 직원 조회
 export const getChosenEmp = async (empId) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/dept/person/chosen?empId=${empId}`, {
+    const response = await fetch(`/api/user/messenger/dept/person/chosen?empId=${empId}`, {
       headers: getAuthHeaders(),
     });
     if (!response.ok) throw new Error("Failed to fetch chosen employee");
@@ -54,7 +52,7 @@ export const getChosenEmp = async (empId) => {
 // 1:1 메시지 전송
 export const sendMessage = async (data) => {
   try {
-    const res = await fetch(`${API_BASE_URL}/message/send`, {
+    const res = await fetch(`/api/user/messenger/message/send`, {
       method: "POST",
       headers: getAuthHeaders(),
       body: JSON.stringify(data),
@@ -70,7 +68,7 @@ export const sendMessage = async (data) => {
 // 단체 메시지 전송
 export const sendGroupMessage = async (groupData) => {
   try {
-    const res = await fetch(`${API_BASE_URL}/message/sendGroup`, {
+    const res = await fetch(`/api/user/messenger/message/sendGroup`, {
       method: "POST",
       headers: getAuthHeaders(),
       body: JSON.stringify(groupData),
@@ -86,7 +84,7 @@ export const sendGroupMessage = async (groupData) => {
 // 메시지 목록 조회
 export const getMessageList = async (empId) => {
   try {
-    const res = await fetch(`${API_BASE_URL}/message/list?empId=${empId}`, {
+    const res = await fetch(`/api/user/messenger/message/list?empId=${empId}`, {
       headers: getAuthHeaders(),
     });
     if (!res.ok) throw new Error("Failed to fetch message list");
@@ -100,7 +98,7 @@ export const getMessageList = async (empId) => {
 // 메시지 전달
 export const deliverMessage = async (msgId, senderId, receiverId) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/message/deliver`, {
+    const response = await fetch(`/api/user/messenger/message/deliver`, {
       method: "POST",
       headers: getAuthHeaders(),
       body: JSON.stringify({ msgId, senderId, receiverId }),
@@ -117,7 +115,7 @@ export const deliverMessage = async (msgId, senderId, receiverId) => {
 export const getMsgContent = async (msgId, senderId) => {
   try {
     const response = await fetch(
-      `${API_BASE_URL}/message/content/send?msgId=${msgId}&senderId=${senderId}`,
+      `/api/user/messenger/message/content/send?msgId=${msgId}&senderId=${senderId}`,
       { headers: getAuthHeaders() }
     );
     if (!response.ok) throw new Error("Failed to fetch sent message content");
@@ -132,7 +130,7 @@ export const getMsgContent = async (msgId, senderId) => {
 export const getMsgContent2 = async (msgId, receiverId) => {
   try {
     const response = await fetch(
-      `${API_BASE_URL}/message/content/receive?msgId=${msgId}&receiverId=${receiverId}`,
+      `/api/user/messenger/message/content/receive?msgId=${msgId}&receiverId=${receiverId}`,
       { headers: getAuthHeaders() }
     );
     if (!response.ok) throw new Error("Failed to fetch received message content");
@@ -146,7 +144,7 @@ export const getMsgContent2 = async (msgId, receiverId) => {
 // 메시지 읽음 처리
 export const readAllMessages = async (empId) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/message/read?empId=${empId}`, {
+    const response = await fetch(`/api/user/messenger/message/read?empId=${empId}`, {
       method: "POST",
       headers: getAuthHeaders(),
     });
@@ -161,7 +159,7 @@ export const readAllMessages = async (empId) => {
 // 첨부파일 추가
 export const addFile = async (fileData) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/file/add`, {
+    const response = await fetch(`/api/user/messenger/file/add`, {
       method: "POST",
       headers: getAuthHeaders(),
       body: JSON.stringify(fileData),
@@ -177,7 +175,7 @@ export const addFile = async (fileData) => {
 // 첨부파일 조회
 export const getMsgFiles = async (msgId) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/file/list?msgId=${msgId}`, {
+    const response = await fetch(`/api/user/messenger/file/list?msgId=${msgId}`, {
       headers: getAuthHeaders(),
     });
     if (!response.ok) throw new Error("Failed to fetch message files");
@@ -191,7 +189,7 @@ export const getMsgFiles = async (msgId) => {
 // 전체 메신저 방 개수 조회
 export const getRoomCount = async (empId) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/room/count?empId=${empId}`, {
+    const response = await fetch(`/api/user/messenger/room/count?empId=${empId}`, {
       headers: getAuthHeaders(),
     });
     if (!response.ok) throw new Error("Failed to fetch room count");
@@ -206,7 +204,7 @@ export const getRoomCount = async (empId) => {
 // 이름 검색
 export const getEmpName = async (receiverId) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/send/name?receiverId=${receiverId}`, {
+    const response = await fetch(`/api/user/messenger/send/name?receiverId=${receiverId}`, {
       headers: getAuthHeaders(),
     });
     if (!response.ok) throw new Error("Failed to fetch employee name");
@@ -220,7 +218,7 @@ export const getEmpName = async (receiverId) => {
 // 안 읽은 메시지 개수 조회
 export const getUnreadMsg = async (empId) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/message/unread/count?empId=${empId}`, {
+    const response = await fetch(`/api/user/messenger/message/unread/count?empId=${empId}`, {
       headers: getAuthHeaders(),
     });
     if (!response.ok) throw new Error("Failed to fetch unread messages");
@@ -236,7 +234,7 @@ export const getUnreadMsg = async (empId) => {
 export const deleteMessage = async (params) => {
   const queryParams = new URLSearchParams(params).toString();
   try {
-    const response = await fetch(`${API_BASE_URL}/message/delete?${queryParams}`, {
+    const response = await fetch(`/api/user/messenger/message/delete?${queryParams}`, {
       method: "DELETE",
       headers: getAuthHeaders(),
     });
@@ -251,7 +249,7 @@ export const deleteMessage = async (params) => {
 // 방 참여자 조회
 export const getRoomParticipants = async (roomId) => {
   try {
-    const res = await fetch(`${API_BASE_URL}/room/participants?roomId=${roomId}`, {
+    const res = await fetch(`/api/user/messenger/room/participants?roomId=${roomId}`, {
       headers: getAuthHeaders(),
     });
     if (!res.ok) throw new Error("Failed to fetch participants");
@@ -265,7 +263,7 @@ export const getRoomParticipants = async (roomId) => {
 // 대화방 생성
 export const createMessengerRoom = async (data) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/room/create`, {
+    const response = await fetch(`/api/user/messenger/room/create`, {
       method: "POST",
       headers: getAuthHeaders(),
       body: JSON.stringify(data),
@@ -281,7 +279,7 @@ export const createMessengerRoom = async (data) => {
 // 대화방 참여자 추가
 export const addRoomParticipant = async (param) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/room/participant/add`, {
+    const response = await fetch(`/api/user/messenger/room/participant/add`, {
       method: "POST",
       headers: getAuthHeaders(),
       body: JSON.stringify(param),
@@ -297,7 +295,7 @@ export const addRoomParticipant = async (param) => {
 // 그룹 대화방 목록 조회
 export const getGroupRoomList = async (empId) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/room/list?empId=${empId}`, {
+    const response = await fetch(`/api/user/messenger/room/list?empId=${empId}`, {
       headers: getAuthHeaders(),
     });
     if (!response.ok) throw new Error("Failed to fetch group rooms");
@@ -311,7 +309,7 @@ export const getGroupRoomList = async (empId) => {
 // 단체 방 내용 조회
 export const getMessagesByRoomId = async (roomId) => {
   try {
-    const res = await fetch(`${API_BASE_URL}/room/messages?roomId=${roomId}`, {
+    const res = await fetch(`/api/user/messenger/room/messages?roomId=${roomId}`, {
       headers: getAuthHeaders(),
     });
     if (!res.ok) throw new Error("메시지 조회 실패");
@@ -325,7 +323,7 @@ export const getMessagesByRoomId = async (roomId) => {
 // 메시지 읽음 상태 업데이트 API 호출
 export const markMessagesAsRead = async (userId, roomId) => {
   try {
-    await fetch(`${API_BASE_URL}/message/markAsRead?roomId=${roomId}&userId=${userId}`, {
+    await fetch(`/api/user/messenger/message/markAsRead?roomId=${roomId}&userId=${userId}`, {
       method: "PUT",
       headers: getAuthHeaders(),
     });

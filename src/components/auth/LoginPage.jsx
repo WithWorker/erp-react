@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LockFill, PersonFill } from 'react-bootstrap-icons';
+import { EnvelopeFill, LockFill } from 'react-bootstrap-icons';
 import axios from 'axios';
-import PasswordResetModal from './PasswordResetModal ';
+import PasswordResetModal from './PasswordResetModal';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ const LoginPage = () => {
         localStorage.setItem("empId", empId); 
         localStorage.setItem("role", role);
   
-        navigate("/");
+        navigate("/dashboard");
       } else {
         setError("토큰이 없습니다.");
       }
@@ -76,7 +76,7 @@ const LoginPage = () => {
         <div className="mb-4">
           <label className="block text-[#323232]">이메일</label>
           <div className="relative">
-            <PersonFill className="absolute left-3 top-3 text-gray-400" />
+            <EnvelopeFill className="absolute left-3 top-3 text-gray-400" />
             <input
               type="email"
               id="mem_email"

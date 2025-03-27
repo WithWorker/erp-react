@@ -1,0 +1,8 @@
+.custom-square-modal {
+  width: 200px;
+}
+
+.custom-square-modal .modal-content {
+  height: 100%;
+  border-radius: 8px;
+}
