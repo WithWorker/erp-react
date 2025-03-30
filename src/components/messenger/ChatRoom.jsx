@@ -29,18 +29,18 @@ const ChatRoom = ({
     }
   }, [messages]);
 
-  // 📥 다운로드 요청 함수
+  // 다운로드 요청 함수
   const handleDownload = async (filename) => {
-    console.log("🚀 다운로드 함수 진입!", filename);
-    const token = localStorage.getItem("token"); // ✅ 토큰 가져오기
+    console.log("다운로드 함수 진입!", filename);
+    const token = localStorage.getItem("token"); // 토큰 가져오기
   
     try {
       const res = await axios.get(
         `/api/user/messenger/file/download?filename=${encodeURIComponent(filename)}`,
         {
-          responseType: "blob", // ✅ blob 설정은 그대로 유지
+          responseType: "blob", // blob 설정은 그대로 유지
           headers: {
-            ...(token && { Authorization: `Bearer ${token}` }), // ✅ 토큰 포함
+            ...(token && { Authorization: `Bearer ${token}` }), // 토큰 포함
           },
         }
       );
@@ -60,7 +60,7 @@ const ChatRoom = ({
     }
   };
 
-  // 📤 파일 선택 → 업로드
+  // 파일 선택 → 업로드
   const handleFileChange = async (e) => {
     const token = localStorage.getItem("token");
     const files = Array.from(e.target.files); // 여러 파일 배열
@@ -132,7 +132,7 @@ const ChatRoom = ({
     loadMessages && loadMessages(currentChatRoom);
   };
 
-  // ✅ 메시지 전송 (파일 포함)
+  // 메시지 전송 (파일 포함)
   const handleSend = async () => {
     if (!input.trim() && !uploadedFilePath) return;
 
@@ -140,7 +140,7 @@ const ChatRoom = ({
       let messengerId = null;
   
       if (currentChatRoom?.roomId) {
-        // ✅ 단체 메시지 전송
+        // 단체 메시지 전송
         const participants = currentChatRoom.participantIds || [];
         const res = await sendGroupMessage({
           senderId: currentUserId,
@@ -152,7 +152,7 @@ const ChatRoom = ({
   
         messengerId = res?.messengerId;
   
-        // ✅ 파일도 등록
+        // 파일도 등록
         if (uploadedFilePath && messengerId) {
           await addFile({
             messengerId,

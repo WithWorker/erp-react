@@ -6,7 +6,6 @@ import WeeklyCalendar from "./WeeklyCalendar";
 import { useEffect, useState, useRef, useMemo } from "react";
 import { getApplicant } from "../../service/approvalLogic";
 import { findById, getAllCalendars } from "../../service/calendarLogic";
-import SalesAnalysis from "./SalesAnalysis";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -183,9 +182,6 @@ const Dashboard = () => {
               </div>
             </div>
             {memoizedWeeklyCalendar}
-          </div>
-          <div className="col-span-1 sm:col-span-2 lg:col-span-3 bg-white p-6 rounded-2xl shadow-md">
-              <SalesAnalysis/>
           </div>
       </main>
         </div>
